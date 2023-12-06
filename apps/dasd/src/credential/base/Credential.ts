@@ -15,7 +15,7 @@ import { App } from "../../app/base/App";
 import { ValidateNested, IsOptional, IsInt, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { DestinationCalendar } from "../../destinationCalendar/base/DestinationCalendar";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { User } from "../../user/base/User";

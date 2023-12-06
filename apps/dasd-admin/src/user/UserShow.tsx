@@ -19,6 +19,7 @@ import { SCHEDULE_TITLE_FIELD } from "../schedule/ScheduleTitle";
 import { DAILYEVENTREFERENCE_TITLE_FIELD } from "../dailyEventReference/DailyEventReferenceTitle";
 import { DESTINATIONCALENDAR_TITLE_FIELD } from "../destinationCalendar/DestinationCalendarTitle";
 import { TEAM_TITLE_FIELD } from "../team/TeamTitle";
+import { VERIFICATIONTOKEN_TITLE_FIELD } from "../verificationToken/VerificationTokenTitle";
 
 export const UserShow = (props: ShowProps): React.ReactElement => {
   return (
@@ -73,6 +74,13 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
         <BooleanField label="Two Factor Enabled" source="twoFactorEnabled" />
         <TextField label="Two Factor Secret" source="twoFactorSecret" />
         <TextField label="Username" source="username" />
+        <ReferenceField
+          label="Verification Token"
+          source="verificationtoken.id"
+          reference="VerificationToken"
+        >
+          <TextField source={VERIFICATIONTOKEN_TITLE_FIELD} />
+        </ReferenceField>
         <BooleanField label="Verified" source="verified" />
         <TextField label="Week Start" source="weekStart" />
         <ReferenceManyField

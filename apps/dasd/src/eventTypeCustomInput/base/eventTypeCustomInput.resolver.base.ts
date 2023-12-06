@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateEventTypeCustomInputArgs } from "./CreateEventTypeCustomInputArgs";
-import { UpdateEventTypeCustomInputArgs } from "./UpdateEventTypeCustomInputArgs";
-import { DeleteEventTypeCustomInputArgs } from "./DeleteEventTypeCustomInputArgs";
+import { EventTypeCustomInput } from "./EventTypeCustomInput";
 import { EventTypeCustomInputCountArgs } from "./EventTypeCustomInputCountArgs";
 import { EventTypeCustomInputFindManyArgs } from "./EventTypeCustomInputFindManyArgs";
 import { EventTypeCustomInputFindUniqueArgs } from "./EventTypeCustomInputFindUniqueArgs";
-import { EventTypeCustomInput } from "./EventTypeCustomInput";
+import { CreateEventTypeCustomInputArgs } from "./CreateEventTypeCustomInputArgs";
+import { UpdateEventTypeCustomInputArgs } from "./UpdateEventTypeCustomInputArgs";
+import { DeleteEventTypeCustomInputArgs } from "./DeleteEventTypeCustomInputArgs";
 import { EventType } from "../../eventType/base/EventType";
 import { EventTypeCustomInputService } from "../eventTypeCustomInput.service";
 @graphql.Resolver(() => EventTypeCustomInput)
@@ -39,14 +39,14 @@ export class EventTypeCustomInputResolverBase {
   async eventTypeCustomInputs(
     @graphql.Args() args: EventTypeCustomInputFindManyArgs
   ): Promise<EventTypeCustomInput[]> {
-    return this.service.findMany(args);
+    return this.service.eventTypeCustomInputs(args);
   }
 
   @graphql.Query(() => EventTypeCustomInput, { nullable: true })
   async eventTypeCustomInput(
     @graphql.Args() args: EventTypeCustomInputFindUniqueArgs
   ): Promise<EventTypeCustomInput | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.eventTypeCustomInput(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class EventTypeCustomInputResolverBase {
   async createEventTypeCustomInput(
     @graphql.Args() args: CreateEventTypeCustomInputArgs
   ): Promise<EventTypeCustomInput> {
-    return await this.service.create({
+    return await this.service.createEventTypeCustomInput({
       ...args,
       data: {
         ...args.data,
@@ -74,7 +74,7 @@ export class EventTypeCustomInputResolverBase {
     @graphql.Args() args: UpdateEventTypeCustomInputArgs
   ): Promise<EventTypeCustomInput | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateEventTypeCustomInput({
         ...args,
         data: {
           ...args.data,
@@ -99,7 +99,7 @@ export class EventTypeCustomInputResolverBase {
     @graphql.Args() args: DeleteEventTypeCustomInputArgs
   ): Promise<EventTypeCustomInput | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteEventTypeCustomInput(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -114,7 +114,7 @@ export class EventTypeCustomInputResolverBase {
     nullable: true,
     name: "eventType",
   })
-  async resolveFieldEventType(
+  async getEventType(
     @graphql.Parent() parent: EventTypeCustomInput
   ): Promise<EventType | null> {
     const result = await this.service.getEventType(parent.id);

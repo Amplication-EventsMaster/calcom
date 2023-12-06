@@ -31,7 +31,7 @@ import { EventType } from "../../eventType/base/EventType";
 import { Feedback } from "../../feedback/base/Feedback";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { Impersonation } from "../../impersonation/base/Impersonation";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { EnumUserPlan } from "./EnumUserPlan";
@@ -40,6 +40,7 @@ import { Schedule } from "../../schedule/base/Schedule";
 import { SelectedCalendar } from "../../selectedCalendar/base/SelectedCalendar";
 import { Session } from "../../session/base/Session";
 import { Membership } from "../../membership/base/Membership";
+import { VerificationToken } from "../../verificationToken/base/VerificationToken";
 import { Webhook } from "../../webhook/base/Webhook";
 import { Workflow } from "../../workflow/base/Workflow";
 
@@ -487,6 +488,15 @@ class User {
     nullable: true,
   })
   username!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationToken,
+  })
+  @ValidateNested()
+  @Type(() => VerificationToken)
+  @IsOptional()
+  verificationToken?: VerificationToken | null;
 
   @ApiProperty({
     required: false,

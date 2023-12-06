@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Attendee, Booking } from "@prisma/client";
+
+import {
+  Prisma,
+  Attendee, // @ts-ignore
+  Booking,
+} from "@prisma/client";
 
 export class AttendeeServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +26,27 @@ export class AttendeeServiceBase {
     return this.prisma.attendee.count(args);
   }
 
-  async findMany<T extends Prisma.AttendeeFindManyArgs>(
+  async attendees<T extends Prisma.AttendeeFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeFindManyArgs>
   ): Promise<Attendee[]> {
     return this.prisma.attendee.findMany(args);
   }
-  async findOne<T extends Prisma.AttendeeFindUniqueArgs>(
+  async attendee<T extends Prisma.AttendeeFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeFindUniqueArgs>
   ): Promise<Attendee | null> {
     return this.prisma.attendee.findUnique(args);
   }
-  async create<T extends Prisma.AttendeeCreateArgs>(
+  async createAttendee<T extends Prisma.AttendeeCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeCreateArgs>
   ): Promise<Attendee> {
     return this.prisma.attendee.create<T>(args);
   }
-  async update<T extends Prisma.AttendeeUpdateArgs>(
+  async updateAttendee<T extends Prisma.AttendeeUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeUpdateArgs>
   ): Promise<Attendee> {
     return this.prisma.attendee.update<T>(args);
   }
-  async delete<T extends Prisma.AttendeeDeleteArgs>(
+  async deleteAttendee<T extends Prisma.AttendeeDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.AttendeeDeleteArgs>
   ): Promise<Attendee> {
     return this.prisma.attendee.delete(args);

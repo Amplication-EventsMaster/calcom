@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateWorkflowArgs } from "./CreateWorkflowArgs";
-import { UpdateWorkflowArgs } from "./UpdateWorkflowArgs";
-import { DeleteWorkflowArgs } from "./DeleteWorkflowArgs";
+import { Workflow } from "./Workflow";
 import { WorkflowCountArgs } from "./WorkflowCountArgs";
 import { WorkflowFindManyArgs } from "./WorkflowFindManyArgs";
 import { WorkflowFindUniqueArgs } from "./WorkflowFindUniqueArgs";
-import { Workflow } from "./Workflow";
+import { CreateWorkflowArgs } from "./CreateWorkflowArgs";
+import { UpdateWorkflowArgs } from "./UpdateWorkflowArgs";
+import { DeleteWorkflowArgs } from "./DeleteWorkflowArgs";
 import { WorkflowsOnEventTypeFindManyArgs } from "../../workflowsOnEventType/base/WorkflowsOnEventTypeFindManyArgs";
 import { WorkflowsOnEventType } from "../../workflowsOnEventType/base/WorkflowsOnEventType";
 import { WorkflowStepFindManyArgs } from "../../workflowStep/base/WorkflowStepFindManyArgs";
@@ -43,14 +43,14 @@ export class WorkflowResolverBase {
   async workflows(
     @graphql.Args() args: WorkflowFindManyArgs
   ): Promise<Workflow[]> {
-    return this.service.findMany(args);
+    return this.service.workflows(args);
   }
 
   @graphql.Query(() => Workflow, { nullable: true })
   async workflow(
     @graphql.Args() args: WorkflowFindUniqueArgs
   ): Promise<Workflow | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.workflow(args);
     if (result === null) {
       return null;
     }
@@ -61,7 +61,7 @@ export class WorkflowResolverBase {
   async createWorkflow(
     @graphql.Args() args: CreateWorkflowArgs
   ): Promise<Workflow> {
-    return await this.service.create({
+    return await this.service.createWorkflow({
       ...args,
       data: {
         ...args.data,
@@ -78,7 +78,7 @@ export class WorkflowResolverBase {
     @graphql.Args() args: UpdateWorkflowArgs
   ): Promise<Workflow | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWorkflow({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class WorkflowResolverBase {
     @graphql.Args() args: DeleteWorkflowArgs
   ): Promise<Workflow | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteWorkflow(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -115,7 +115,7 @@ export class WorkflowResolverBase {
   }
 
   @graphql.ResolveField(() => [WorkflowsOnEventType], { name: "activeOn" })
-  async resolveFieldActiveOn(
+  async findActiveOn(
     @graphql.Parent() parent: Workflow,
     @graphql.Args() args: WorkflowsOnEventTypeFindManyArgs
   ): Promise<WorkflowsOnEventType[]> {
@@ -129,7 +129,7 @@ export class WorkflowResolverBase {
   }
 
   @graphql.ResolveField(() => [WorkflowStep], { name: "steps" })
-  async resolveFieldSteps(
+  async findSteps(
     @graphql.Parent() parent: Workflow,
     @graphql.Args() args: WorkflowStepFindManyArgs
   ): Promise<WorkflowStep[]> {
@@ -146,9 +146,7 @@ export class WorkflowResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Workflow
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Workflow): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

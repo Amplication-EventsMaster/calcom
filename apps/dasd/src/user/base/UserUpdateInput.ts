@@ -31,7 +31,7 @@ import { EventTypeUpdateManyWithoutUsersInput } from "./EventTypeUpdateManyWitho
 import { FeedbackUpdateManyWithoutUsersInput } from "./FeedbackUpdateManyWithoutUsersInput";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { ImpersonationUpdateManyWithoutUsersInput } from "./ImpersonationUpdateManyWithoutUsersInput";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { EnumUserPlan } from "./EnumUserPlan";
@@ -40,6 +40,7 @@ import { ScheduleUpdateManyWithoutUsersInput } from "./ScheduleUpdateManyWithout
 import { SelectedCalendarUpdateManyWithoutUsersInput } from "./SelectedCalendarUpdateManyWithoutUsersInput";
 import { SessionUpdateManyWithoutUsersInput } from "./SessionUpdateManyWithoutUsersInput";
 import { MembershipUpdateManyWithoutUsersInput } from "./MembershipUpdateManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../../verificationToken/base/VerificationTokenWhereUniqueInput";
 import { WebhookUpdateManyWithoutUsersInput } from "./WebhookUpdateManyWithoutUsersInput";
 import { WorkflowUpdateManyWithoutUsersInput } from "./WorkflowUpdateManyWithoutUsersInput";
 
@@ -552,6 +553,18 @@ class UserUpdateInput {
     nullable: true,
   })
   username?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationTokenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => VerificationTokenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => VerificationTokenWhereUniqueInput, {
+    nullable: true,
+  })
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
 
   @ApiProperty({
     required: false,

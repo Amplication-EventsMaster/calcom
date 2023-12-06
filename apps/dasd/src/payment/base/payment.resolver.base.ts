@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreatePaymentArgs } from "./CreatePaymentArgs";
-import { UpdatePaymentArgs } from "./UpdatePaymentArgs";
-import { DeletePaymentArgs } from "./DeletePaymentArgs";
+import { Payment } from "./Payment";
 import { PaymentCountArgs } from "./PaymentCountArgs";
 import { PaymentFindManyArgs } from "./PaymentFindManyArgs";
 import { PaymentFindUniqueArgs } from "./PaymentFindUniqueArgs";
-import { Payment } from "./Payment";
+import { CreatePaymentArgs } from "./CreatePaymentArgs";
+import { UpdatePaymentArgs } from "./UpdatePaymentArgs";
+import { DeletePaymentArgs } from "./DeletePaymentArgs";
 import { Booking } from "../../booking/base/Booking";
 import { PaymentService } from "../payment.service";
 @graphql.Resolver(() => Payment)
@@ -39,14 +39,14 @@ export class PaymentResolverBase {
   async payments(
     @graphql.Args() args: PaymentFindManyArgs
   ): Promise<Payment[]> {
-    return this.service.findMany(args);
+    return this.service.payments(args);
   }
 
   @graphql.Query(() => Payment, { nullable: true })
   async payment(
     @graphql.Args() args: PaymentFindUniqueArgs
   ): Promise<Payment | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.payment(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class PaymentResolverBase {
   async createPayment(
     @graphql.Args() args: CreatePaymentArgs
   ): Promise<Payment> {
-    return await this.service.create({
+    return await this.service.createPayment({
       ...args,
       data: {
         ...args.data,
@@ -76,7 +76,7 @@ export class PaymentResolverBase {
     @graphql.Args() args: UpdatePaymentArgs
   ): Promise<Payment | null> {
     try {
-      return await this.service.update({
+      return await this.service.updatePayment({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class PaymentResolverBase {
     @graphql.Args() args: DeletePaymentArgs
   ): Promise<Payment | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deletePayment(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -118,9 +118,7 @@ export class PaymentResolverBase {
     nullable: true,
     name: "booking",
   })
-  async resolveFieldBooking(
-    @graphql.Parent() parent: Payment
-  ): Promise<Booking | null> {
+  async getBooking(@graphql.Parent() parent: Payment): Promise<Booking | null> {
     const result = await this.service.getBooking(parent.id);
 
     if (!result) {

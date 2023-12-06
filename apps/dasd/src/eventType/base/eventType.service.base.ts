@@ -13,16 +13,16 @@ import { PrismaService } from "../../prisma/prisma.service";
 
 import {
   Prisma,
-  EventType,
-  Availability,
-  Booking,
-  EventTypeCustomInput,
-  User,
-  Webhook,
-  WorkflowsOnEventType,
-  DestinationCalendar,
-  HashedLink,
-  Schedule,
+  EventType, // @ts-ignore
+  Availability, // @ts-ignore
+  Booking, // @ts-ignore
+  EventTypeCustomInput, // @ts-ignore
+  User, // @ts-ignore
+  Webhook, // @ts-ignore
+  WorkflowsOnEventType, // @ts-ignore
+  DestinationCalendar, // @ts-ignore
+  HashedLink, // @ts-ignore
+  Schedule, // @ts-ignore
   Team,
 } from "@prisma/client";
 
@@ -35,27 +35,27 @@ export class EventTypeServiceBase {
     return this.prisma.eventType.count(args);
   }
 
-  async findMany<T extends Prisma.EventTypeFindManyArgs>(
+  async eventTypes<T extends Prisma.EventTypeFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.EventTypeFindManyArgs>
   ): Promise<EventType[]> {
     return this.prisma.eventType.findMany(args);
   }
-  async findOne<T extends Prisma.EventTypeFindUniqueArgs>(
+  async eventType<T extends Prisma.EventTypeFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.EventTypeFindUniqueArgs>
   ): Promise<EventType | null> {
     return this.prisma.eventType.findUnique(args);
   }
-  async create<T extends Prisma.EventTypeCreateArgs>(
+  async createEventType<T extends Prisma.EventTypeCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.EventTypeCreateArgs>
   ): Promise<EventType> {
     return this.prisma.eventType.create<T>(args);
   }
-  async update<T extends Prisma.EventTypeUpdateArgs>(
+  async updateEventType<T extends Prisma.EventTypeUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.EventTypeUpdateArgs>
   ): Promise<EventType> {
     return this.prisma.eventType.update<T>(args);
   }
-  async delete<T extends Prisma.EventTypeDeleteArgs>(
+  async deleteEventType<T extends Prisma.EventTypeDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.EventTypeDeleteArgs>
   ): Promise<EventType> {
     return this.prisma.eventType.delete(args);

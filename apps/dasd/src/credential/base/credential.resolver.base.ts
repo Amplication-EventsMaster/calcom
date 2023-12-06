@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateCredentialArgs } from "./CreateCredentialArgs";
-import { UpdateCredentialArgs } from "./UpdateCredentialArgs";
-import { DeleteCredentialArgs } from "./DeleteCredentialArgs";
+import { Credential } from "./Credential";
 import { CredentialCountArgs } from "./CredentialCountArgs";
 import { CredentialFindManyArgs } from "./CredentialFindManyArgs";
 import { CredentialFindUniqueArgs } from "./CredentialFindUniqueArgs";
-import { Credential } from "./Credential";
+import { CreateCredentialArgs } from "./CreateCredentialArgs";
+import { UpdateCredentialArgs } from "./UpdateCredentialArgs";
+import { DeleteCredentialArgs } from "./DeleteCredentialArgs";
 import { DestinationCalendarFindManyArgs } from "../../destinationCalendar/base/DestinationCalendarFindManyArgs";
 import { DestinationCalendar } from "../../destinationCalendar/base/DestinationCalendar";
 import { App } from "../../app/base/App";
@@ -42,14 +42,14 @@ export class CredentialResolverBase {
   async credentials(
     @graphql.Args() args: CredentialFindManyArgs
   ): Promise<Credential[]> {
-    return this.service.findMany(args);
+    return this.service.credentials(args);
   }
 
   @graphql.Query(() => Credential, { nullable: true })
   async credential(
     @graphql.Args() args: CredentialFindUniqueArgs
   ): Promise<Credential | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.credential(args);
     if (result === null) {
       return null;
     }
@@ -60,7 +60,7 @@ export class CredentialResolverBase {
   async createCredential(
     @graphql.Args() args: CreateCredentialArgs
   ): Promise<Credential> {
-    return await this.service.create({
+    return await this.service.createCredential({
       ...args,
       data: {
         ...args.data,
@@ -85,7 +85,7 @@ export class CredentialResolverBase {
     @graphql.Args() args: UpdateCredentialArgs
   ): Promise<Credential | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateCredential({
         ...args,
         data: {
           ...args.data,
@@ -118,7 +118,7 @@ export class CredentialResolverBase {
     @graphql.Args() args: DeleteCredentialArgs
   ): Promise<Credential | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteCredential(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -132,7 +132,7 @@ export class CredentialResolverBase {
   @graphql.ResolveField(() => [DestinationCalendar], {
     name: "destinationCalendars",
   })
-  async resolveFieldDestinationCalendars(
+  async findDestinationCalendars(
     @graphql.Parent() parent: Credential,
     @graphql.Args() args: DestinationCalendarFindManyArgs
   ): Promise<DestinationCalendar[]> {
@@ -152,9 +152,7 @@ export class CredentialResolverBase {
     nullable: true,
     name: "app",
   })
-  async resolveFieldApp(
-    @graphql.Parent() parent: Credential
-  ): Promise<App | null> {
+  async getApp(@graphql.Parent() parent: Credential): Promise<App | null> {
     const result = await this.service.getApp(parent.id);
 
     if (!result) {
@@ -167,9 +165,7 @@ export class CredentialResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Credential
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Credential): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

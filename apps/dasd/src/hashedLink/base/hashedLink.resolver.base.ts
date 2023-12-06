@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateHashedLinkArgs } from "./CreateHashedLinkArgs";
-import { UpdateHashedLinkArgs } from "./UpdateHashedLinkArgs";
-import { DeleteHashedLinkArgs } from "./DeleteHashedLinkArgs";
+import { HashedLink } from "./HashedLink";
 import { HashedLinkCountArgs } from "./HashedLinkCountArgs";
 import { HashedLinkFindManyArgs } from "./HashedLinkFindManyArgs";
 import { HashedLinkFindUniqueArgs } from "./HashedLinkFindUniqueArgs";
-import { HashedLink } from "./HashedLink";
+import { CreateHashedLinkArgs } from "./CreateHashedLinkArgs";
+import { UpdateHashedLinkArgs } from "./UpdateHashedLinkArgs";
+import { DeleteHashedLinkArgs } from "./DeleteHashedLinkArgs";
 import { EventType } from "../../eventType/base/EventType";
 import { HashedLinkService } from "../hashedLink.service";
 @graphql.Resolver(() => HashedLink)
@@ -39,14 +39,14 @@ export class HashedLinkResolverBase {
   async hashedLinks(
     @graphql.Args() args: HashedLinkFindManyArgs
   ): Promise<HashedLink[]> {
-    return this.service.findMany(args);
+    return this.service.hashedLinks(args);
   }
 
   @graphql.Query(() => HashedLink, { nullable: true })
   async hashedLink(
     @graphql.Args() args: HashedLinkFindUniqueArgs
   ): Promise<HashedLink | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.hashedLink(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class HashedLinkResolverBase {
   async createHashedLink(
     @graphql.Args() args: CreateHashedLinkArgs
   ): Promise<HashedLink> {
-    return await this.service.create({
+    return await this.service.createHashedLink({
       ...args,
       data: {
         ...args.data,
@@ -74,7 +74,7 @@ export class HashedLinkResolverBase {
     @graphql.Args() args: UpdateHashedLinkArgs
   ): Promise<HashedLink | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateHashedLink({
         ...args,
         data: {
           ...args.data,
@@ -99,7 +99,7 @@ export class HashedLinkResolverBase {
     @graphql.Args() args: DeleteHashedLinkArgs
   ): Promise<HashedLink | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteHashedLink(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -114,7 +114,7 @@ export class HashedLinkResolverBase {
     nullable: true,
     name: "eventType",
   })
-  async resolveFieldEventType(
+  async getEventType(
     @graphql.Parent() parent: HashedLink
   ): Promise<EventType | null> {
     const result = await this.service.getEventType(parent.id);

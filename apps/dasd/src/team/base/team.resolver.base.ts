@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateTeamArgs } from "./CreateTeamArgs";
-import { UpdateTeamArgs } from "./UpdateTeamArgs";
-import { DeleteTeamArgs } from "./DeleteTeamArgs";
+import { Team } from "./Team";
 import { TeamCountArgs } from "./TeamCountArgs";
 import { TeamFindManyArgs } from "./TeamFindManyArgs";
 import { TeamFindUniqueArgs } from "./TeamFindUniqueArgs";
-import { Team } from "./Team";
+import { CreateTeamArgs } from "./CreateTeamArgs";
+import { UpdateTeamArgs } from "./UpdateTeamArgs";
+import { DeleteTeamArgs } from "./DeleteTeamArgs";
 import { EventTypeFindManyArgs } from "../../eventType/base/EventTypeFindManyArgs";
 import { EventType } from "../../eventType/base/EventType";
 import { MembershipFindManyArgs } from "../../membership/base/MembershipFindManyArgs";
@@ -40,12 +40,12 @@ export class TeamResolverBase {
 
   @graphql.Query(() => [Team])
   async teams(@graphql.Args() args: TeamFindManyArgs): Promise<Team[]> {
-    return this.service.findMany(args);
+    return this.service.teams(args);
   }
 
   @graphql.Query(() => Team, { nullable: true })
   async team(@graphql.Args() args: TeamFindUniqueArgs): Promise<Team | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.team(args);
     if (result === null) {
       return null;
     }
@@ -54,7 +54,7 @@ export class TeamResolverBase {
 
   @graphql.Mutation(() => Team)
   async createTeam(@graphql.Args() args: CreateTeamArgs): Promise<Team> {
-    return await this.service.create({
+    return await this.service.createTeam({
       ...args,
       data: args.data,
     });
@@ -63,7 +63,7 @@ export class TeamResolverBase {
   @graphql.Mutation(() => Team)
   async updateTeam(@graphql.Args() args: UpdateTeamArgs): Promise<Team | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateTeam({
         ...args,
         data: args.data,
       });
@@ -80,7 +80,7 @@ export class TeamResolverBase {
   @graphql.Mutation(() => Team)
   async deleteTeam(@graphql.Args() args: DeleteTeamArgs): Promise<Team | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteTeam(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -92,7 +92,7 @@ export class TeamResolverBase {
   }
 
   @graphql.ResolveField(() => [EventType], { name: "eventTypes" })
-  async resolveFieldEventTypes(
+  async findEventTypes(
     @graphql.Parent() parent: Team,
     @graphql.Args() args: EventTypeFindManyArgs
   ): Promise<EventType[]> {
@@ -106,7 +106,7 @@ export class TeamResolverBase {
   }
 
   @graphql.ResolveField(() => [Membership], { name: "members" })
-  async resolveFieldMembers(
+  async findMembers(
     @graphql.Parent() parent: Team,
     @graphql.Args() args: MembershipFindManyArgs
   ): Promise<Membership[]> {

@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateBookingReferenceArgs } from "./CreateBookingReferenceArgs";
-import { UpdateBookingReferenceArgs } from "./UpdateBookingReferenceArgs";
-import { DeleteBookingReferenceArgs } from "./DeleteBookingReferenceArgs";
+import { BookingReference } from "./BookingReference";
 import { BookingReferenceCountArgs } from "./BookingReferenceCountArgs";
 import { BookingReferenceFindManyArgs } from "./BookingReferenceFindManyArgs";
 import { BookingReferenceFindUniqueArgs } from "./BookingReferenceFindUniqueArgs";
-import { BookingReference } from "./BookingReference";
+import { CreateBookingReferenceArgs } from "./CreateBookingReferenceArgs";
+import { UpdateBookingReferenceArgs } from "./UpdateBookingReferenceArgs";
+import { DeleteBookingReferenceArgs } from "./DeleteBookingReferenceArgs";
 import { Booking } from "../../booking/base/Booking";
 import { BookingReferenceService } from "../bookingReference.service";
 @graphql.Resolver(() => BookingReference)
@@ -39,14 +39,14 @@ export class BookingReferenceResolverBase {
   async bookingReferences(
     @graphql.Args() args: BookingReferenceFindManyArgs
   ): Promise<BookingReference[]> {
-    return this.service.findMany(args);
+    return this.service.bookingReferences(args);
   }
 
   @graphql.Query(() => BookingReference, { nullable: true })
   async bookingReference(
     @graphql.Args() args: BookingReferenceFindUniqueArgs
   ): Promise<BookingReference | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.bookingReference(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class BookingReferenceResolverBase {
   async createBookingReference(
     @graphql.Args() args: CreateBookingReferenceArgs
   ): Promise<BookingReference> {
-    return await this.service.create({
+    return await this.service.createBookingReference({
       ...args,
       data: {
         ...args.data,
@@ -76,7 +76,7 @@ export class BookingReferenceResolverBase {
     @graphql.Args() args: UpdateBookingReferenceArgs
   ): Promise<BookingReference | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateBookingReference({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class BookingReferenceResolverBase {
     @graphql.Args() args: DeleteBookingReferenceArgs
   ): Promise<BookingReference | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteBookingReference(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -118,7 +118,7 @@ export class BookingReferenceResolverBase {
     nullable: true,
     name: "booking",
   })
-  async resolveFieldBooking(
+  async getBooking(
     @graphql.Parent() parent: BookingReference
   ): Promise<Booking | null> {
     const result = await this.service.getBooking(parent.id);

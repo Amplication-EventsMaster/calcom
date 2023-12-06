@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateBookingArgs } from "./CreateBookingArgs";
-import { UpdateBookingArgs } from "./UpdateBookingArgs";
-import { DeleteBookingArgs } from "./DeleteBookingArgs";
+import { Booking } from "./Booking";
 import { BookingCountArgs } from "./BookingCountArgs";
 import { BookingFindManyArgs } from "./BookingFindManyArgs";
 import { BookingFindUniqueArgs } from "./BookingFindUniqueArgs";
-import { Booking } from "./Booking";
+import { CreateBookingArgs } from "./CreateBookingArgs";
+import { UpdateBookingArgs } from "./UpdateBookingArgs";
+import { DeleteBookingArgs } from "./DeleteBookingArgs";
 import { AttendeeFindManyArgs } from "../../attendee/base/AttendeeFindManyArgs";
 import { Attendee } from "../../attendee/base/Attendee";
 import { PaymentFindManyArgs } from "../../payment/base/PaymentFindManyArgs";
@@ -50,14 +50,14 @@ export class BookingResolverBase {
   async bookings(
     @graphql.Args() args: BookingFindManyArgs
   ): Promise<Booking[]> {
-    return this.service.findMany(args);
+    return this.service.bookings(args);
   }
 
   @graphql.Query(() => Booking, { nullable: true })
   async booking(
     @graphql.Args() args: BookingFindUniqueArgs
   ): Promise<Booking | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.booking(args);
     if (result === null) {
       return null;
     }
@@ -68,7 +68,7 @@ export class BookingResolverBase {
   async createBooking(
     @graphql.Args() args: CreateBookingArgs
   ): Promise<Booking> {
-    return await this.service.create({
+    return await this.service.createBooking({
       ...args,
       data: {
         ...args.data,
@@ -105,7 +105,7 @@ export class BookingResolverBase {
     @graphql.Args() args: UpdateBookingArgs
   ): Promise<Booking | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateBooking({
         ...args,
         data: {
           ...args.data,
@@ -150,7 +150,7 @@ export class BookingResolverBase {
     @graphql.Args() args: DeleteBookingArgs
   ): Promise<Booking | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteBooking(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -162,7 +162,7 @@ export class BookingResolverBase {
   }
 
   @graphql.ResolveField(() => [Attendee], { name: "attendees" })
-  async resolveFieldAttendees(
+  async findAttendees(
     @graphql.Parent() parent: Booking,
     @graphql.Args() args: AttendeeFindManyArgs
   ): Promise<Attendee[]> {
@@ -176,7 +176,7 @@ export class BookingResolverBase {
   }
 
   @graphql.ResolveField(() => [Payment], { name: "payment" })
-  async resolveFieldPayment(
+  async findPayment(
     @graphql.Parent() parent: Booking,
     @graphql.Args() args: PaymentFindManyArgs
   ): Promise<Payment[]> {
@@ -190,7 +190,7 @@ export class BookingResolverBase {
   }
 
   @graphql.ResolveField(() => [BookingReference], { name: "references" })
-  async resolveFieldReferences(
+  async findReferences(
     @graphql.Parent() parent: Booking,
     @graphql.Args() args: BookingReferenceFindManyArgs
   ): Promise<BookingReference[]> {
@@ -204,7 +204,7 @@ export class BookingResolverBase {
   }
 
   @graphql.ResolveField(() => [WorkflowReminder], { name: "workflowReminders" })
-  async resolveFieldWorkflowReminders(
+  async findWorkflowReminders(
     @graphql.Parent() parent: Booking,
     @graphql.Args() args: WorkflowReminderFindManyArgs
   ): Promise<WorkflowReminder[]> {
@@ -221,7 +221,7 @@ export class BookingResolverBase {
     nullable: true,
     name: "dailyRef",
   })
-  async resolveFieldDailyRef(
+  async getDailyRef(
     @graphql.Parent() parent: Booking
   ): Promise<DailyEventReference | null> {
     const result = await this.service.getDailyRef(parent.id);
@@ -236,7 +236,7 @@ export class BookingResolverBase {
     nullable: true,
     name: "destinationCalendar",
   })
-  async resolveFieldDestinationCalendar(
+  async getDestinationCalendar(
     @graphql.Parent() parent: Booking
   ): Promise<DestinationCalendar | null> {
     const result = await this.service.getDestinationCalendar(parent.id);
@@ -251,7 +251,7 @@ export class BookingResolverBase {
     nullable: true,
     name: "eventType",
   })
-  async resolveFieldEventType(
+  async getEventType(
     @graphql.Parent() parent: Booking
   ): Promise<EventType | null> {
     const result = await this.service.getEventType(parent.id);
@@ -266,9 +266,7 @@ export class BookingResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Booking
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Booking): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

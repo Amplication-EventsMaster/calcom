@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateResetPasswordRequestArgs } from "./CreateResetPasswordRequestArgs";
-import { UpdateResetPasswordRequestArgs } from "./UpdateResetPasswordRequestArgs";
-import { DeleteResetPasswordRequestArgs } from "./DeleteResetPasswordRequestArgs";
+import { ResetPasswordRequest } from "./ResetPasswordRequest";
 import { ResetPasswordRequestCountArgs } from "./ResetPasswordRequestCountArgs";
 import { ResetPasswordRequestFindManyArgs } from "./ResetPasswordRequestFindManyArgs";
 import { ResetPasswordRequestFindUniqueArgs } from "./ResetPasswordRequestFindUniqueArgs";
-import { ResetPasswordRequest } from "./ResetPasswordRequest";
+import { CreateResetPasswordRequestArgs } from "./CreateResetPasswordRequestArgs";
+import { UpdateResetPasswordRequestArgs } from "./UpdateResetPasswordRequestArgs";
+import { DeleteResetPasswordRequestArgs } from "./DeleteResetPasswordRequestArgs";
 import { ResetPasswordRequestService } from "../resetPasswordRequest.service";
 @graphql.Resolver(() => ResetPasswordRequest)
 export class ResetPasswordRequestResolverBase {
@@ -38,14 +38,14 @@ export class ResetPasswordRequestResolverBase {
   async resetPasswordRequests(
     @graphql.Args() args: ResetPasswordRequestFindManyArgs
   ): Promise<ResetPasswordRequest[]> {
-    return this.service.findMany(args);
+    return this.service.resetPasswordRequests(args);
   }
 
   @graphql.Query(() => ResetPasswordRequest, { nullable: true })
   async resetPasswordRequest(
     @graphql.Args() args: ResetPasswordRequestFindUniqueArgs
   ): Promise<ResetPasswordRequest | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.resetPasswordRequest(args);
     if (result === null) {
       return null;
     }
@@ -56,7 +56,7 @@ export class ResetPasswordRequestResolverBase {
   async createResetPasswordRequest(
     @graphql.Args() args: CreateResetPasswordRequestArgs
   ): Promise<ResetPasswordRequest> {
-    return await this.service.create({
+    return await this.service.createResetPasswordRequest({
       ...args,
       data: args.data,
     });
@@ -67,7 +67,7 @@ export class ResetPasswordRequestResolverBase {
     @graphql.Args() args: UpdateResetPasswordRequestArgs
   ): Promise<ResetPasswordRequest | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateResetPasswordRequest({
         ...args,
         data: args.data,
       });
@@ -86,7 +86,7 @@ export class ResetPasswordRequestResolverBase {
     @graphql.Args() args: DeleteResetPasswordRequestArgs
   ): Promise<ResetPasswordRequest | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteResetPasswordRequest(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(

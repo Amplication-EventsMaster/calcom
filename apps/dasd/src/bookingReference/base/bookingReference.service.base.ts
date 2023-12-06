@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, BookingReference, Booking } from "@prisma/client";
+
+import {
+  Prisma,
+  BookingReference, // @ts-ignore
+  Booking,
+} from "@prisma/client";
 
 export class BookingReferenceServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +26,27 @@ export class BookingReferenceServiceBase {
     return this.prisma.bookingReference.count(args);
   }
 
-  async findMany<T extends Prisma.BookingReferenceFindManyArgs>(
+  async bookingReferences<T extends Prisma.BookingReferenceFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingReferenceFindManyArgs>
   ): Promise<BookingReference[]> {
     return this.prisma.bookingReference.findMany(args);
   }
-  async findOne<T extends Prisma.BookingReferenceFindUniqueArgs>(
+  async bookingReference<T extends Prisma.BookingReferenceFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingReferenceFindUniqueArgs>
   ): Promise<BookingReference | null> {
     return this.prisma.bookingReference.findUnique(args);
   }
-  async create<T extends Prisma.BookingReferenceCreateArgs>(
+  async createBookingReference<T extends Prisma.BookingReferenceCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingReferenceCreateArgs>
   ): Promise<BookingReference> {
     return this.prisma.bookingReference.create<T>(args);
   }
-  async update<T extends Prisma.BookingReferenceUpdateArgs>(
+  async updateBookingReference<T extends Prisma.BookingReferenceUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingReferenceUpdateArgs>
   ): Promise<BookingReference> {
     return this.prisma.bookingReference.update<T>(args);
   }
-  async delete<T extends Prisma.BookingReferenceDeleteArgs>(
+  async deleteBookingReference<T extends Prisma.BookingReferenceDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingReferenceDeleteArgs>
   ): Promise<BookingReference> {
     return this.prisma.bookingReference.delete(args);

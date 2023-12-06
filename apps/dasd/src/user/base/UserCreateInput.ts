@@ -31,7 +31,7 @@ import { EventTypeCreateNestedManyWithoutUsersInput } from "./EventTypeCreateNes
 import { FeedbackCreateNestedManyWithoutUsersInput } from "./FeedbackCreateNestedManyWithoutUsersInput";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { ImpersonationCreateNestedManyWithoutUsersInput } from "./ImpersonationCreateNestedManyWithoutUsersInput";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { EnumUserPlan } from "./EnumUserPlan";
@@ -40,6 +40,7 @@ import { ScheduleCreateNestedManyWithoutUsersInput } from "./ScheduleCreateNeste
 import { SelectedCalendarCreateNestedManyWithoutUsersInput } from "./SelectedCalendarCreateNestedManyWithoutUsersInput";
 import { SessionCreateNestedManyWithoutUsersInput } from "./SessionCreateNestedManyWithoutUsersInput";
 import { MembershipCreateNestedManyWithoutUsersInput } from "./MembershipCreateNestedManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../../verificationToken/base/VerificationTokenWhereUniqueInput";
 import { WebhookCreateNestedManyWithoutUsersInput } from "./WebhookCreateNestedManyWithoutUsersInput";
 import { WorkflowCreateNestedManyWithoutUsersInput } from "./WorkflowCreateNestedManyWithoutUsersInput";
 
@@ -507,6 +508,18 @@ class UserCreateInput {
     nullable: true,
   })
   username?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationTokenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => VerificationTokenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => VerificationTokenWhereUniqueInput, {
+    nullable: true,
+  })
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
 
   @ApiProperty({
     required: false,

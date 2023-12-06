@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, SelectedCalendar, User } from "@prisma/client";
+
+import {
+  Prisma,
+  SelectedCalendar, // @ts-ignore
+  User,
+} from "@prisma/client";
 
 export class SelectedCalendarServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +26,27 @@ export class SelectedCalendarServiceBase {
     return this.prisma.selectedCalendar.count(args);
   }
 
-  async findMany<T extends Prisma.SelectedCalendarFindManyArgs>(
+  async selectedCalendars<T extends Prisma.SelectedCalendarFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.SelectedCalendarFindManyArgs>
   ): Promise<SelectedCalendar[]> {
     return this.prisma.selectedCalendar.findMany(args);
   }
-  async findOne<T extends Prisma.SelectedCalendarFindUniqueArgs>(
+  async selectedCalendar<T extends Prisma.SelectedCalendarFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.SelectedCalendarFindUniqueArgs>
   ): Promise<SelectedCalendar | null> {
     return this.prisma.selectedCalendar.findUnique(args);
   }
-  async create<T extends Prisma.SelectedCalendarCreateArgs>(
+  async createSelectedCalendar<T extends Prisma.SelectedCalendarCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.SelectedCalendarCreateArgs>
   ): Promise<SelectedCalendar> {
     return this.prisma.selectedCalendar.create<T>(args);
   }
-  async update<T extends Prisma.SelectedCalendarUpdateArgs>(
+  async updateSelectedCalendar<T extends Prisma.SelectedCalendarUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.SelectedCalendarUpdateArgs>
   ): Promise<SelectedCalendar> {
     return this.prisma.selectedCalendar.update<T>(args);
   }
-  async delete<T extends Prisma.SelectedCalendarDeleteArgs>(
+  async deleteSelectedCalendar<T extends Prisma.SelectedCalendarDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.SelectedCalendarDeleteArgs>
   ): Promise<SelectedCalendar> {
     return this.prisma.selectedCalendar.delete(args);

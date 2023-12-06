@@ -18,18 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { FeedbackService } from "../feedback.service";
 import { FeedbackCreateInput } from "./FeedbackCreateInput";
-import { FeedbackWhereInput } from "./FeedbackWhereInput";
-import { FeedbackWhereUniqueInput } from "./FeedbackWhereUniqueInput";
-import { FeedbackFindManyArgs } from "./FeedbackFindManyArgs";
-import { FeedbackUpdateInput } from "./FeedbackUpdateInput";
 import { Feedback } from "./Feedback";
+import { FeedbackFindManyArgs } from "./FeedbackFindManyArgs";
+import { FeedbackWhereUniqueInput } from "./FeedbackWhereUniqueInput";
+import { FeedbackUpdateInput } from "./FeedbackUpdateInput";
 
 export class FeedbackControllerBase {
   constructor(protected readonly service: FeedbackService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Feedback })
-  async create(@common.Body() data: FeedbackCreateInput): Promise<Feedback> {
-    return await this.service.create({
+  async createFeedback(
+    @common.Body() data: FeedbackCreateInput
+  ): Promise<Feedback> {
+    return await this.service.createFeedback({
       data: {
         ...data,
 
@@ -55,9 +56,9 @@ export class FeedbackControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Feedback] })
   @ApiNestedQuery(FeedbackFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Feedback[]> {
+  async feedbacks(@common.Req() request: Request): Promise<Feedback[]> {
     const args = plainToClass(FeedbackFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.feedbacks({
       ...args,
       select: {
         comment: true,
@@ -77,10 +78,10 @@ export class FeedbackControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Feedback })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async feedback(
     @common.Param() params: FeedbackWhereUniqueInput
   ): Promise<Feedback | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.feedback({
       where: params,
       select: {
         comment: true,
@@ -106,12 +107,12 @@ export class FeedbackControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Feedback })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateFeedback(
     @common.Param() params: FeedbackWhereUniqueInput,
     @common.Body() data: FeedbackUpdateInput
   ): Promise<Feedback | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateFeedback({
         where: params,
         data: {
           ...data,
@@ -146,11 +147,11 @@ export class FeedbackControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Feedback })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteFeedback(
     @common.Param() params: FeedbackWhereUniqueInput
   ): Promise<Feedback | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteFeedback({
         where: params,
         select: {
           comment: true,

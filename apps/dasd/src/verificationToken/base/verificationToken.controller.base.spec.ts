@@ -53,11 +53,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createVerificationToken() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  verificationTokens: () => FIND_MANY_RESULT,
+  verificationToken: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

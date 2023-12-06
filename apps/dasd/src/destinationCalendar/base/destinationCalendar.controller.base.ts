@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { DestinationCalendarService } from "../destinationCalendar.service";
 import { DestinationCalendarCreateInput } from "./DestinationCalendarCreateInput";
-import { DestinationCalendarWhereInput } from "./DestinationCalendarWhereInput";
-import { DestinationCalendarWhereUniqueInput } from "./DestinationCalendarWhereUniqueInput";
-import { DestinationCalendarFindManyArgs } from "./DestinationCalendarFindManyArgs";
-import { DestinationCalendarUpdateInput } from "./DestinationCalendarUpdateInput";
 import { DestinationCalendar } from "./DestinationCalendar";
+import { DestinationCalendarFindManyArgs } from "./DestinationCalendarFindManyArgs";
+import { DestinationCalendarWhereUniqueInput } from "./DestinationCalendarWhereUniqueInput";
+import { DestinationCalendarUpdateInput } from "./DestinationCalendarUpdateInput";
 
 export class DestinationCalendarControllerBase {
   constructor(protected readonly service: DestinationCalendarService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: DestinationCalendar })
-  async create(
+  async createDestinationCalendar(
     @common.Body() data: DestinationCalendarCreateInput
   ): Promise<DestinationCalendar> {
-    return await this.service.create({
+    return await this.service.createDestinationCalendar({
       data: {
         ...data,
 
@@ -94,11 +93,11 @@ export class DestinationCalendarControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [DestinationCalendar] })
   @ApiNestedQuery(DestinationCalendarFindManyArgs)
-  async findMany(
+  async destinationCalendars(
     @common.Req() request: Request
   ): Promise<DestinationCalendar[]> {
     const args = plainToClass(DestinationCalendarFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.destinationCalendars({
       ...args,
       select: {
         booking: {
@@ -135,10 +134,10 @@ export class DestinationCalendarControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: DestinationCalendar })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async destinationCalendar(
     @common.Param() params: DestinationCalendarWhereUniqueInput
   ): Promise<DestinationCalendar | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.destinationCalendar({
       where: params,
       select: {
         booking: {
@@ -181,12 +180,12 @@ export class DestinationCalendarControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: DestinationCalendar })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateDestinationCalendar(
     @common.Param() params: DestinationCalendarWhereUniqueInput,
     @common.Body() data: DestinationCalendarUpdateInput
   ): Promise<DestinationCalendar | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateDestinationCalendar({
         where: params,
         data: {
           ...data,
@@ -258,11 +257,11 @@ export class DestinationCalendarControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: DestinationCalendar })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteDestinationCalendar(
     @common.Param() params: DestinationCalendarWhereUniqueInput
   ): Promise<DestinationCalendar | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteDestinationCalendar({
         where: params,
         select: {
           booking: {

@@ -16,7 +16,7 @@ import { ValidateNested, IsOptional, IsEnum, IsString } from "class-validator";
 import { Type } from "class-transformer";
 import { EnumAppCategories } from "./EnumAppCategories";
 import { CredentialUpdateManyWithoutAppsInput } from "./CredentialUpdateManyWithoutAppsInput";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { WebhookUpdateManyWithoutAppsInput } from "./WebhookUpdateManyWithoutAppsInput";

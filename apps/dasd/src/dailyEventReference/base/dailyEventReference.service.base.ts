@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, DailyEventReference, Booking } from "@prisma/client";
+
+import {
+  Prisma,
+  DailyEventReference, // @ts-ignore
+  Booking,
+} from "@prisma/client";
 
 export class DailyEventReferenceServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +26,33 @@ export class DailyEventReferenceServiceBase {
     return this.prisma.dailyEventReference.count(args);
   }
 
-  async findMany<T extends Prisma.DailyEventReferenceFindManyArgs>(
+  async dailyEventReferences<T extends Prisma.DailyEventReferenceFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceFindManyArgs>
   ): Promise<DailyEventReference[]> {
     return this.prisma.dailyEventReference.findMany(args);
   }
-  async findOne<T extends Prisma.DailyEventReferenceFindUniqueArgs>(
+  async dailyEventReference<T extends Prisma.DailyEventReferenceFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceFindUniqueArgs>
   ): Promise<DailyEventReference | null> {
     return this.prisma.dailyEventReference.findUnique(args);
   }
-  async create<T extends Prisma.DailyEventReferenceCreateArgs>(
+  async createDailyEventReference<
+    T extends Prisma.DailyEventReferenceCreateArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceCreateArgs>
   ): Promise<DailyEventReference> {
     return this.prisma.dailyEventReference.create<T>(args);
   }
-  async update<T extends Prisma.DailyEventReferenceUpdateArgs>(
+  async updateDailyEventReference<
+    T extends Prisma.DailyEventReferenceUpdateArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceUpdateArgs>
   ): Promise<DailyEventReference> {
     return this.prisma.dailyEventReference.update<T>(args);
   }
-  async delete<T extends Prisma.DailyEventReferenceDeleteArgs>(
+  async deleteDailyEventReference<
+    T extends Prisma.DailyEventReferenceDeleteArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceDeleteArgs>
   ): Promise<DailyEventReference> {
     return this.prisma.dailyEventReference.delete(args);

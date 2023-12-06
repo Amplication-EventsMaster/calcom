@@ -10,12 +10,13 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  DestinationCalendar,
-  Booking,
-  Credential,
-  EventType,
+  DestinationCalendar, // @ts-ignore
+  Booking, // @ts-ignore
+  Credential, // @ts-ignore
+  EventType, // @ts-ignore
   User,
 } from "@prisma/client";
 
@@ -28,27 +29,33 @@ export class DestinationCalendarServiceBase {
     return this.prisma.destinationCalendar.count(args);
   }
 
-  async findMany<T extends Prisma.DestinationCalendarFindManyArgs>(
+  async destinationCalendars<T extends Prisma.DestinationCalendarFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.DestinationCalendarFindManyArgs>
   ): Promise<DestinationCalendar[]> {
     return this.prisma.destinationCalendar.findMany(args);
   }
-  async findOne<T extends Prisma.DestinationCalendarFindUniqueArgs>(
+  async destinationCalendar<T extends Prisma.DestinationCalendarFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.DestinationCalendarFindUniqueArgs>
   ): Promise<DestinationCalendar | null> {
     return this.prisma.destinationCalendar.findUnique(args);
   }
-  async create<T extends Prisma.DestinationCalendarCreateArgs>(
+  async createDestinationCalendar<
+    T extends Prisma.DestinationCalendarCreateArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.DestinationCalendarCreateArgs>
   ): Promise<DestinationCalendar> {
     return this.prisma.destinationCalendar.create<T>(args);
   }
-  async update<T extends Prisma.DestinationCalendarUpdateArgs>(
+  async updateDestinationCalendar<
+    T extends Prisma.DestinationCalendarUpdateArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.DestinationCalendarUpdateArgs>
   ): Promise<DestinationCalendar> {
     return this.prisma.destinationCalendar.update<T>(args);
   }
-  async delete<T extends Prisma.DestinationCalendarDeleteArgs>(
+  async deleteDestinationCalendar<
+    T extends Prisma.DestinationCalendarDeleteArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.DestinationCalendarDeleteArgs>
   ): Promise<DestinationCalendar> {
     return this.prisma.destinationCalendar.delete(args);

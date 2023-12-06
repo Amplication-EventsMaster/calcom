@@ -37,11 +37,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createCredential() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  credentials: () => FIND_MANY_RESULT,
+  credential: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

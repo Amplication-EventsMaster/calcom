@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateDailyEventReferenceArgs } from "./CreateDailyEventReferenceArgs";
-import { UpdateDailyEventReferenceArgs } from "./UpdateDailyEventReferenceArgs";
-import { DeleteDailyEventReferenceArgs } from "./DeleteDailyEventReferenceArgs";
+import { DailyEventReference } from "./DailyEventReference";
 import { DailyEventReferenceCountArgs } from "./DailyEventReferenceCountArgs";
 import { DailyEventReferenceFindManyArgs } from "./DailyEventReferenceFindManyArgs";
 import { DailyEventReferenceFindUniqueArgs } from "./DailyEventReferenceFindUniqueArgs";
-import { DailyEventReference } from "./DailyEventReference";
+import { CreateDailyEventReferenceArgs } from "./CreateDailyEventReferenceArgs";
+import { UpdateDailyEventReferenceArgs } from "./UpdateDailyEventReferenceArgs";
+import { DeleteDailyEventReferenceArgs } from "./DeleteDailyEventReferenceArgs";
 import { Booking } from "../../booking/base/Booking";
 import { DailyEventReferenceService } from "../dailyEventReference.service";
 @graphql.Resolver(() => DailyEventReference)
@@ -39,14 +39,14 @@ export class DailyEventReferenceResolverBase {
   async dailyEventReferences(
     @graphql.Args() args: DailyEventReferenceFindManyArgs
   ): Promise<DailyEventReference[]> {
-    return this.service.findMany(args);
+    return this.service.dailyEventReferences(args);
   }
 
   @graphql.Query(() => DailyEventReference, { nullable: true })
   async dailyEventReference(
     @graphql.Args() args: DailyEventReferenceFindUniqueArgs
   ): Promise<DailyEventReference | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.dailyEventReference(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class DailyEventReferenceResolverBase {
   async createDailyEventReference(
     @graphql.Args() args: CreateDailyEventReferenceArgs
   ): Promise<DailyEventReference> {
-    return await this.service.create({
+    return await this.service.createDailyEventReference({
       ...args,
       data: {
         ...args.data,
@@ -76,7 +76,7 @@ export class DailyEventReferenceResolverBase {
     @graphql.Args() args: UpdateDailyEventReferenceArgs
   ): Promise<DailyEventReference | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateDailyEventReference({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class DailyEventReferenceResolverBase {
     @graphql.Args() args: DeleteDailyEventReferenceArgs
   ): Promise<DailyEventReference | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteDailyEventReference(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -118,7 +118,7 @@ export class DailyEventReferenceResolverBase {
     nullable: true,
     name: "booking",
   })
-  async resolveFieldBooking(
+  async getBooking(
     @graphql.Parent() parent: DailyEventReference
   ): Promise<Booking | null> {
     const result = await this.service.getBooking(parent.id);

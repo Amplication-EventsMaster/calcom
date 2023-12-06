@@ -10,11 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  Schedule,
-  Availability,
-  EventType,
+  Schedule, // @ts-ignore
+  Availability, // @ts-ignore
+  EventType, // @ts-ignore
   User,
 } from "@prisma/client";
 
@@ -27,27 +28,27 @@ export class ScheduleServiceBase {
     return this.prisma.schedule.count(args);
   }
 
-  async findMany<T extends Prisma.ScheduleFindManyArgs>(
+  async schedules<T extends Prisma.ScheduleFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.ScheduleFindManyArgs>
   ): Promise<Schedule[]> {
     return this.prisma.schedule.findMany(args);
   }
-  async findOne<T extends Prisma.ScheduleFindUniqueArgs>(
+  async schedule<T extends Prisma.ScheduleFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.ScheduleFindUniqueArgs>
   ): Promise<Schedule | null> {
     return this.prisma.schedule.findUnique(args);
   }
-  async create<T extends Prisma.ScheduleCreateArgs>(
+  async createSchedule<T extends Prisma.ScheduleCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.ScheduleCreateArgs>
   ): Promise<Schedule> {
     return this.prisma.schedule.create<T>(args);
   }
-  async update<T extends Prisma.ScheduleUpdateArgs>(
+  async updateSchedule<T extends Prisma.ScheduleUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.ScheduleUpdateArgs>
   ): Promise<Schedule> {
     return this.prisma.schedule.update<T>(args);
   }
-  async delete<T extends Prisma.ScheduleDeleteArgs>(
+  async deleteSchedule<T extends Prisma.ScheduleDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.ScheduleDeleteArgs>
   ): Promise<Schedule> {
     return this.prisma.schedule.delete(args);

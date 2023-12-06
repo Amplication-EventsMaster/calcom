@@ -128,6 +128,8 @@ model User {
   twoFactorEnabled     Boolean                  @default(false)
   twoFactorSecret      String?
   username             String?                  @unique
+  verificationToken    VerificationToken?       @relation(fields: [verificationTokenId], references: [id])
+  verificationTokenId  Int?
   verified             Boolean?                 @default(false)
   webhooks             Webhook[]
   weekStart            String                   @default("Sunday")
@@ -166,6 +168,7 @@ model VerificationToken {
   identifier String
   token      String   @unique
   updatedAt  DateTime @updatedAt
+  users      User[]
 
   @@unique([identifier, token])
 }

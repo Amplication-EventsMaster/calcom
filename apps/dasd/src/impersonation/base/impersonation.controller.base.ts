@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { ImpersonationService } from "../impersonation.service";
 import { ImpersonationCreateInput } from "./ImpersonationCreateInput";
-import { ImpersonationWhereInput } from "./ImpersonationWhereInput";
-import { ImpersonationWhereUniqueInput } from "./ImpersonationWhereUniqueInput";
-import { ImpersonationFindManyArgs } from "./ImpersonationFindManyArgs";
-import { ImpersonationUpdateInput } from "./ImpersonationUpdateInput";
 import { Impersonation } from "./Impersonation";
+import { ImpersonationFindManyArgs } from "./ImpersonationFindManyArgs";
+import { ImpersonationWhereUniqueInput } from "./ImpersonationWhereUniqueInput";
+import { ImpersonationUpdateInput } from "./ImpersonationUpdateInput";
 
 export class ImpersonationControllerBase {
   constructor(protected readonly service: ImpersonationService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Impersonation })
-  async create(
+  async createImpersonation(
     @common.Body() data: ImpersonationCreateInput
   ): Promise<Impersonation> {
-    return await this.service.create({
+    return await this.service.createImpersonation({
       data: {
         ...data,
 
@@ -65,9 +64,11 @@ export class ImpersonationControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Impersonation] })
   @ApiNestedQuery(ImpersonationFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Impersonation[]> {
+  async impersonations(
+    @common.Req() request: Request
+  ): Promise<Impersonation[]> {
     const args = plainToClass(ImpersonationFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.impersonations({
       ...args,
       select: {
         createdAt: true,
@@ -91,10 +92,10 @@ export class ImpersonationControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Impersonation })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async impersonation(
     @common.Param() params: ImpersonationWhereUniqueInput
   ): Promise<Impersonation | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.impersonation({
       where: params,
       select: {
         createdAt: true,
@@ -124,12 +125,12 @@ export class ImpersonationControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Impersonation })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateImpersonation(
     @common.Param() params: ImpersonationWhereUniqueInput,
     @common.Body() data: ImpersonationUpdateInput
   ): Promise<Impersonation | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateImpersonation({
         where: params,
         data: {
           ...data,
@@ -172,11 +173,11 @@ export class ImpersonationControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Impersonation })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteImpersonation(
     @common.Param() params: ImpersonationWhereUniqueInput
   ): Promise<Impersonation | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteImpersonation({
         where: params,
         select: {
           createdAt: true,

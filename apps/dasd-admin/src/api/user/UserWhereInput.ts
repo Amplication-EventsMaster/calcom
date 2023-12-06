@@ -20,6 +20,7 @@ import { ScheduleListRelationFilter } from "../schedule/ScheduleListRelationFilt
 import { SelectedCalendarListRelationFilter } from "../selectedCalendar/SelectedCalendarListRelationFilter";
 import { SessionListRelationFilter } from "../session/SessionListRelationFilter";
 import { MembershipListRelationFilter } from "../membership/MembershipListRelationFilter";
+import { VerificationTokenWhereUniqueInput } from "../verificationToken/VerificationTokenWhereUniqueInput";
 import { WebhookListRelationFilter } from "../webhook/WebhookListRelationFilter";
 import { WorkflowListRelationFilter } from "../workflow/WorkflowListRelationFilter";
 
@@ -71,6 +72,7 @@ export type UserWhereInput = {
   twoFactorEnabled?: BooleanFilter;
   twoFactorSecret?: StringNullableFilter;
   username?: StringNullableFilter;
+  verificationToken?: VerificationTokenWhereUniqueInput;
   verified?: BooleanNullableFilter;
   webhooks?: WebhookListRelationFilter;
   weekStart?: StringFilter;

@@ -26,7 +26,7 @@ import { BookingCreateNestedManyWithoutEventTypesInput } from "./BookingCreateNe
 import { EventTypeCustomInputCreateNestedManyWithoutEventTypesInput } from "./EventTypeCustomInputCreateNestedManyWithoutEventTypesInput";
 import { DestinationCalendarWhereUniqueInput } from "../../destinationCalendar/base/DestinationCalendarWhereUniqueInput";
 import { HashedLinkWhereUniqueInput } from "../../hashedLink/base/HashedLinkWhereUniqueInput";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { EnumEventTypePeriodType } from "./EnumEventTypePeriodType";

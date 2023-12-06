@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { WorkflowService } from "../workflow.service";
 import { WorkflowCreateInput } from "./WorkflowCreateInput";
-import { WorkflowWhereInput } from "./WorkflowWhereInput";
-import { WorkflowWhereUniqueInput } from "./WorkflowWhereUniqueInput";
-import { WorkflowFindManyArgs } from "./WorkflowFindManyArgs";
-import { WorkflowUpdateInput } from "./WorkflowUpdateInput";
 import { Workflow } from "./Workflow";
+import { WorkflowFindManyArgs } from "./WorkflowFindManyArgs";
+import { WorkflowWhereUniqueInput } from "./WorkflowWhereUniqueInput";
+import { WorkflowUpdateInput } from "./WorkflowUpdateInput";
 import { WorkflowsOnEventTypeFindManyArgs } from "../../workflowsOnEventType/base/WorkflowsOnEventTypeFindManyArgs";
 import { WorkflowsOnEventType } from "../../workflowsOnEventType/base/WorkflowsOnEventType";
 import { WorkflowsOnEventTypeWhereUniqueInput } from "../../workflowsOnEventType/base/WorkflowsOnEventTypeWhereUniqueInput";
@@ -34,8 +33,10 @@ export class WorkflowControllerBase {
   constructor(protected readonly service: WorkflowService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Workflow })
-  async create(@common.Body() data: WorkflowCreateInput): Promise<Workflow> {
-    return await this.service.create({
+  async createWorkflow(
+    @common.Body() data: WorkflowCreateInput
+  ): Promise<Workflow> {
+    return await this.service.createWorkflow({
       data: {
         ...data,
 
@@ -62,9 +63,9 @@ export class WorkflowControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Workflow] })
   @ApiNestedQuery(WorkflowFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Workflow[]> {
+  async workflows(@common.Req() request: Request): Promise<Workflow[]> {
     const args = plainToClass(WorkflowFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.workflows({
       ...args,
       select: {
         id: true,
@@ -85,10 +86,10 @@ export class WorkflowControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Workflow })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async workflow(
     @common.Param() params: WorkflowWhereUniqueInput
   ): Promise<Workflow | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.workflow({
       where: params,
       select: {
         id: true,
@@ -115,12 +116,12 @@ export class WorkflowControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Workflow })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateWorkflow(
     @common.Param() params: WorkflowWhereUniqueInput,
     @common.Body() data: WorkflowUpdateInput
   ): Promise<Workflow | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWorkflow({
         where: params,
         data: {
           ...data,
@@ -156,11 +157,11 @@ export class WorkflowControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Workflow })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteWorkflow(
     @common.Param() params: WorkflowWhereUniqueInput
   ): Promise<Workflow | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteWorkflow({
         where: params,
         select: {
           id: true,
@@ -188,7 +189,7 @@ export class WorkflowControllerBase {
 
   @common.Get("/:id/activeOn")
   @ApiNestedQuery(WorkflowsOnEventTypeFindManyArgs)
-  async findManyActiveOn(
+  async findActiveOn(
     @common.Req() request: Request,
     @common.Param() params: WorkflowWhereUniqueInput
   ): Promise<WorkflowsOnEventType[]> {
@@ -229,7 +230,7 @@ export class WorkflowControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateWorkflow({
       where: params,
       data,
       select: { id: true },
@@ -246,7 +247,7 @@ export class WorkflowControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateWorkflow({
       where: params,
       data,
       select: { id: true },
@@ -263,7 +264,7 @@ export class WorkflowControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateWorkflow({
       where: params,
       data,
       select: { id: true },
@@ -272,7 +273,7 @@ export class WorkflowControllerBase {
 
   @common.Get("/:id/steps")
   @ApiNestedQuery(WorkflowStepFindManyArgs)
-  async findManySteps(
+  async findSteps(
     @common.Req() request: Request,
     @common.Param() params: WorkflowWhereUniqueInput
   ): Promise<WorkflowStep[]> {
@@ -313,7 +314,7 @@ export class WorkflowControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateWorkflow({
       where: params,
       data,
       select: { id: true },
@@ -330,7 +331,7 @@ export class WorkflowControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateWorkflow({
       where: params,
       data,
       select: { id: true },
@@ -347,7 +348,7 @@ export class WorkflowControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateWorkflow({
       where: params,
       data,
       select: { id: true },

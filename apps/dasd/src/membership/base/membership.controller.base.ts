@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { MembershipService } from "../membership.service";
 import { MembershipCreateInput } from "./MembershipCreateInput";
-import { MembershipWhereInput } from "./MembershipWhereInput";
-import { MembershipWhereUniqueInput } from "./MembershipWhereUniqueInput";
-import { MembershipFindManyArgs } from "./MembershipFindManyArgs";
-import { MembershipUpdateInput } from "./MembershipUpdateInput";
 import { Membership } from "./Membership";
+import { MembershipFindManyArgs } from "./MembershipFindManyArgs";
+import { MembershipWhereUniqueInput } from "./MembershipWhereUniqueInput";
+import { MembershipUpdateInput } from "./MembershipUpdateInput";
 
 export class MembershipControllerBase {
   constructor(protected readonly service: MembershipService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Membership })
-  async create(
+  async createMembership(
     @common.Body() data: MembershipCreateInput
   ): Promise<Membership> {
-    return await this.service.create({
+    return await this.service.createMembership({
       data: {
         ...data,
 
@@ -66,9 +65,9 @@ export class MembershipControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Membership] })
   @ApiNestedQuery(MembershipFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Membership[]> {
+  async memberships(@common.Req() request: Request): Promise<Membership[]> {
     const args = plainToClass(MembershipFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.memberships({
       ...args,
       select: {
         accepted: true,
@@ -93,10 +92,10 @@ export class MembershipControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Membership })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async membership(
     @common.Param() params: MembershipWhereUniqueInput
   ): Promise<Membership | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.membership({
       where: params,
       select: {
         accepted: true,
@@ -127,12 +126,12 @@ export class MembershipControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Membership })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateMembership(
     @common.Param() params: MembershipWhereUniqueInput,
     @common.Body() data: MembershipUpdateInput
   ): Promise<Membership | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateMembership({
         where: params,
         data: {
           ...data,
@@ -176,11 +175,11 @@ export class MembershipControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Membership })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteMembership(
     @common.Param() params: MembershipWhereUniqueInput
   ): Promise<Membership | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteMembership({
         where: params,
         select: {
           accepted: true,

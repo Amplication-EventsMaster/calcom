@@ -18,18 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { AccountService } from "../account.service";
 import { AccountCreateInput } from "./AccountCreateInput";
-import { AccountWhereInput } from "./AccountWhereInput";
-import { AccountWhereUniqueInput } from "./AccountWhereUniqueInput";
-import { AccountFindManyArgs } from "./AccountFindManyArgs";
-import { AccountUpdateInput } from "./AccountUpdateInput";
 import { Account } from "./Account";
+import { AccountFindManyArgs } from "./AccountFindManyArgs";
+import { AccountWhereUniqueInput } from "./AccountWhereUniqueInput";
+import { AccountUpdateInput } from "./AccountUpdateInput";
 
 export class AccountControllerBase {
   constructor(protected readonly service: AccountService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Account })
-  async create(@common.Body() data: AccountCreateInput): Promise<Account> {
-    return await this.service.create({
+  async createAccount(
+    @common.Body() data: AccountCreateInput
+  ): Promise<Account> {
+    return await this.service.createAccount({
       data: {
         ...data,
 
@@ -64,9 +65,9 @@ export class AccountControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Account] })
   @ApiNestedQuery(AccountFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Account[]> {
+  async accounts(@common.Req() request: Request): Promise<Account[]> {
     const args = plainToClass(AccountFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.accounts({
       ...args,
       select: {
         accessToken: true,
@@ -93,10 +94,10 @@ export class AccountControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Account })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async account(
     @common.Param() params: AccountWhereUniqueInput
   ): Promise<Account | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.account({
       where: params,
       select: {
         accessToken: true,
@@ -129,12 +130,12 @@ export class AccountControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Account })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateAccount(
     @common.Param() params: AccountWhereUniqueInput,
     @common.Body() data: AccountUpdateInput
   ): Promise<Account | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateAccount({
         where: params,
         data: {
           ...data,
@@ -178,11 +179,11 @@ export class AccountControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Account })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteAccount(
     @common.Param() params: AccountWhereUniqueInput
   ): Promise<Account | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteAccount({
         where: params,
         select: {
           accessToken: true,

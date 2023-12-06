@@ -12,6 +12,7 @@ import { ScheduleUpdateManyWithoutUsersInput } from "./ScheduleUpdateManyWithout
 import { SelectedCalendarUpdateManyWithoutUsersInput } from "./SelectedCalendarUpdateManyWithoutUsersInput";
 import { SessionUpdateManyWithoutUsersInput } from "./SessionUpdateManyWithoutUsersInput";
 import { MembershipUpdateManyWithoutUsersInput } from "./MembershipUpdateManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../verificationToken/VerificationTokenWhereUniqueInput";
 import { WebhookUpdateManyWithoutUsersInput } from "./WebhookUpdateManyWithoutUsersInput";
 import { WorkflowUpdateManyWithoutUsersInput } from "./WorkflowUpdateManyWithoutUsersInput";
 
@@ -61,6 +62,7 @@ export type UserUpdateInput = {
   twoFactorEnabled?: boolean;
   twoFactorSecret?: string | null;
   username?: string | null;
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
   verified?: boolean | null;
   webhooks?: WebhookUpdateManyWithoutUsersInput;
   weekStart?: string;
