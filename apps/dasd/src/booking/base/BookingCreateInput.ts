@@ -21,7 +21,7 @@ import {
   IsEnum,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { DailyEventReferenceWhereUniqueInput } from "../../dailyEventReference/base/DailyEventReferenceWhereUniqueInput";

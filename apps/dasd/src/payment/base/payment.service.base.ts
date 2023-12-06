@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Payment, Booking } from "@prisma/client";
+
+import {
+  Prisma,
+  Payment, // @ts-ignore
+  Booking,
+} from "@prisma/client";
 
 export class PaymentServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +26,27 @@ export class PaymentServiceBase {
     return this.prisma.payment.count(args);
   }
 
-  async findMany<T extends Prisma.PaymentFindManyArgs>(
+  async payments<T extends Prisma.PaymentFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.PaymentFindManyArgs>
   ): Promise<Payment[]> {
     return this.prisma.payment.findMany(args);
   }
-  async findOne<T extends Prisma.PaymentFindUniqueArgs>(
+  async payment<T extends Prisma.PaymentFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.PaymentFindUniqueArgs>
   ): Promise<Payment | null> {
     return this.prisma.payment.findUnique(args);
   }
-  async create<T extends Prisma.PaymentCreateArgs>(
+  async createPayment<T extends Prisma.PaymentCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.PaymentCreateArgs>
   ): Promise<Payment> {
     return this.prisma.payment.create<T>(args);
   }
-  async update<T extends Prisma.PaymentUpdateArgs>(
+  async updatePayment<T extends Prisma.PaymentUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.PaymentUpdateArgs>
   ): Promise<Payment> {
     return this.prisma.payment.update<T>(args);
   }
-  async delete<T extends Prisma.PaymentDeleteArgs>(
+  async deletePayment<T extends Prisma.PaymentDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.PaymentDeleteArgs>
   ): Promise<Payment> {
     return this.prisma.payment.delete(args);

@@ -10,11 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  Workflow,
-  WorkflowsOnEventType,
-  WorkflowStep,
+  Workflow, // @ts-ignore
+  WorkflowsOnEventType, // @ts-ignore
+  WorkflowStep, // @ts-ignore
   User,
 } from "@prisma/client";
 
@@ -27,27 +28,27 @@ export class WorkflowServiceBase {
     return this.prisma.workflow.count(args);
   }
 
-  async findMany<T extends Prisma.WorkflowFindManyArgs>(
+  async workflows<T extends Prisma.WorkflowFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.WorkflowFindManyArgs>
   ): Promise<Workflow[]> {
     return this.prisma.workflow.findMany(args);
   }
-  async findOne<T extends Prisma.WorkflowFindUniqueArgs>(
+  async workflow<T extends Prisma.WorkflowFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.WorkflowFindUniqueArgs>
   ): Promise<Workflow | null> {
     return this.prisma.workflow.findUnique(args);
   }
-  async create<T extends Prisma.WorkflowCreateArgs>(
+  async createWorkflow<T extends Prisma.WorkflowCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.WorkflowCreateArgs>
   ): Promise<Workflow> {
     return this.prisma.workflow.create<T>(args);
   }
-  async update<T extends Prisma.WorkflowUpdateArgs>(
+  async updateWorkflow<T extends Prisma.WorkflowUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.WorkflowUpdateArgs>
   ): Promise<Workflow> {
     return this.prisma.workflow.update<T>(args);
   }
-  async delete<T extends Prisma.WorkflowDeleteArgs>(
+  async deleteWorkflow<T extends Prisma.WorkflowDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.WorkflowDeleteArgs>
   ): Promise<Workflow> {
     return this.prisma.workflow.delete(args);

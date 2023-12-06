@@ -10,7 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, HashedLink, EventType } from "@prisma/client";
+
+import {
+  Prisma,
+  HashedLink, // @ts-ignore
+  EventType,
+} from "@prisma/client";
 
 export class HashedLinkServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +26,27 @@ export class HashedLinkServiceBase {
     return this.prisma.hashedLink.count(args);
   }
 
-  async findMany<T extends Prisma.HashedLinkFindManyArgs>(
+  async hashedLinks<T extends Prisma.HashedLinkFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.HashedLinkFindManyArgs>
   ): Promise<HashedLink[]> {
     return this.prisma.hashedLink.findMany(args);
   }
-  async findOne<T extends Prisma.HashedLinkFindUniqueArgs>(
+  async hashedLink<T extends Prisma.HashedLinkFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.HashedLinkFindUniqueArgs>
   ): Promise<HashedLink | null> {
     return this.prisma.hashedLink.findUnique(args);
   }
-  async create<T extends Prisma.HashedLinkCreateArgs>(
+  async createHashedLink<T extends Prisma.HashedLinkCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.HashedLinkCreateArgs>
   ): Promise<HashedLink> {
     return this.prisma.hashedLink.create<T>(args);
   }
-  async update<T extends Prisma.HashedLinkUpdateArgs>(
+  async updateHashedLink<T extends Prisma.HashedLinkUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.HashedLinkUpdateArgs>
   ): Promise<HashedLink> {
     return this.prisma.hashedLink.update<T>(args);
   }
-  async delete<T extends Prisma.HashedLinkDeleteArgs>(
+  async deleteHashedLink<T extends Prisma.HashedLinkDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.HashedLinkDeleteArgs>
   ): Promise<HashedLink> {
     return this.prisma.hashedLink.delete(args);

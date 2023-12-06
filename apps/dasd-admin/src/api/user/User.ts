@@ -12,6 +12,7 @@ import { Schedule } from "../schedule/Schedule";
 import { SelectedCalendar } from "../selectedCalendar/SelectedCalendar";
 import { Session } from "../session/Session";
 import { Membership } from "../membership/Membership";
+import { VerificationToken } from "../verificationToken/VerificationToken";
 import { Webhook } from "../webhook/Webhook";
 import { Workflow } from "../workflow/Workflow";
 
@@ -63,6 +64,7 @@ export type User = {
   twoFactorEnabled: boolean;
   twoFactorSecret: string | null;
   username: string | null;
+  verificationToken?: VerificationToken | null;
   verified: boolean | null;
   webhooks?: Array<Webhook>;
   weekStart: string;

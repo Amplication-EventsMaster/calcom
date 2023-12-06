@@ -35,6 +35,7 @@ export type UserOrderByInput = {
   twoFactorEnabled?: SortOrder;
   twoFactorSecret?: SortOrder;
   username?: SortOrder;
+  verificationTokenId?: SortOrder;
   verified?: SortOrder;
   weekStart?: SortOrder;
 };

@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { TeamService } from "../team.service";
 import { TeamCreateInput } from "./TeamCreateInput";
-import { TeamWhereInput } from "./TeamWhereInput";
-import { TeamWhereUniqueInput } from "./TeamWhereUniqueInput";
-import { TeamFindManyArgs } from "./TeamFindManyArgs";
-import { TeamUpdateInput } from "./TeamUpdateInput";
 import { Team } from "./Team";
+import { TeamFindManyArgs } from "./TeamFindManyArgs";
+import { TeamWhereUniqueInput } from "./TeamWhereUniqueInput";
+import { TeamUpdateInput } from "./TeamUpdateInput";
 import { EventTypeFindManyArgs } from "../../eventType/base/EventTypeFindManyArgs";
 import { EventType } from "../../eventType/base/EventType";
 import { EventTypeWhereUniqueInput } from "../../eventType/base/EventTypeWhereUniqueInput";
@@ -34,8 +33,8 @@ export class TeamControllerBase {
   constructor(protected readonly service: TeamService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Team })
-  async create(@common.Body() data: TeamCreateInput): Promise<Team> {
-    return await this.service.create({
+  async createTeam(@common.Body() data: TeamCreateInput): Promise<Team> {
+    return await this.service.createTeam({
       data: data,
       select: {
         bio: true,
@@ -51,9 +50,9 @@ export class TeamControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Team] })
   @ApiNestedQuery(TeamFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Team[]> {
+  async teams(@common.Req() request: Request): Promise<Team[]> {
     const args = plainToClass(TeamFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.teams({
       ...args,
       select: {
         bio: true,
@@ -69,10 +68,10 @@ export class TeamControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Team })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async team(
     @common.Param() params: TeamWhereUniqueInput
   ): Promise<Team | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.team({
       where: params,
       select: {
         bio: true,
@@ -94,12 +93,12 @@ export class TeamControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Team })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateTeam(
     @common.Param() params: TeamWhereUniqueInput,
     @common.Body() data: TeamUpdateInput
   ): Promise<Team | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateTeam({
         where: params,
         data: data,
         select: {
@@ -124,11 +123,11 @@ export class TeamControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Team })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteTeam(
     @common.Param() params: TeamWhereUniqueInput
   ): Promise<Team | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteTeam({
         where: params,
         select: {
           bio: true,
@@ -151,7 +150,7 @@ export class TeamControllerBase {
 
   @common.Get("/:id/eventTypes")
   @ApiNestedQuery(EventTypeFindManyArgs)
-  async findManyEventTypes(
+  async findEventTypes(
     @common.Req() request: Request,
     @common.Param() params: TeamWhereUniqueInput
   ): Promise<EventType[]> {
@@ -237,7 +236,7 @@ export class TeamControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateTeam({
       where: params,
       data,
       select: { id: true },
@@ -254,7 +253,7 @@ export class TeamControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateTeam({
       where: params,
       data,
       select: { id: true },
@@ -271,7 +270,7 @@ export class TeamControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateTeam({
       where: params,
       data,
       select: { id: true },
@@ -280,7 +279,7 @@ export class TeamControllerBase {
 
   @common.Get("/:id/members")
   @ApiNestedQuery(MembershipFindManyArgs)
-  async findManyMembers(
+  async findMembers(
     @common.Req() request: Request,
     @common.Param() params: TeamWhereUniqueInput
   ): Promise<Membership[]> {
@@ -323,7 +322,7 @@ export class TeamControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateTeam({
       where: params,
       data,
       select: { id: true },
@@ -340,7 +339,7 @@ export class TeamControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateTeam({
       where: params,
       data,
       select: { id: true },
@@ -357,7 +356,7 @@ export class TeamControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateTeam({
       where: params,
       data,
       select: { id: true },

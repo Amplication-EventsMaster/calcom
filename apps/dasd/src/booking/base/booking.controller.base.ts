@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { BookingService } from "../booking.service";
 import { BookingCreateInput } from "./BookingCreateInput";
-import { BookingWhereInput } from "./BookingWhereInput";
-import { BookingWhereUniqueInput } from "./BookingWhereUniqueInput";
-import { BookingFindManyArgs } from "./BookingFindManyArgs";
-import { BookingUpdateInput } from "./BookingUpdateInput";
 import { Booking } from "./Booking";
+import { BookingFindManyArgs } from "./BookingFindManyArgs";
+import { BookingWhereUniqueInput } from "./BookingWhereUniqueInput";
+import { BookingUpdateInput } from "./BookingUpdateInput";
 import { AttendeeFindManyArgs } from "../../attendee/base/AttendeeFindManyArgs";
 import { Attendee } from "../../attendee/base/Attendee";
 import { AttendeeWhereUniqueInput } from "../../attendee/base/AttendeeWhereUniqueInput";
@@ -40,8 +39,10 @@ export class BookingControllerBase {
   constructor(protected readonly service: BookingService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Booking })
-  async create(@common.Body() data: BookingCreateInput): Promise<Booking> {
-    return await this.service.create({
+  async createBooking(
+    @common.Body() data: BookingCreateInput
+  ): Promise<Booking> {
+    return await this.service.createBooking({
       data: {
         ...data,
 
@@ -124,9 +125,9 @@ export class BookingControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Booking] })
   @ApiNestedQuery(BookingFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Booking[]> {
+  async bookings(@common.Req() request: Request): Promise<Booking[]> {
     const args = plainToClass(BookingFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.bookings({
       ...args,
       select: {
         cancellationReason: true,
@@ -183,10 +184,10 @@ export class BookingControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Booking })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async booking(
     @common.Param() params: BookingWhereUniqueInput
   ): Promise<Booking | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.booking({
       where: params,
       select: {
         cancellationReason: true,
@@ -249,12 +250,12 @@ export class BookingControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Booking })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateBooking(
     @common.Param() params: BookingWhereUniqueInput,
     @common.Body() data: BookingUpdateInput
   ): Promise<Booking | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateBooking({
         where: params,
         data: {
           ...data,
@@ -346,11 +347,11 @@ export class BookingControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Booking })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteBooking(
     @common.Param() params: BookingWhereUniqueInput
   ): Promise<Booking | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteBooking({
         where: params,
         select: {
           cancellationReason: true,
@@ -414,7 +415,7 @@ export class BookingControllerBase {
 
   @common.Get("/:id/attendees")
   @ApiNestedQuery(AttendeeFindManyArgs)
-  async findManyAttendees(
+  async findAttendees(
     @common.Req() request: Request,
     @common.Param() params: BookingWhereUniqueInput
   ): Promise<Attendee[]> {
@@ -453,7 +454,7 @@ export class BookingControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -470,7 +471,7 @@ export class BookingControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -487,7 +488,7 @@ export class BookingControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -496,7 +497,7 @@ export class BookingControllerBase {
 
   @common.Get("/:id/payment")
   @ApiNestedQuery(PaymentFindManyArgs)
-  async findManyPayment(
+  async findPayment(
     @common.Req() request: Request,
     @common.Param() params: BookingWhereUniqueInput
   ): Promise<Payment[]> {
@@ -541,7 +542,7 @@ export class BookingControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -558,7 +559,7 @@ export class BookingControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -575,7 +576,7 @@ export class BookingControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -584,7 +585,7 @@ export class BookingControllerBase {
 
   @common.Get("/:id/references")
   @ApiNestedQuery(BookingReferenceFindManyArgs)
-  async findManyReferences(
+  async findReferences(
     @common.Req() request: Request,
     @common.Param() params: BookingWhereUniqueInput
   ): Promise<BookingReference[]> {
@@ -626,7 +627,7 @@ export class BookingControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -643,7 +644,7 @@ export class BookingControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -660,7 +661,7 @@ export class BookingControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -669,7 +670,7 @@ export class BookingControllerBase {
 
   @common.Get("/:id/workflowReminders")
   @ApiNestedQuery(WorkflowReminderFindManyArgs)
-  async findManyWorkflowReminders(
+  async findWorkflowReminders(
     @common.Req() request: Request,
     @common.Param() params: BookingWhereUniqueInput
   ): Promise<WorkflowReminder[]> {
@@ -714,7 +715,7 @@ export class BookingControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -731,7 +732,7 @@ export class BookingControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },
@@ -748,7 +749,7 @@ export class BookingControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateBooking({
       where: params,
       data,
       select: { id: true },

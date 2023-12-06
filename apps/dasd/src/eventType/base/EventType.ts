@@ -26,7 +26,7 @@ import { Booking } from "../../booking/base/Booking";
 import { EventTypeCustomInput } from "../../eventTypeCustomInput/base/EventTypeCustomInput";
 import { DestinationCalendar } from "../../destinationCalendar/base/DestinationCalendar";
 import { HashedLink } from "../../hashedLink/base/HashedLink";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { EnumEventTypePeriodType } from "./EnumEventTypePeriodType";

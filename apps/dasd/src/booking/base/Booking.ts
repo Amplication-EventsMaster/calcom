@@ -22,7 +22,7 @@ import {
   IsEnum,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { DailyEventReference } from "../../dailyEventReference/base/DailyEventReference";

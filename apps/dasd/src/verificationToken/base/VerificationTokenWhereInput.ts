@@ -13,9 +13,10 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { DateTimeFilter } from "../../util/DateTimeFilter";
 import { Type } from "class-transformer";
-import { IsOptional } from "class-validator";
+import { IsOptional, ValidateNested } from "class-validator";
 import { IntFilter } from "../../util/IntFilter";
 import { StringFilter } from "../../util/StringFilter";
+import { UserListRelationFilter } from "../../user/base/UserListRelationFilter";
 
 @InputType()
 class VerificationTokenWhereInput {
@@ -84,6 +85,18 @@ class VerificationTokenWhereInput {
     nullable: true,
   })
   updatedAt?: DateTimeFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserListRelationFilter,
+  })
+  @ValidateNested()
+  @Type(() => UserListRelationFilter)
+  @IsOptional()
+  @Field(() => UserListRelationFilter, {
+    nullable: true,
+  })
+  users?: UserListRelationFilter;
 }
 
 export { VerificationTokenWhereInput as VerificationTokenWhereInput };

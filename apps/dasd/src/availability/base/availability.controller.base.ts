@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { AvailabilityService } from "../availability.service";
 import { AvailabilityCreateInput } from "./AvailabilityCreateInput";
-import { AvailabilityWhereInput } from "./AvailabilityWhereInput";
-import { AvailabilityWhereUniqueInput } from "./AvailabilityWhereUniqueInput";
-import { AvailabilityFindManyArgs } from "./AvailabilityFindManyArgs";
-import { AvailabilityUpdateInput } from "./AvailabilityUpdateInput";
 import { Availability } from "./Availability";
+import { AvailabilityFindManyArgs } from "./AvailabilityFindManyArgs";
+import { AvailabilityWhereUniqueInput } from "./AvailabilityWhereUniqueInput";
+import { AvailabilityUpdateInput } from "./AvailabilityUpdateInput";
 
 export class AvailabilityControllerBase {
   constructor(protected readonly service: AvailabilityService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Availability })
-  async create(
+  async createAvailability(
     @common.Body() data: AvailabilityCreateInput
   ): Promise<Availability> {
-    return await this.service.create({
+    return await this.service.createAvailability({
       data: {
         ...data,
 
@@ -86,9 +85,11 @@ export class AvailabilityControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Availability] })
   @ApiNestedQuery(AvailabilityFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Availability[]> {
+  async availabilities(
+    @common.Req() request: Request
+  ): Promise<Availability[]> {
     const args = plainToClass(AvailabilityFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.availabilities({
       ...args,
       select: {
         date: true,
@@ -123,10 +124,10 @@ export class AvailabilityControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Availability })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async availability(
     @common.Param() params: AvailabilityWhereUniqueInput
   ): Promise<Availability | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.availability({
       where: params,
       select: {
         date: true,
@@ -167,12 +168,12 @@ export class AvailabilityControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Availability })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateAvailability(
     @common.Param() params: AvailabilityWhereUniqueInput,
     @common.Body() data: AvailabilityUpdateInput
   ): Promise<Availability | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateAvailability({
         where: params,
         data: {
           ...data,
@@ -236,11 +237,11 @@ export class AvailabilityControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Availability })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteAvailability(
     @common.Param() params: AvailabilityWhereUniqueInput
   ): Promise<Availability | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteAvailability({
         where: params,
         select: {
           date: true,

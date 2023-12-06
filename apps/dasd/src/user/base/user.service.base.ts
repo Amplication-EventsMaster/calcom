@@ -13,22 +13,23 @@ import { PrismaService } from "../../prisma/prisma.service";
 
 import {
   Prisma,
-  User,
-  Account,
-  ApiKey,
-  Availability,
-  Booking,
-  Credential,
-  EventType,
-  Feedback,
-  Impersonation,
-  Schedule,
-  SelectedCalendar,
-  Session,
-  Membership,
-  Webhook,
-  Workflow,
-  DestinationCalendar,
+  User, // @ts-ignore
+  Account, // @ts-ignore
+  ApiKey, // @ts-ignore
+  Availability, // @ts-ignore
+  Booking, // @ts-ignore
+  Credential, // @ts-ignore
+  EventType, // @ts-ignore
+  Feedback, // @ts-ignore
+  Impersonation, // @ts-ignore
+  Schedule, // @ts-ignore
+  SelectedCalendar, // @ts-ignore
+  Session, // @ts-ignore
+  Membership, // @ts-ignore
+  Webhook, // @ts-ignore
+  Workflow, // @ts-ignore
+  DestinationCalendar, // @ts-ignore
+  VerificationToken,
 } from "@prisma/client";
 
 export class UserServiceBase {
@@ -40,27 +41,27 @@ export class UserServiceBase {
     return this.prisma.user.count(args);
   }
 
-  async findMany<T extends Prisma.UserFindManyArgs>(
+  async users<T extends Prisma.UserFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.UserFindManyArgs>
   ): Promise<User[]> {
     return this.prisma.user.findMany(args);
   }
-  async findOne<T extends Prisma.UserFindUniqueArgs>(
+  async user<T extends Prisma.UserFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.UserFindUniqueArgs>
   ): Promise<User | null> {
     return this.prisma.user.findUnique(args);
   }
-  async create<T extends Prisma.UserCreateArgs>(
+  async createUser<T extends Prisma.UserCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.UserCreateArgs>
   ): Promise<User> {
     return this.prisma.user.create<T>(args);
   }
-  async update<T extends Prisma.UserUpdateArgs>(
+  async updateUser<T extends Prisma.UserUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>
   ): Promise<User> {
     return this.prisma.user.update<T>(args);
   }
-  async delete<T extends Prisma.UserDeleteArgs>(
+  async deleteUser<T extends Prisma.UserDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.UserDeleteArgs>
   ): Promise<User> {
     return this.prisma.user.delete(args);
@@ -239,5 +240,15 @@ export class UserServiceBase {
         where: { id: parentId },
       })
       .destinationCalendar();
+  }
+
+  async getVerificationToken(
+    parentId: number
+  ): Promise<VerificationToken | null> {
+    return this.prisma.user
+      .findUnique({
+        where: { id: parentId },
+      })
+      .verificationToken();
   }
 }

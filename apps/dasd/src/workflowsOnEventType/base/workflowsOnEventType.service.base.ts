@@ -10,10 +10,11 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  WorkflowsOnEventType,
-  EventType,
+  WorkflowsOnEventType, // @ts-ignore
+  EventType, // @ts-ignore
   Workflow,
 } from "@prisma/client";
 
@@ -26,27 +27,37 @@ export class WorkflowsOnEventTypeServiceBase {
     return this.prisma.workflowsOnEventType.count(args);
   }
 
-  async findMany<T extends Prisma.WorkflowsOnEventTypeFindManyArgs>(
+  async workflowsOnEventTypes<
+    T extends Prisma.WorkflowsOnEventTypeFindManyArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeFindManyArgs>
   ): Promise<WorkflowsOnEventType[]> {
     return this.prisma.workflowsOnEventType.findMany(args);
   }
-  async findOne<T extends Prisma.WorkflowsOnEventTypeFindUniqueArgs>(
+  async workflowsOnEventType<
+    T extends Prisma.WorkflowsOnEventTypeFindUniqueArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeFindUniqueArgs>
   ): Promise<WorkflowsOnEventType | null> {
     return this.prisma.workflowsOnEventType.findUnique(args);
   }
-  async create<T extends Prisma.WorkflowsOnEventTypeCreateArgs>(
+  async createWorkflowsOnEventType<
+    T extends Prisma.WorkflowsOnEventTypeCreateArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeCreateArgs>
   ): Promise<WorkflowsOnEventType> {
     return this.prisma.workflowsOnEventType.create<T>(args);
   }
-  async update<T extends Prisma.WorkflowsOnEventTypeUpdateArgs>(
+  async updateWorkflowsOnEventType<
+    T extends Prisma.WorkflowsOnEventTypeUpdateArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeUpdateArgs>
   ): Promise<WorkflowsOnEventType> {
     return this.prisma.workflowsOnEventType.update<T>(args);
   }
-  async delete<T extends Prisma.WorkflowsOnEventTypeDeleteArgs>(
+  async deleteWorkflowsOnEventType<
+    T extends Prisma.WorkflowsOnEventTypeDeleteArgs
+  >(
     args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeDeleteArgs>
   ): Promise<WorkflowsOnEventType> {
     return this.prisma.workflowsOnEventType.delete(args);

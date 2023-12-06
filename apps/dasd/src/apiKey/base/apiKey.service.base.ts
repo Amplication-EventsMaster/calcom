@@ -10,7 +10,13 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, ApiKey, App, User } from "@prisma/client";
+
+import {
+  Prisma,
+  ApiKey, // @ts-ignore
+  App, // @ts-ignore
+  User,
+} from "@prisma/client";
 
 export class ApiKeyServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
@@ -21,27 +27,27 @@ export class ApiKeyServiceBase {
     return this.prisma.apiKey.count(args);
   }
 
-  async findMany<T extends Prisma.ApiKeyFindManyArgs>(
+  async apiKeys<T extends Prisma.ApiKeyFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.ApiKeyFindManyArgs>
   ): Promise<ApiKey[]> {
     return this.prisma.apiKey.findMany(args);
   }
-  async findOne<T extends Prisma.ApiKeyFindUniqueArgs>(
+  async apiKey<T extends Prisma.ApiKeyFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.ApiKeyFindUniqueArgs>
   ): Promise<ApiKey | null> {
     return this.prisma.apiKey.findUnique(args);
   }
-  async create<T extends Prisma.ApiKeyCreateArgs>(
+  async createApiKey<T extends Prisma.ApiKeyCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.ApiKeyCreateArgs>
   ): Promise<ApiKey> {
     return this.prisma.apiKey.create<T>(args);
   }
-  async update<T extends Prisma.ApiKeyUpdateArgs>(
+  async updateApiKey<T extends Prisma.ApiKeyUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.ApiKeyUpdateArgs>
   ): Promise<ApiKey> {
     return this.prisma.apiKey.update<T>(args);
   }
-  async delete<T extends Prisma.ApiKeyDeleteArgs>(
+  async deleteApiKey<T extends Prisma.ApiKeyDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.ApiKeyDeleteArgs>
   ): Promise<ApiKey> {
     return this.prisma.apiKey.delete(args);

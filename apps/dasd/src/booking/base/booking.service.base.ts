@@ -13,14 +13,14 @@ import { PrismaService } from "../../prisma/prisma.service";
 
 import {
   Prisma,
-  Booking,
-  Attendee,
-  Payment,
-  BookingReference,
-  WorkflowReminder,
-  DailyEventReference,
-  DestinationCalendar,
-  EventType,
+  Booking, // @ts-ignore
+  Attendee, // @ts-ignore
+  Payment, // @ts-ignore
+  BookingReference, // @ts-ignore
+  WorkflowReminder, // @ts-ignore
+  DailyEventReference, // @ts-ignore
+  DestinationCalendar, // @ts-ignore
+  EventType, // @ts-ignore
   User,
 } from "@prisma/client";
 
@@ -33,27 +33,27 @@ export class BookingServiceBase {
     return this.prisma.booking.count(args);
   }
 
-  async findMany<T extends Prisma.BookingFindManyArgs>(
+  async bookings<T extends Prisma.BookingFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingFindManyArgs>
   ): Promise<Booking[]> {
     return this.prisma.booking.findMany(args);
   }
-  async findOne<T extends Prisma.BookingFindUniqueArgs>(
+  async booking<T extends Prisma.BookingFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingFindUniqueArgs>
   ): Promise<Booking | null> {
     return this.prisma.booking.findUnique(args);
   }
-  async create<T extends Prisma.BookingCreateArgs>(
+  async createBooking<T extends Prisma.BookingCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingCreateArgs>
   ): Promise<Booking> {
     return this.prisma.booking.create<T>(args);
   }
-  async update<T extends Prisma.BookingUpdateArgs>(
+  async updateBooking<T extends Prisma.BookingUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingUpdateArgs>
   ): Promise<Booking> {
     return this.prisma.booking.update<T>(args);
   }
-  async delete<T extends Prisma.BookingDeleteArgs>(
+  async deleteBooking<T extends Prisma.BookingDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.BookingDeleteArgs>
   ): Promise<Booking> {
     return this.prisma.booking.delete(args);

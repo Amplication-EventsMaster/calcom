@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { ResetPasswordRequestService } from "../resetPasswordRequest.service";
 import { ResetPasswordRequestCreateInput } from "./ResetPasswordRequestCreateInput";
-import { ResetPasswordRequestWhereInput } from "./ResetPasswordRequestWhereInput";
-import { ResetPasswordRequestWhereUniqueInput } from "./ResetPasswordRequestWhereUniqueInput";
-import { ResetPasswordRequestFindManyArgs } from "./ResetPasswordRequestFindManyArgs";
-import { ResetPasswordRequestUpdateInput } from "./ResetPasswordRequestUpdateInput";
 import { ResetPasswordRequest } from "./ResetPasswordRequest";
+import { ResetPasswordRequestFindManyArgs } from "./ResetPasswordRequestFindManyArgs";
+import { ResetPasswordRequestWhereUniqueInput } from "./ResetPasswordRequestWhereUniqueInput";
+import { ResetPasswordRequestUpdateInput } from "./ResetPasswordRequestUpdateInput";
 
 export class ResetPasswordRequestControllerBase {
   constructor(protected readonly service: ResetPasswordRequestService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: ResetPasswordRequest })
-  async create(
+  async createResetPasswordRequest(
     @common.Body() data: ResetPasswordRequestCreateInput
   ): Promise<ResetPasswordRequest> {
-    return await this.service.create({
+    return await this.service.createResetPasswordRequest({
       data: data,
       select: {
         createdAt: true,
@@ -46,11 +45,11 @@ export class ResetPasswordRequestControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [ResetPasswordRequest] })
   @ApiNestedQuery(ResetPasswordRequestFindManyArgs)
-  async findMany(
+  async resetPasswordRequests(
     @common.Req() request: Request
   ): Promise<ResetPasswordRequest[]> {
     const args = plainToClass(ResetPasswordRequestFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.resetPasswordRequests({
       ...args,
       select: {
         createdAt: true,
@@ -65,10 +64,10 @@ export class ResetPasswordRequestControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: ResetPasswordRequest })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async resetPasswordRequest(
     @common.Param() params: ResetPasswordRequestWhereUniqueInput
   ): Promise<ResetPasswordRequest | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.resetPasswordRequest({
       where: params,
       select: {
         createdAt: true,
@@ -89,12 +88,12 @@ export class ResetPasswordRequestControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: ResetPasswordRequest })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateResetPasswordRequest(
     @common.Param() params: ResetPasswordRequestWhereUniqueInput,
     @common.Body() data: ResetPasswordRequestUpdateInput
   ): Promise<ResetPasswordRequest | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateResetPasswordRequest({
         where: params,
         data: data,
         select: {
@@ -118,11 +117,11 @@ export class ResetPasswordRequestControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: ResetPasswordRequest })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteResetPasswordRequest(
     @common.Param() params: ResetPasswordRequestWhereUniqueInput
   ): Promise<ResetPasswordRequest | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteResetPasswordRequest({
         where: params,
         select: {
           createdAt: true,

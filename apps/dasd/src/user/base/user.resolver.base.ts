@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateUserArgs } from "./CreateUserArgs";
-import { UpdateUserArgs } from "./UpdateUserArgs";
-import { DeleteUserArgs } from "./DeleteUserArgs";
+import { User } from "./User";
 import { UserCountArgs } from "./UserCountArgs";
 import { UserFindManyArgs } from "./UserFindManyArgs";
 import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
-import { User } from "./User";
+import { CreateUserArgs } from "./CreateUserArgs";
+import { UpdateUserArgs } from "./UpdateUserArgs";
+import { DeleteUserArgs } from "./DeleteUserArgs";
 import { AccountFindManyArgs } from "../../account/base/AccountFindManyArgs";
 import { Account } from "../../account/base/Account";
 import { ApiKeyFindManyArgs } from "../../apiKey/base/ApiKeyFindManyArgs";
@@ -49,6 +49,7 @@ import { Webhook } from "../../webhook/base/Webhook";
 import { WorkflowFindManyArgs } from "../../workflow/base/WorkflowFindManyArgs";
 import { Workflow } from "../../workflow/base/Workflow";
 import { DestinationCalendar } from "../../destinationCalendar/base/DestinationCalendar";
+import { VerificationToken } from "../../verificationToken/base/VerificationToken";
 import { UserService } from "../user.service";
 @graphql.Resolver(() => User)
 export class UserResolverBase {
@@ -65,12 +66,12 @@ export class UserResolverBase {
 
   @graphql.Query(() => [User])
   async users(@graphql.Args() args: UserFindManyArgs): Promise<User[]> {
-    return this.service.findMany(args);
+    return this.service.users(args);
   }
 
   @graphql.Query(() => User, { nullable: true })
   async user(@graphql.Args() args: UserFindUniqueArgs): Promise<User | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.user(args);
     if (result === null) {
       return null;
     }
@@ -79,7 +80,7 @@ export class UserResolverBase {
 
   @graphql.Mutation(() => User)
   async createUser(@graphql.Args() args: CreateUserArgs): Promise<User> {
-    return await this.service.create({
+    return await this.service.createUser({
       ...args,
       data: {
         ...args.data,
@@ -89,6 +90,12 @@ export class UserResolverBase {
               connect: args.data.destinationCalendar,
             }
           : undefined,
+
+        verificationToken: args.data.verificationToken
+          ? {
+              connect: args.data.verificationToken,
+            }
+          : undefined,
       },
     });
   }
@@ -96,7 +103,7 @@ export class UserResolverBase {
   @graphql.Mutation(() => User)
   async updateUser(@graphql.Args() args: UpdateUserArgs): Promise<User | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateUser({
         ...args,
         data: {
           ...args.data,
@@ -104,6 +111,12 @@ export class UserResolverBase {
           destinationCalendar: args.data.destinationCalendar
             ? {
                 connect: args.data.destinationCalendar,
+              }
+            : undefined,
+
+          verificationToken: args.data.verificationToken
+            ? {
+                connect: args.data.verificationToken,
               }
             : undefined,
         },
@@ -121,7 +134,7 @@ export class UserResolverBase {
   @graphql.Mutation(() => User)
   async deleteUser(@graphql.Args() args: DeleteUserArgs): Promise<User | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteUser(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -133,7 +146,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Account], { name: "accounts" })
-  async resolveFieldAccounts(
+  async findAccounts(
     @graphql.Parent() parent: User,
     @graphql.Args() args: AccountFindManyArgs
   ): Promise<Account[]> {
@@ -147,7 +160,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [ApiKey], { name: "apiKeys" })
-  async resolveFieldApiKeys(
+  async findApiKeys(
     @graphql.Parent() parent: User,
     @graphql.Args() args: ApiKeyFindManyArgs
   ): Promise<ApiKey[]> {
@@ -161,7 +174,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Availability], { name: "availability" })
-  async resolveFieldAvailability(
+  async findAvailability(
     @graphql.Parent() parent: User,
     @graphql.Args() args: AvailabilityFindManyArgs
   ): Promise<Availability[]> {
@@ -175,7 +188,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Booking], { name: "bookings" })
-  async resolveFieldBookings(
+  async findBookings(
     @graphql.Parent() parent: User,
     @graphql.Args() args: BookingFindManyArgs
   ): Promise<Booking[]> {
@@ -189,7 +202,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Credential], { name: "credentials" })
-  async resolveFieldCredentials(
+  async findCredentials(
     @graphql.Parent() parent: User,
     @graphql.Args() args: CredentialFindManyArgs
   ): Promise<Credential[]> {
@@ -203,7 +216,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [EventType], { name: "eventTypes" })
-  async resolveFieldEventTypes(
+  async findEventTypes(
     @graphql.Parent() parent: User,
     @graphql.Args() args: EventTypeFindManyArgs
   ): Promise<EventType[]> {
@@ -217,7 +230,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Feedback], { name: "feedback" })
-  async resolveFieldFeedback(
+  async findFeedback(
     @graphql.Parent() parent: User,
     @graphql.Args() args: FeedbackFindManyArgs
   ): Promise<Feedback[]> {
@@ -231,7 +244,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Impersonation], { name: "impersonatedBy" })
-  async resolveFieldImpersonatedBy(
+  async findImpersonatedBy(
     @graphql.Parent() parent: User,
     @graphql.Args() args: ImpersonationFindManyArgs
   ): Promise<Impersonation[]> {
@@ -245,7 +258,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Impersonation], { name: "impersonatedUsers" })
-  async resolveFieldImpersonatedUsers(
+  async findImpersonatedUsers(
     @graphql.Parent() parent: User,
     @graphql.Args() args: ImpersonationFindManyArgs
   ): Promise<Impersonation[]> {
@@ -259,7 +272,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Schedule], { name: "schedules" })
-  async resolveFieldSchedules(
+  async findSchedules(
     @graphql.Parent() parent: User,
     @graphql.Args() args: ScheduleFindManyArgs
   ): Promise<Schedule[]> {
@@ -273,7 +286,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [SelectedCalendar], { name: "selectedCalendars" })
-  async resolveFieldSelectedCalendars(
+  async findSelectedCalendars(
     @graphql.Parent() parent: User,
     @graphql.Args() args: SelectedCalendarFindManyArgs
   ): Promise<SelectedCalendar[]> {
@@ -287,7 +300,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Session], { name: "sessions" })
-  async resolveFieldSessions(
+  async findSessions(
     @graphql.Parent() parent: User,
     @graphql.Args() args: SessionFindManyArgs
   ): Promise<Session[]> {
@@ -301,7 +314,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Membership], { name: "teams" })
-  async resolveFieldTeams(
+  async findTeams(
     @graphql.Parent() parent: User,
     @graphql.Args() args: MembershipFindManyArgs
   ): Promise<Membership[]> {
@@ -315,7 +328,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Webhook], { name: "webhooks" })
-  async resolveFieldWebhooks(
+  async findWebhooks(
     @graphql.Parent() parent: User,
     @graphql.Args() args: WebhookFindManyArgs
   ): Promise<Webhook[]> {
@@ -329,7 +342,7 @@ export class UserResolverBase {
   }
 
   @graphql.ResolveField(() => [Workflow], { name: "workflows" })
-  async resolveFieldWorkflows(
+  async findWorkflows(
     @graphql.Parent() parent: User,
     @graphql.Args() args: WorkflowFindManyArgs
   ): Promise<Workflow[]> {
@@ -346,10 +359,25 @@ export class UserResolverBase {
     nullable: true,
     name: "destinationCalendar",
   })
-  async resolveFieldDestinationCalendar(
+  async getDestinationCalendar(
     @graphql.Parent() parent: User
   ): Promise<DestinationCalendar | null> {
     const result = await this.service.getDestinationCalendar(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
+  }
+
+  @graphql.ResolveField(() => VerificationToken, {
+    nullable: true,
+    name: "verificationToken",
+  })
+  async getVerificationToken(
+    @graphql.Parent() parent: User
+  ): Promise<VerificationToken | null> {
+    const result = await this.service.getVerificationToken(parent.id);
 
     if (!result) {
       return null;

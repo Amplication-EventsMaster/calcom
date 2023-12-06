@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateSelectedCalendarArgs } from "./CreateSelectedCalendarArgs";
-import { UpdateSelectedCalendarArgs } from "./UpdateSelectedCalendarArgs";
-import { DeleteSelectedCalendarArgs } from "./DeleteSelectedCalendarArgs";
+import { SelectedCalendar } from "./SelectedCalendar";
 import { SelectedCalendarCountArgs } from "./SelectedCalendarCountArgs";
 import { SelectedCalendarFindManyArgs } from "./SelectedCalendarFindManyArgs";
 import { SelectedCalendarFindUniqueArgs } from "./SelectedCalendarFindUniqueArgs";
-import { SelectedCalendar } from "./SelectedCalendar";
+import { CreateSelectedCalendarArgs } from "./CreateSelectedCalendarArgs";
+import { UpdateSelectedCalendarArgs } from "./UpdateSelectedCalendarArgs";
+import { DeleteSelectedCalendarArgs } from "./DeleteSelectedCalendarArgs";
 import { User } from "../../user/base/User";
 import { SelectedCalendarService } from "../selectedCalendar.service";
 @graphql.Resolver(() => SelectedCalendar)
@@ -39,14 +39,14 @@ export class SelectedCalendarResolverBase {
   async selectedCalendars(
     @graphql.Args() args: SelectedCalendarFindManyArgs
   ): Promise<SelectedCalendar[]> {
-    return this.service.findMany(args);
+    return this.service.selectedCalendars(args);
   }
 
   @graphql.Query(() => SelectedCalendar, { nullable: true })
   async selectedCalendar(
     @graphql.Args() args: SelectedCalendarFindUniqueArgs
   ): Promise<SelectedCalendar | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.selectedCalendar(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class SelectedCalendarResolverBase {
   async createSelectedCalendar(
     @graphql.Args() args: CreateSelectedCalendarArgs
   ): Promise<SelectedCalendar> {
-    return await this.service.create({
+    return await this.service.createSelectedCalendar({
       ...args,
       data: {
         ...args.data,
@@ -74,7 +74,7 @@ export class SelectedCalendarResolverBase {
     @graphql.Args() args: UpdateSelectedCalendarArgs
   ): Promise<SelectedCalendar | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateSelectedCalendar({
         ...args,
         data: {
           ...args.data,
@@ -99,7 +99,7 @@ export class SelectedCalendarResolverBase {
     @graphql.Args() args: DeleteSelectedCalendarArgs
   ): Promise<SelectedCalendar | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteSelectedCalendar(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -114,7 +114,7 @@ export class SelectedCalendarResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
+  async getUser(
     @graphql.Parent() parent: SelectedCalendar
   ): Promise<User | null> {
     const result = await this.service.getUser(parent.id);

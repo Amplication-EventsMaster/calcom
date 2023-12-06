@@ -13,13 +13,15 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateVerificationTokenArgs } from "./CreateVerificationTokenArgs";
-import { UpdateVerificationTokenArgs } from "./UpdateVerificationTokenArgs";
-import { DeleteVerificationTokenArgs } from "./DeleteVerificationTokenArgs";
+import { VerificationToken } from "./VerificationToken";
 import { VerificationTokenCountArgs } from "./VerificationTokenCountArgs";
 import { VerificationTokenFindManyArgs } from "./VerificationTokenFindManyArgs";
 import { VerificationTokenFindUniqueArgs } from "./VerificationTokenFindUniqueArgs";
-import { VerificationToken } from "./VerificationToken";
+import { CreateVerificationTokenArgs } from "./CreateVerificationTokenArgs";
+import { UpdateVerificationTokenArgs } from "./UpdateVerificationTokenArgs";
+import { DeleteVerificationTokenArgs } from "./DeleteVerificationTokenArgs";
+import { UserFindManyArgs } from "../../user/base/UserFindManyArgs";
+import { User } from "../../user/base/User";
 import { VerificationTokenService } from "../verificationToken.service";
 @graphql.Resolver(() => VerificationToken)
 export class VerificationTokenResolverBase {
@@ -38,14 +40,14 @@ export class VerificationTokenResolverBase {
   async verificationTokens(
     @graphql.Args() args: VerificationTokenFindManyArgs
   ): Promise<VerificationToken[]> {
-    return this.service.findMany(args);
+    return this.service.verificationTokens(args);
   }
 
   @graphql.Query(() => VerificationToken, { nullable: true })
   async verificationToken(
     @graphql.Args() args: VerificationTokenFindUniqueArgs
   ): Promise<VerificationToken | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.verificationToken(args);
     if (result === null) {
       return null;
     }
@@ -56,7 +58,7 @@ export class VerificationTokenResolverBase {
   async createVerificationToken(
     @graphql.Args() args: CreateVerificationTokenArgs
   ): Promise<VerificationToken> {
-    return await this.service.create({
+    return await this.service.createVerificationToken({
       ...args,
       data: args.data,
     });
@@ -67,7 +69,7 @@ export class VerificationTokenResolverBase {
     @graphql.Args() args: UpdateVerificationTokenArgs
   ): Promise<VerificationToken | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateVerificationToken({
         ...args,
         data: args.data,
       });
@@ -86,7 +88,7 @@ export class VerificationTokenResolverBase {
     @graphql.Args() args: DeleteVerificationTokenArgs
   ): Promise<VerificationToken | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteVerificationToken(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -95,5 +97,19 @@ export class VerificationTokenResolverBase {
       }
       throw error;
     }
+  }
+
+  @graphql.ResolveField(() => [User], { name: "users" })
+  async findUsers(
+    @graphql.Parent() parent: VerificationToken,
+    @graphql.Args() args: UserFindManyArgs
+  ): Promise<User[]> {
+    const results = await this.service.findUsers(parent.id, args);
+
+    if (!results) {
+      return [];
+    }
+
+    return results;
   }
 }

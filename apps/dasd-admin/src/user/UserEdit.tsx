@@ -27,6 +27,7 @@ import { ScheduleTitle } from "../schedule/ScheduleTitle";
 import { SelectedCalendarTitle } from "../selectedCalendar/SelectedCalendarTitle";
 import { SessionTitle } from "../session/SessionTitle";
 import { MembershipTitle } from "../membership/MembershipTitle";
+import { VerificationTokenTitle } from "../verificationToken/VerificationTokenTitle";
 import { WebhookTitle } from "../webhook/WebhookTitle";
 import { WorkflowTitle } from "../workflow/WorkflowTitle";
 
@@ -218,6 +219,13 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
         <BooleanInput label="Two Factor Enabled" source="twoFactorEnabled" />
         <TextInput label="Two Factor Secret" source="twoFactorSecret" />
         <TextInput label="Username" source="username" />
+        <ReferenceInput
+          source="verificationToken.id"
+          reference="VerificationToken"
+          label="Verification Token"
+        >
+          <SelectInput optionText={VerificationTokenTitle} />
+        </ReferenceInput>
         <BooleanInput label="Verified" source="verified" />
         <ReferenceArrayInput
           source="webhooks"

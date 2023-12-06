@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { UserService } from "../user.service";
 import { UserCreateInput } from "./UserCreateInput";
-import { UserWhereInput } from "./UserWhereInput";
-import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
-import { UserFindManyArgs } from "./UserFindManyArgs";
-import { UserUpdateInput } from "./UserUpdateInput";
 import { User } from "./User";
+import { UserFindManyArgs } from "./UserFindManyArgs";
+import { UserWhereUniqueInput } from "./UserWhereUniqueInput";
+import { UserUpdateInput } from "./UserUpdateInput";
 import { AccountFindManyArgs } from "../../account/base/AccountFindManyArgs";
 import { Account } from "../../account/base/Account";
 import { AccountWhereUniqueInput } from "../../account/base/AccountWhereUniqueInput";
@@ -70,14 +69,20 @@ export class UserControllerBase {
   constructor(protected readonly service: UserService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: User })
-  async create(@common.Body() data: UserCreateInput): Promise<User> {
-    return await this.service.create({
+  async createUser(@common.Body() data: UserCreateInput): Promise<User> {
+    return await this.service.createUser({
       data: {
         ...data,
 
         destinationCalendar: data.destinationCalendar
           ? {
               connect: data.destinationCalendar,
+            }
+          : undefined,
+
+        verificationToken: data.verificationToken
+          ? {
+              connect: data.verificationToken,
             }
           : undefined,
       },
@@ -122,6 +127,13 @@ export class UserControllerBase {
         twoFactorEnabled: true,
         twoFactorSecret: true,
         username: true,
+
+        verificationToken: {
+          select: {
+            id: true,
+          },
+        },
+
         verified: true,
         weekStart: true,
       },
@@ -131,9 +143,9 @@ export class UserControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [User] })
   @ApiNestedQuery(UserFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<User[]> {
+  async users(@common.Req() request: Request): Promise<User[]> {
     const args = plainToClass(UserFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.users({
       ...args,
       select: {
         allowDynamicBooking: true,
@@ -176,6 +188,13 @@ export class UserControllerBase {
         twoFactorEnabled: true,
         twoFactorSecret: true,
         username: true,
+
+        verificationToken: {
+          select: {
+            id: true,
+          },
+        },
+
         verified: true,
         weekStart: true,
       },
@@ -185,10 +204,10 @@ export class UserControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async user(
     @common.Param() params: UserWhereUniqueInput
   ): Promise<User | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.user({
       where: params,
       select: {
         allowDynamicBooking: true,
@@ -231,6 +250,13 @@ export class UserControllerBase {
         twoFactorEnabled: true,
         twoFactorSecret: true,
         username: true,
+
+        verificationToken: {
+          select: {
+            id: true,
+          },
+        },
+
         verified: true,
         weekStart: true,
       },
@@ -246,12 +272,12 @@ export class UserControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateUser(
     @common.Param() params: UserWhereUniqueInput,
     @common.Body() data: UserUpdateInput
   ): Promise<User | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateUser({
         where: params,
         data: {
           ...data,
@@ -259,6 +285,12 @@ export class UserControllerBase {
           destinationCalendar: data.destinationCalendar
             ? {
                 connect: data.destinationCalendar,
+              }
+            : undefined,
+
+          verificationToken: data.verificationToken
+            ? {
+                connect: data.verificationToken,
               }
             : undefined,
         },
@@ -303,6 +335,13 @@ export class UserControllerBase {
           twoFactorEnabled: true,
           twoFactorSecret: true,
           username: true,
+
+          verificationToken: {
+            select: {
+              id: true,
+            },
+          },
+
           verified: true,
           weekStart: true,
         },
@@ -320,11 +359,11 @@ export class UserControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: User })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteUser(
     @common.Param() params: UserWhereUniqueInput
   ): Promise<User | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteUser({
         where: params,
         select: {
           allowDynamicBooking: true,
@@ -367,6 +406,13 @@ export class UserControllerBase {
           twoFactorEnabled: true,
           twoFactorSecret: true,
           username: true,
+
+          verificationToken: {
+            select: {
+              id: true,
+            },
+          },
+
           verified: true,
           weekStart: true,
         },
@@ -383,7 +429,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/accounts")
   @ApiNestedQuery(AccountFindManyArgs)
-  async findManyAccounts(
+  async findAccounts(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Account[]> {
@@ -428,7 +474,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -445,7 +491,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -462,7 +508,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -471,7 +517,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/apiKeys")
   @ApiNestedQuery(ApiKeyFindManyArgs)
-  async findManyApiKeys(
+  async findApiKeys(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<ApiKey[]> {
@@ -517,7 +563,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -534,7 +580,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -551,7 +597,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -560,7 +606,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/availability")
   @ApiNestedQuery(AvailabilityFindManyArgs)
-  async findManyAvailability(
+  async findAvailability(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Availability[]> {
@@ -613,7 +659,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -630,7 +676,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -647,7 +693,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -656,7 +702,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/bookings")
   @ApiNestedQuery(BookingFindManyArgs)
-  async findManyBookings(
+  async findBookings(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Booking[]> {
@@ -731,7 +777,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -748,7 +794,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -765,7 +811,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -774,7 +820,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/credentials")
   @ApiNestedQuery(CredentialFindManyArgs)
-  async findManyCredentials(
+  async findCredentials(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Credential[]> {
@@ -817,7 +863,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -834,7 +880,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -851,7 +897,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -860,7 +906,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/eventTypes")
   @ApiNestedQuery(EventTypeFindManyArgs)
-  async findManyEventTypes(
+  async findEventTypes(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<EventType[]> {
@@ -946,7 +992,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -963,7 +1009,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -980,7 +1026,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -989,7 +1035,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/feedback")
   @ApiNestedQuery(FeedbackFindManyArgs)
-  async findManyFeedback(
+  async findFeedback(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Feedback[]> {
@@ -1027,7 +1073,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1044,7 +1090,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1061,7 +1107,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1070,7 +1116,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/impersonatedBy")
   @ApiNestedQuery(ImpersonationFindManyArgs)
-  async findManyImpersonatedBy(
+  async findImpersonatedBy(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Impersonation[]> {
@@ -1112,7 +1158,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1129,7 +1175,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1146,7 +1192,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1155,7 +1201,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/impersonatedUsers")
   @ApiNestedQuery(ImpersonationFindManyArgs)
-  async findManyImpersonatedUsers(
+  async findImpersonatedUsers(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Impersonation[]> {
@@ -1197,7 +1243,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1214,7 +1260,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1231,7 +1277,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1240,7 +1286,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/schedules")
   @ApiNestedQuery(ScheduleFindManyArgs)
-  async findManySchedules(
+  async findSchedules(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Schedule[]> {
@@ -1277,7 +1323,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1294,7 +1340,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1311,7 +1357,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1320,7 +1366,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/selectedCalendars")
   @ApiNestedQuery(SelectedCalendarFindManyArgs)
-  async findManySelectedCalendars(
+  async findSelectedCalendars(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<SelectedCalendar[]> {
@@ -1357,7 +1403,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1374,7 +1420,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1391,7 +1437,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1400,7 +1446,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/sessions")
   @ApiNestedQuery(SessionFindManyArgs)
-  async findManySessions(
+  async findSessions(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Session[]> {
@@ -1437,7 +1483,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1454,7 +1500,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1471,7 +1517,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1480,7 +1526,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/teams")
   @ApiNestedQuery(MembershipFindManyArgs)
-  async findManyTeams(
+  async findTeams(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Membership[]> {
@@ -1523,7 +1569,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1540,7 +1586,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1557,7 +1603,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1566,7 +1612,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/webhooks")
   @ApiNestedQuery(WebhookFindManyArgs)
-  async findManyWebhooks(
+  async findWebhooks(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Webhook[]> {
@@ -1621,7 +1667,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1638,7 +1684,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1655,7 +1701,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1664,7 +1710,7 @@ export class UserControllerBase {
 
   @common.Get("/:id/workflows")
   @ApiNestedQuery(WorkflowFindManyArgs)
-  async findManyWorkflows(
+  async findWorkflows(
     @common.Req() request: Request,
     @common.Param() params: UserWhereUniqueInput
   ): Promise<Workflow[]> {
@@ -1703,7 +1749,7 @@ export class UserControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1720,7 +1766,7 @@ export class UserControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },
@@ -1737,7 +1783,7 @@ export class UserControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateUser({
       where: params,
       data,
       select: { id: true },

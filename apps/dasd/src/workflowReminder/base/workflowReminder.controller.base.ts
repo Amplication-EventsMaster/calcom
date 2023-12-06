@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { WorkflowReminderService } from "../workflowReminder.service";
 import { WorkflowReminderCreateInput } from "./WorkflowReminderCreateInput";
-import { WorkflowReminderWhereInput } from "./WorkflowReminderWhereInput";
-import { WorkflowReminderWhereUniqueInput } from "./WorkflowReminderWhereUniqueInput";
-import { WorkflowReminderFindManyArgs } from "./WorkflowReminderFindManyArgs";
-import { WorkflowReminderUpdateInput } from "./WorkflowReminderUpdateInput";
 import { WorkflowReminder } from "./WorkflowReminder";
+import { WorkflowReminderFindManyArgs } from "./WorkflowReminderFindManyArgs";
+import { WorkflowReminderWhereUniqueInput } from "./WorkflowReminderWhereUniqueInput";
+import { WorkflowReminderUpdateInput } from "./WorkflowReminderUpdateInput";
 
 export class WorkflowReminderControllerBase {
   constructor(protected readonly service: WorkflowReminderService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: WorkflowReminder })
-  async create(
+  async createWorkflowReminder(
     @common.Body() data: WorkflowReminderCreateInput
   ): Promise<WorkflowReminder> {
-    return await this.service.create({
+    return await this.service.createWorkflowReminder({
       data: {
         ...data,
 
@@ -70,9 +69,11 @@ export class WorkflowReminderControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [WorkflowReminder] })
   @ApiNestedQuery(WorkflowReminderFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<WorkflowReminder[]> {
+  async workflowReminders(
+    @common.Req() request: Request
+  ): Promise<WorkflowReminder[]> {
     const args = plainToClass(WorkflowReminderFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.workflowReminders({
       ...args,
       select: {
         booking: {
@@ -99,10 +100,10 @@ export class WorkflowReminderControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: WorkflowReminder })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async workflowReminder(
     @common.Param() params: WorkflowReminderWhereUniqueInput
   ): Promise<WorkflowReminder | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.workflowReminder({
       where: params,
       select: {
         booking: {
@@ -135,12 +136,12 @@ export class WorkflowReminderControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: WorkflowReminder })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateWorkflowReminder(
     @common.Param() params: WorkflowReminderWhereUniqueInput,
     @common.Body() data: WorkflowReminderUpdateInput
   ): Promise<WorkflowReminder | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWorkflowReminder({
         where: params,
         data: {
           ...data,
@@ -188,11 +189,11 @@ export class WorkflowReminderControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: WorkflowReminder })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteWorkflowReminder(
     @common.Param() params: WorkflowReminderWhereUniqueInput
   ): Promise<WorkflowReminder | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteWorkflowReminder({
         where: params,
         select: {
           booking: {

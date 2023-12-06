@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateEventTypeArgs } from "./CreateEventTypeArgs";
-import { UpdateEventTypeArgs } from "./UpdateEventTypeArgs";
-import { DeleteEventTypeArgs } from "./DeleteEventTypeArgs";
+import { EventType } from "./EventType";
 import { EventTypeCountArgs } from "./EventTypeCountArgs";
 import { EventTypeFindManyArgs } from "./EventTypeFindManyArgs";
 import { EventTypeFindUniqueArgs } from "./EventTypeFindUniqueArgs";
-import { EventType } from "./EventType";
+import { CreateEventTypeArgs } from "./CreateEventTypeArgs";
+import { UpdateEventTypeArgs } from "./UpdateEventTypeArgs";
+import { DeleteEventTypeArgs } from "./DeleteEventTypeArgs";
 import { AvailabilityFindManyArgs } from "../../availability/base/AvailabilityFindManyArgs";
 import { Availability } from "../../availability/base/Availability";
 import { BookingFindManyArgs } from "../../booking/base/BookingFindManyArgs";
@@ -54,14 +54,14 @@ export class EventTypeResolverBase {
   async eventTypes(
     @graphql.Args() args: EventTypeFindManyArgs
   ): Promise<EventType[]> {
-    return this.service.findMany(args);
+    return this.service.eventTypes(args);
   }
 
   @graphql.Query(() => EventType, { nullable: true })
   async eventType(
     @graphql.Args() args: EventTypeFindUniqueArgs
   ): Promise<EventType | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.eventType(args);
     if (result === null) {
       return null;
     }
@@ -72,7 +72,7 @@ export class EventTypeResolverBase {
   async createEventType(
     @graphql.Args() args: CreateEventTypeArgs
   ): Promise<EventType> {
-    return await this.service.create({
+    return await this.service.createEventType({
       ...args,
       data: {
         ...args.data,
@@ -109,7 +109,7 @@ export class EventTypeResolverBase {
     @graphql.Args() args: UpdateEventTypeArgs
   ): Promise<EventType | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateEventType({
         ...args,
         data: {
           ...args.data,
@@ -154,7 +154,7 @@ export class EventTypeResolverBase {
     @graphql.Args() args: DeleteEventTypeArgs
   ): Promise<EventType | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteEventType(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -166,7 +166,7 @@ export class EventTypeResolverBase {
   }
 
   @graphql.ResolveField(() => [Availability], { name: "availability" })
-  async resolveFieldAvailability(
+  async findAvailability(
     @graphql.Parent() parent: EventType,
     @graphql.Args() args: AvailabilityFindManyArgs
   ): Promise<Availability[]> {
@@ -180,7 +180,7 @@ export class EventTypeResolverBase {
   }
 
   @graphql.ResolveField(() => [Booking], { name: "bookings" })
-  async resolveFieldBookings(
+  async findBookings(
     @graphql.Parent() parent: EventType,
     @graphql.Args() args: BookingFindManyArgs
   ): Promise<Booking[]> {
@@ -194,7 +194,7 @@ export class EventTypeResolverBase {
   }
 
   @graphql.ResolveField(() => [EventTypeCustomInput], { name: "customInputs" })
-  async resolveFieldCustomInputs(
+  async findCustomInputs(
     @graphql.Parent() parent: EventType,
     @graphql.Args() args: EventTypeCustomInputFindManyArgs
   ): Promise<EventTypeCustomInput[]> {
@@ -208,7 +208,7 @@ export class EventTypeResolverBase {
   }
 
   @graphql.ResolveField(() => [User], { name: "users" })
-  async resolveFieldUsers(
+  async findUsers(
     @graphql.Parent() parent: EventType,
     @graphql.Args() args: UserFindManyArgs
   ): Promise<User[]> {
@@ -222,7 +222,7 @@ export class EventTypeResolverBase {
   }
 
   @graphql.ResolveField(() => [Webhook], { name: "webhooks" })
-  async resolveFieldWebhooks(
+  async findWebhooks(
     @graphql.Parent() parent: EventType,
     @graphql.Args() args: WebhookFindManyArgs
   ): Promise<Webhook[]> {
@@ -236,7 +236,7 @@ export class EventTypeResolverBase {
   }
 
   @graphql.ResolveField(() => [WorkflowsOnEventType], { name: "workflows" })
-  async resolveFieldWorkflows(
+  async findWorkflows(
     @graphql.Parent() parent: EventType,
     @graphql.Args() args: WorkflowsOnEventTypeFindManyArgs
   ): Promise<WorkflowsOnEventType[]> {
@@ -253,7 +253,7 @@ export class EventTypeResolverBase {
     nullable: true,
     name: "destinationCalendar",
   })
-  async resolveFieldDestinationCalendar(
+  async getDestinationCalendar(
     @graphql.Parent() parent: EventType
   ): Promise<DestinationCalendar | null> {
     const result = await this.service.getDestinationCalendar(parent.id);
@@ -268,7 +268,7 @@ export class EventTypeResolverBase {
     nullable: true,
     name: "hashedLink",
   })
-  async resolveFieldHashedLink(
+  async getHashedLink(
     @graphql.Parent() parent: EventType
   ): Promise<HashedLink | null> {
     const result = await this.service.getHashedLink(parent.id);
@@ -283,7 +283,7 @@ export class EventTypeResolverBase {
     nullable: true,
     name: "schedule",
   })
-  async resolveFieldSchedule(
+  async getSchedule(
     @graphql.Parent() parent: EventType
   ): Promise<Schedule | null> {
     const result = await this.service.getSchedule(parent.id);
@@ -298,9 +298,7 @@ export class EventTypeResolverBase {
     nullable: true,
     name: "team",
   })
-  async resolveFieldTeam(
-    @graphql.Parent() parent: EventType
-  ): Promise<Team | null> {
+  async getTeam(@graphql.Parent() parent: EventType): Promise<Team | null> {
     const result = await this.service.getTeam(parent.id);
 
     if (!result) {

@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { AppService } from "../app.service";
 import { AppCreateInput } from "./AppCreateInput";
-import { AppWhereInput } from "./AppWhereInput";
-import { AppWhereUniqueInput } from "./AppWhereUniqueInput";
-import { AppFindManyArgs } from "./AppFindManyArgs";
-import { AppUpdateInput } from "./AppUpdateInput";
 import { App } from "./App";
+import { AppFindManyArgs } from "./AppFindManyArgs";
+import { AppWhereUniqueInput } from "./AppWhereUniqueInput";
+import { AppUpdateInput } from "./AppUpdateInput";
 import { ApiKeyFindManyArgs } from "../../apiKey/base/ApiKeyFindManyArgs";
 import { ApiKey } from "../../apiKey/base/ApiKey";
 import { ApiKeyWhereUniqueInput } from "../../apiKey/base/ApiKeyWhereUniqueInput";
@@ -37,8 +36,8 @@ export class AppControllerBase {
   constructor(protected readonly service: AppService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: App })
-  async create(@common.Body() data: AppCreateInput): Promise<App> {
-    return await this.service.create({
+  async createApp(@common.Body() data: AppCreateInput): Promise<App> {
+    return await this.service.createApp({
       data: data,
       select: {
         categories: true,
@@ -54,9 +53,9 @@ export class AppControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [App] })
   @ApiNestedQuery(AppFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<App[]> {
+  async apps(@common.Req() request: Request): Promise<App[]> {
     const args = plainToClass(AppFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.apps({
       ...args,
       select: {
         categories: true,
@@ -72,10 +71,8 @@ export class AppControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: App })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
-    @common.Param() params: AppWhereUniqueInput
-  ): Promise<App | null> {
-    const result = await this.service.findOne({
+  async app(@common.Param() params: AppWhereUniqueInput): Promise<App | null> {
+    const result = await this.service.app({
       where: params,
       select: {
         categories: true,
@@ -97,12 +94,12 @@ export class AppControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: App })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateApp(
     @common.Param() params: AppWhereUniqueInput,
     @common.Body() data: AppUpdateInput
   ): Promise<App | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateApp({
         where: params,
         data: data,
         select: {
@@ -127,11 +124,11 @@ export class AppControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: App })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteApp(
     @common.Param() params: AppWhereUniqueInput
   ): Promise<App | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteApp({
         where: params,
         select: {
           categories: true,
@@ -154,7 +151,7 @@ export class AppControllerBase {
 
   @common.Get("/:id/apiKey")
   @ApiNestedQuery(ApiKeyFindManyArgs)
-  async findManyApiKey(
+  async findApiKey(
     @common.Req() request: Request,
     @common.Param() params: AppWhereUniqueInput
   ): Promise<ApiKey[]> {
@@ -200,7 +197,7 @@ export class AppControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -217,7 +214,7 @@ export class AppControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -234,7 +231,7 @@ export class AppControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -243,7 +240,7 @@ export class AppControllerBase {
 
   @common.Get("/:id/credentials")
   @ApiNestedQuery(CredentialFindManyArgs)
-  async findManyCredentials(
+  async findCredentials(
     @common.Req() request: Request,
     @common.Param() params: AppWhereUniqueInput
   ): Promise<Credential[]> {
@@ -286,7 +283,7 @@ export class AppControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -303,7 +300,7 @@ export class AppControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -320,7 +317,7 @@ export class AppControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -329,7 +326,7 @@ export class AppControllerBase {
 
   @common.Get("/:id/webhook")
   @ApiNestedQuery(WebhookFindManyArgs)
-  async findManyWebhook(
+  async findWebhook(
     @common.Req() request: Request,
     @common.Param() params: AppWhereUniqueInput
   ): Promise<Webhook[]> {
@@ -384,7 +381,7 @@ export class AppControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -401,7 +398,7 @@ export class AppControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },
@@ -418,7 +415,7 @@ export class AppControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateApp({
       where: params,
       data,
       select: { id: true },

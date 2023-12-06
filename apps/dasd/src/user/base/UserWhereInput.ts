@@ -38,6 +38,7 @@ import { ScheduleListRelationFilter } from "../../schedule/base/ScheduleListRela
 import { SelectedCalendarListRelationFilter } from "../../selectedCalendar/base/SelectedCalendarListRelationFilter";
 import { SessionListRelationFilter } from "../../session/base/SessionListRelationFilter";
 import { MembershipListRelationFilter } from "../../membership/base/MembershipListRelationFilter";
+import { VerificationTokenWhereUniqueInput } from "../../verificationToken/base/VerificationTokenWhereUniqueInput";
 import { WebhookListRelationFilter } from "../../webhook/base/WebhookListRelationFilter";
 import { WorkflowListRelationFilter } from "../../workflow/base/WorkflowListRelationFilter";
 
@@ -573,6 +574,18 @@ class UserWhereInput {
     nullable: true,
   })
   username?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationTokenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => VerificationTokenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => VerificationTokenWhereUniqueInput, {
+    nullable: true,
+  })
+  verificationToken?: VerificationTokenWhereUniqueInput;
 
   @ApiProperty({
     required: false,

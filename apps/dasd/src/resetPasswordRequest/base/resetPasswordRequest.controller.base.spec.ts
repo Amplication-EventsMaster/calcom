@@ -49,11 +49,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createResetPasswordRequest() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  resetPasswordRequests: () => FIND_MANY_RESULT,
+  resetPasswordRequest: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

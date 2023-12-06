@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateWebhookArgs } from "./CreateWebhookArgs";
-import { UpdateWebhookArgs } from "./UpdateWebhookArgs";
-import { DeleteWebhookArgs } from "./DeleteWebhookArgs";
+import { Webhook } from "./Webhook";
 import { WebhookCountArgs } from "./WebhookCountArgs";
 import { WebhookFindManyArgs } from "./WebhookFindManyArgs";
 import { WebhookFindUniqueArgs } from "./WebhookFindUniqueArgs";
-import { Webhook } from "./Webhook";
+import { CreateWebhookArgs } from "./CreateWebhookArgs";
+import { UpdateWebhookArgs } from "./UpdateWebhookArgs";
+import { DeleteWebhookArgs } from "./DeleteWebhookArgs";
 import { App } from "../../app/base/App";
 import { EventType } from "../../eventType/base/EventType";
 import { User } from "../../user/base/User";
@@ -41,14 +41,14 @@ export class WebhookResolverBase {
   async webhooks(
     @graphql.Args() args: WebhookFindManyArgs
   ): Promise<Webhook[]> {
-    return this.service.findMany(args);
+    return this.service.webhooks(args);
   }
 
   @graphql.Query(() => Webhook, { nullable: true })
   async webhook(
     @graphql.Args() args: WebhookFindUniqueArgs
   ): Promise<Webhook | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.webhook(args);
     if (result === null) {
       return null;
     }
@@ -59,7 +59,7 @@ export class WebhookResolverBase {
   async createWebhook(
     @graphql.Args() args: CreateWebhookArgs
   ): Promise<Webhook> {
-    return await this.service.create({
+    return await this.service.createWebhook({
       ...args,
       data: {
         ...args.data,
@@ -90,7 +90,7 @@ export class WebhookResolverBase {
     @graphql.Args() args: UpdateWebhookArgs
   ): Promise<Webhook | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWebhook({
         ...args,
         data: {
           ...args.data,
@@ -129,7 +129,7 @@ export class WebhookResolverBase {
     @graphql.Args() args: DeleteWebhookArgs
   ): Promise<Webhook | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteWebhook(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -144,9 +144,7 @@ export class WebhookResolverBase {
     nullable: true,
     name: "app",
   })
-  async resolveFieldApp(
-    @graphql.Parent() parent: Webhook
-  ): Promise<App | null> {
+  async getApp(@graphql.Parent() parent: Webhook): Promise<App | null> {
     const result = await this.service.getApp(parent.id);
 
     if (!result) {
@@ -159,7 +157,7 @@ export class WebhookResolverBase {
     nullable: true,
     name: "eventType",
   })
-  async resolveFieldEventType(
+  async getEventType(
     @graphql.Parent() parent: Webhook
   ): Promise<EventType | null> {
     const result = await this.service.getEventType(parent.id);
@@ -174,9 +172,7 @@ export class WebhookResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Webhook
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Webhook): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

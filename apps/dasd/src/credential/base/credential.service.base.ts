@@ -10,11 +10,12 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  Credential,
-  DestinationCalendar,
-  App,
+  Credential, // @ts-ignore
+  DestinationCalendar, // @ts-ignore
+  App, // @ts-ignore
   User,
 } from "@prisma/client";
 
@@ -27,27 +28,27 @@ export class CredentialServiceBase {
     return this.prisma.credential.count(args);
   }
 
-  async findMany<T extends Prisma.CredentialFindManyArgs>(
+  async credentials<T extends Prisma.CredentialFindManyArgs>(
     args: Prisma.SelectSubset<T, Prisma.CredentialFindManyArgs>
   ): Promise<Credential[]> {
     return this.prisma.credential.findMany(args);
   }
-  async findOne<T extends Prisma.CredentialFindUniqueArgs>(
+  async credential<T extends Prisma.CredentialFindUniqueArgs>(
     args: Prisma.SelectSubset<T, Prisma.CredentialFindUniqueArgs>
   ): Promise<Credential | null> {
     return this.prisma.credential.findUnique(args);
   }
-  async create<T extends Prisma.CredentialCreateArgs>(
+  async createCredential<T extends Prisma.CredentialCreateArgs>(
     args: Prisma.SelectSubset<T, Prisma.CredentialCreateArgs>
   ): Promise<Credential> {
     return this.prisma.credential.create<T>(args);
   }
-  async update<T extends Prisma.CredentialUpdateArgs>(
+  async updateCredential<T extends Prisma.CredentialUpdateArgs>(
     args: Prisma.SelectSubset<T, Prisma.CredentialUpdateArgs>
   ): Promise<Credential> {
     return this.prisma.credential.update<T>(args);
   }
-  async delete<T extends Prisma.CredentialDeleteArgs>(
+  async deleteCredential<T extends Prisma.CredentialDeleteArgs>(
     args: Prisma.SelectSubset<T, Prisma.CredentialDeleteArgs>
   ): Promise<Credential> {
     return this.prisma.credential.delete(args);

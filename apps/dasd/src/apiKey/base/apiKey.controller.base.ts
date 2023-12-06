@@ -18,18 +18,17 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { ApiKeyService } from "../apiKey.service";
 import { ApiKeyCreateInput } from "./ApiKeyCreateInput";
-import { ApiKeyWhereInput } from "./ApiKeyWhereInput";
-import { ApiKeyWhereUniqueInput } from "./ApiKeyWhereUniqueInput";
-import { ApiKeyFindManyArgs } from "./ApiKeyFindManyArgs";
-import { ApiKeyUpdateInput } from "./ApiKeyUpdateInput";
 import { ApiKey } from "./ApiKey";
+import { ApiKeyFindManyArgs } from "./ApiKeyFindManyArgs";
+import { ApiKeyWhereUniqueInput } from "./ApiKeyWhereUniqueInput";
+import { ApiKeyUpdateInput } from "./ApiKeyUpdateInput";
 
 export class ApiKeyControllerBase {
   constructor(protected readonly service: ApiKeyService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: ApiKey })
-  async create(@common.Body() data: ApiKeyCreateInput): Promise<ApiKey> {
-    return await this.service.create({
+  async createApiKey(@common.Body() data: ApiKeyCreateInput): Promise<ApiKey> {
+    return await this.service.createApiKey({
       data: {
         ...data,
 
@@ -71,9 +70,9 @@ export class ApiKeyControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [ApiKey] })
   @ApiNestedQuery(ApiKeyFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<ApiKey[]> {
+  async apiKeys(@common.Req() request: Request): Promise<ApiKey[]> {
     const args = plainToClass(ApiKeyFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.apiKeys({
       ...args,
       select: {
         app: {
@@ -101,10 +100,10 @@ export class ApiKeyControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: ApiKey })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async apiKey(
     @common.Param() params: ApiKeyWhereUniqueInput
   ): Promise<ApiKey | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.apiKey({
       where: params,
       select: {
         app: {
@@ -138,12 +137,12 @@ export class ApiKeyControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: ApiKey })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateApiKey(
     @common.Param() params: ApiKeyWhereUniqueInput,
     @common.Body() data: ApiKeyUpdateInput
   ): Promise<ApiKey | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateApiKey({
         where: params,
         data: {
           ...data,
@@ -194,11 +193,11 @@ export class ApiKeyControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: ApiKey })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteApiKey(
     @common.Param() params: ApiKeyWhereUniqueInput
   ): Promise<ApiKey | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteApiKey({
         where: params,
         select: {
           app: {

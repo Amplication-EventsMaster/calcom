@@ -12,6 +12,7 @@ import { ScheduleCreateNestedManyWithoutUsersInput } from "./ScheduleCreateNeste
 import { SelectedCalendarCreateNestedManyWithoutUsersInput } from "./SelectedCalendarCreateNestedManyWithoutUsersInput";
 import { SessionCreateNestedManyWithoutUsersInput } from "./SessionCreateNestedManyWithoutUsersInput";
 import { MembershipCreateNestedManyWithoutUsersInput } from "./MembershipCreateNestedManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../verificationToken/VerificationTokenWhereUniqueInput";
 import { WebhookCreateNestedManyWithoutUsersInput } from "./WebhookCreateNestedManyWithoutUsersInput";
 import { WorkflowCreateNestedManyWithoutUsersInput } from "./WorkflowCreateNestedManyWithoutUsersInput";
 
@@ -61,6 +62,7 @@ export type UserCreateInput = {
   twoFactorEnabled: boolean;
   twoFactorSecret?: string | null;
   username?: string | null;
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
   verified?: boolean | null;
   webhooks?: WebhookCreateNestedManyWithoutUsersInput;
   weekStart: string;

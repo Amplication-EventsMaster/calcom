@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { ReminderMailService } from "../reminderMail.service";
 import { ReminderMailCreateInput } from "./ReminderMailCreateInput";
-import { ReminderMailWhereInput } from "./ReminderMailWhereInput";
-import { ReminderMailWhereUniqueInput } from "./ReminderMailWhereUniqueInput";
-import { ReminderMailFindManyArgs } from "./ReminderMailFindManyArgs";
-import { ReminderMailUpdateInput } from "./ReminderMailUpdateInput";
 import { ReminderMail } from "./ReminderMail";
+import { ReminderMailFindManyArgs } from "./ReminderMailFindManyArgs";
+import { ReminderMailWhereUniqueInput } from "./ReminderMailWhereUniqueInput";
+import { ReminderMailUpdateInput } from "./ReminderMailUpdateInput";
 
 export class ReminderMailControllerBase {
   constructor(protected readonly service: ReminderMailService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: ReminderMail })
-  async create(
+  async createReminderMail(
     @common.Body() data: ReminderMailCreateInput
   ): Promise<ReminderMail> {
-    return await this.service.create({
+    return await this.service.createReminderMail({
       data: data,
       select: {
         createdAt: true,
@@ -46,9 +45,9 @@ export class ReminderMailControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [ReminderMail] })
   @ApiNestedQuery(ReminderMailFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<ReminderMail[]> {
+  async reminderMails(@common.Req() request: Request): Promise<ReminderMail[]> {
     const args = plainToClass(ReminderMailFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.reminderMails({
       ...args,
       select: {
         createdAt: true,
@@ -63,10 +62,10 @@ export class ReminderMailControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: ReminderMail })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async reminderMail(
     @common.Param() params: ReminderMailWhereUniqueInput
   ): Promise<ReminderMail | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.reminderMail({
       where: params,
       select: {
         createdAt: true,
@@ -87,12 +86,12 @@ export class ReminderMailControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: ReminderMail })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateReminderMail(
     @common.Param() params: ReminderMailWhereUniqueInput,
     @common.Body() data: ReminderMailUpdateInput
   ): Promise<ReminderMail | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateReminderMail({
         where: params,
         data: data,
         select: {
@@ -116,11 +115,11 @@ export class ReminderMailControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: ReminderMail })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteReminderMail(
     @common.Param() params: ReminderMailWhereUniqueInput
   ): Promise<ReminderMail | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteReminderMail({
         where: params,
         select: {
           createdAt: true,
