@@ -20,7 +20,6 @@ import { FeedbackFindUniqueArgs } from "./FeedbackFindUniqueArgs";
 import { CreateFeedbackArgs } from "./CreateFeedbackArgs";
 import { UpdateFeedbackArgs } from "./UpdateFeedbackArgs";
 import { DeleteFeedbackArgs } from "./DeleteFeedbackArgs";
-import { User } from "../../user/base/User";
 import { FeedbackService } from "../feedback.service";
 @graphql.Resolver(() => Feedback)
 export class FeedbackResolverBase {
@@ -59,13 +58,7 @@ export class FeedbackResolverBase {
   ): Promise<Feedback> {
     return await this.service.createFeedback({
       ...args,
-      data: {
-        ...args.data,
-
-        user: {
-          connect: args.data.user,
-        },
-      },
+      data: args.data,
     });
   }
 
@@ -76,13 +69,7 @@ export class FeedbackResolverBase {
     try {
       return await this.service.updateFeedback({
         ...args,
-        data: {
-          ...args.data,
-
-          user: {
-            connect: args.data.user,
-          },
-        },
+        data: args.data,
       });
     } catch (error) {
       if (isRecordNotFoundError(error)) {
@@ -108,18 +95,5 @@ export class FeedbackResolverBase {
       }
       throw error;
     }
-  }
-
-  @graphql.ResolveField(() => User, {
-    nullable: true,
-    name: "user",
-  })
-  async getUser(@graphql.Parent() parent: Feedback): Promise<User | null> {
-    const result = await this.service.getUser(parent.id);
-
-    if (!result) {
-      return null;
-    }
-    return result;
   }
 }

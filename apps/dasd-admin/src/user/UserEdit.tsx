@@ -21,7 +21,6 @@ import { BookingTitle } from "../booking/BookingTitle";
 import { CredentialTitle } from "../credential/CredentialTitle";
 import { DestinationCalendarTitle } from "../destinationCalendar/DestinationCalendarTitle";
 import { EventTypeTitle } from "../eventType/EventTypeTitle";
-import { FeedbackTitle } from "../feedback/FeedbackTitle";
 import { ImpersonationTitle } from "../impersonation/ImpersonationTitle";
 import { ScheduleTitle } from "../schedule/ScheduleTitle";
 import { SelectedCalendarTitle } from "../selectedCalendar/SelectedCalendarTitle";
@@ -35,44 +34,40 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
   return (
     <Edit {...props}>
       <SimpleForm>
-        <ReferenceArrayInput
-          source="accounts"
-          reference="Account"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={AccountTitle} />
+        <ReferenceArrayInput source="accounts" reference="Account">
+          <SelectArrayInput
+            optionText={AccountTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <BooleanInput
           label="Allow Dynamic Booking"
           source="allowDynamicBooking"
         />
-        <ReferenceArrayInput
-          source="apiKeys"
-          reference="ApiKey"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={ApiKeyTitle} />
+        <ReferenceArrayInput source="apiKeys" reference="ApiKey">
+          <SelectArrayInput
+            optionText={ApiKeyTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
-        <ReferenceArrayInput
-          source="availability"
-          reference="Availability"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={AvailabilityTitle} />
+        <ReferenceArrayInput source="availability" reference="Availability">
+          <SelectArrayInput
+            optionText={AvailabilityTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <TextInput label="Avatar" source="avatar" />
         <BooleanInput label="Away" source="away" />
         <TextInput label="Bio" source="bio" />
-        <ReferenceArrayInput
-          source="bookings"
-          reference="Booking"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={BookingTitle} />
+        <ReferenceArrayInput source="bookings" reference="Booking">
+          <SelectArrayInput
+            optionText={BookingTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <TextInput label="Brand Color" source="brandColor" />
         <NumberInput step={1} label="Buffer Time" source="bufferTime" />
@@ -80,13 +75,12 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
           label="Completed Onboarding"
           source="completedOnboarding"
         />
-        <ReferenceArrayInput
-          source="credentials"
-          reference="Credential"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={CredentialTitle} />
+        <ReferenceArrayInput source="credentials" reference="Credential">
+          <SelectArrayInput
+            optionText={CredentialTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <TextInput label="Dark Brand Color" source="darkBrandColor" />
         <NumberInput
@@ -108,21 +102,12 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
         <TextInput label="Email" source="email" />
         <DateTimeInput label="Email Verified" source="emailVerified" />
         <NumberInput step={1} label="End Time" source="endTime" />
-        <ReferenceArrayInput
-          source="eventTypes"
-          reference="EventType"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={EventTypeTitle} />
-        </ReferenceArrayInput>
-        <ReferenceArrayInput
-          source="feedback"
-          reference="Feedback"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={FeedbackTitle} />
+        <ReferenceArrayInput source="eventTypes" reference="EventType">
+          <SelectArrayInput
+            optionText={EventTypeTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <BooleanInput label="Hide Branding" source="hideBranding" />
         <SelectInput
@@ -137,21 +122,22 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
           optionValue="value"
         />
         <TextInput label="Identity Provider Id" source="identityProviderId" />
-        <ReferenceArrayInput
-          source="impersonatedBy"
-          reference="Impersonation"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={ImpersonationTitle} />
+        <ReferenceArrayInput source="impersonatedBy" reference="Impersonation">
+          <SelectArrayInput
+            optionText={ImpersonationTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <ReferenceArrayInput
           source="impersonatedUsers"
           reference="Impersonation"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
         >
-          <SelectArrayInput optionText={ImpersonationTitle} />
+          <SelectArrayInput
+            optionText={ImpersonationTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <NumberInput step={1} label="Invited To" source="invitedTo" />
         <TextInput label="Locale" source="locale" />
@@ -179,38 +165,37 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
           optionText="label"
           optionValue="value"
         />
-        <ReferenceArrayInput
-          source="schedules"
-          reference="Schedule"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={ScheduleTitle} />
+        <ReferenceArrayInput source="schedules" reference="Schedule">
+          <SelectArrayInput
+            optionText={ScheduleTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <ReferenceArrayInput
           source="selectedCalendars"
           reference="SelectedCalendar"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
         >
-          <SelectArrayInput optionText={SelectedCalendarTitle} />
+          <SelectArrayInput
+            optionText={SelectedCalendarTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
-        <ReferenceArrayInput
-          source="sessions"
-          reference="Session"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={SessionTitle} />
+        <ReferenceArrayInput source="sessions" reference="Session">
+          <SelectArrayInput
+            optionText={SessionTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <NumberInput step={1} label="Start Time" source="startTime" />
-        <ReferenceArrayInput
-          source="teams"
-          reference="Membership"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={MembershipTitle} />
+        <ReferenceArrayInput source="teams" reference="Membership">
+          <SelectArrayInput
+            optionText={MembershipTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <TextInput label="Theme" source="theme" />
         <NumberInput step={1} label="Time Format" source="timeFormat" />
@@ -227,22 +212,20 @@ export const UserEdit = (props: EditProps): React.ReactElement => {
           <SelectInput optionText={VerificationTokenTitle} />
         </ReferenceInput>
         <BooleanInput label="Verified" source="verified" />
-        <ReferenceArrayInput
-          source="webhooks"
-          reference="Webhook"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={WebhookTitle} />
+        <ReferenceArrayInput source="webhooks" reference="Webhook">
+          <SelectArrayInput
+            optionText={WebhookTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
         <TextInput label="Week Start" source="weekStart" />
-        <ReferenceArrayInput
-          source="workflows"
-          reference="Workflow"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={WorkflowTitle} />
+        <ReferenceArrayInput source="workflows" reference="Workflow">
+          <SelectArrayInput
+            optionText={WorkflowTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
       </SimpleForm>
     </Edit>

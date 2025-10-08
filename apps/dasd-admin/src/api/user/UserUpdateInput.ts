@@ -5,7 +5,6 @@ import { BookingUpdateManyWithoutUsersInput } from "./BookingUpdateManyWithoutUs
 import { CredentialUpdateManyWithoutUsersInput } from "./CredentialUpdateManyWithoutUsersInput";
 import { DestinationCalendarWhereUniqueInput } from "../destinationCalendar/DestinationCalendarWhereUniqueInput";
 import { EventTypeUpdateManyWithoutUsersInput } from "./EventTypeUpdateManyWithoutUsersInput";
-import { FeedbackUpdateManyWithoutUsersInput } from "./FeedbackUpdateManyWithoutUsersInput";
 import { ImpersonationUpdateManyWithoutUsersInput } from "./ImpersonationUpdateManyWithoutUsersInput";
 import { InputJsonValue } from "../../types";
 import { ScheduleUpdateManyWithoutUsersInput } from "./ScheduleUpdateManyWithoutUsersInput";
@@ -37,7 +36,6 @@ export type UserUpdateInput = {
   emailVerified?: Date | null;
   endTime?: number;
   eventTypes?: EventTypeUpdateManyWithoutUsersInput;
-  feedback?: FeedbackUpdateManyWithoutUsersInput;
   hideBranding?: boolean;
   identityProvider?: "CAL" | "GOOGLE" | "SAML";
   identityProviderId?: string | null;

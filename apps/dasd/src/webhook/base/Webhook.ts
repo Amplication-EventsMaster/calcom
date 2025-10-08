@@ -18,6 +18,7 @@ import {
   IsDate,
   IsEnum,
   IsString,
+  MaxLength,
 } from "class-validator";
 import { App } from "../../app/base/App";
 import { Type } from "class-transformer";
@@ -90,6 +91,7 @@ class Webhook {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -101,6 +103,7 @@ class Webhook {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -112,6 +115,7 @@ class Webhook {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   subscriberUrl!: string;
 

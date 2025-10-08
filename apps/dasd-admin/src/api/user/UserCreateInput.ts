@@ -5,7 +5,6 @@ import { BookingCreateNestedManyWithoutUsersInput } from "./BookingCreateNestedM
 import { CredentialCreateNestedManyWithoutUsersInput } from "./CredentialCreateNestedManyWithoutUsersInput";
 import { DestinationCalendarWhereUniqueInput } from "../destinationCalendar/DestinationCalendarWhereUniqueInput";
 import { EventTypeCreateNestedManyWithoutUsersInput } from "./EventTypeCreateNestedManyWithoutUsersInput";
-import { FeedbackCreateNestedManyWithoutUsersInput } from "./FeedbackCreateNestedManyWithoutUsersInput";
 import { ImpersonationCreateNestedManyWithoutUsersInput } from "./ImpersonationCreateNestedManyWithoutUsersInput";
 import { InputJsonValue } from "../../types";
 import { ScheduleCreateNestedManyWithoutUsersInput } from "./ScheduleCreateNestedManyWithoutUsersInput";
@@ -37,7 +36,6 @@ export type UserCreateInput = {
   emailVerified?: Date | null;
   endTime: number;
   eventTypes?: EventTypeCreateNestedManyWithoutUsersInput;
-  feedback?: FeedbackCreateNestedManyWithoutUsersInput;
   hideBranding: boolean;
   identityProvider: "CAL" | "GOOGLE" | "SAML";
   identityProviderId?: string | null;

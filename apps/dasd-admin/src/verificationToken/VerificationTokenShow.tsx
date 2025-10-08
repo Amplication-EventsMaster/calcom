@@ -30,7 +30,7 @@ export const VerificationTokenShow = (props: ShowProps): React.ReactElement => {
           target="verificationTokenId"
           label="Users"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <BooleanField
               label="Allow Dynamic Booking"
               source="allowDynamicBooking"

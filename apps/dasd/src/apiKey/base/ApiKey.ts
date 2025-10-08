@@ -12,7 +12,13 @@ https://docs.amplication.com/how-to/custom-code
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { App } from "../../app/base/App";
-import { ValidateNested, IsOptional, IsDate, IsString } from "class-validator";
+import {
+  ValidateNested,
+  IsOptional,
+  IsDate,
+  IsString,
+  MaxLength,
+} from "class-validator";
 import { Type } from "class-transformer";
 import { User } from "../../user/base/User";
 
@@ -51,6 +57,7 @@ class ApiKey {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   hashedKey!: string;
 
@@ -78,6 +85,7 @@ class ApiKey {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,

@@ -16,14 +16,8 @@ import { VERIFICATIONTOKEN_TITLE_FIELD } from "../verificationToken/Verification
 
 export const UserList = (props: ListProps): React.ReactElement => {
   return (
-    <List
-      {...props}
-      bulkActionButtons={false}
-      title={"Users"}
-      perPage={50}
-      pagination={<Pagination />}
-    >
-      <Datagrid rowClick="show">
+    <List {...props} title={"Users"} perPage={50} pagination={<Pagination />}>
+      <Datagrid rowClick="show" bulkActionButtons={false}>
         <BooleanField
           label="Allow Dynamic Booking"
           source="allowDynamicBooking"
@@ -81,7 +75,7 @@ export const UserList = (props: ListProps): React.ReactElement => {
           <TextField source={VERIFICATIONTOKEN_TITLE_FIELD} />
         </ReferenceField>
         <BooleanField label="Verified" source="verified" />
-        <TextField label="Week Start" source="weekStart" />
+        <TextField label="Week Start" source="weekStart" />{" "}
       </Datagrid>
     </List>
   );

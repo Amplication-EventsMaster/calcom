@@ -88,7 +88,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Accounts"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField label="Access Token" source="accessToken" />
             <TextField label="Expires At" source="expiresAt" />
             <TextField label="ID" source="id" />
@@ -106,7 +106,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           </Datagrid>
         </ReferenceManyField>
         <ReferenceManyField reference="ApiKey" target="userId" label="ApiKeys">
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <ReferenceField label="App" source="app.id" reference="App">
               <TextField source={APP_TITLE_FIELD} />
             </ReferenceField>
@@ -126,7 +126,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Availabilities"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField label="Date" source="date" />
             <TextField label="Days" source="days" />
             <TextField label="End Time" source="endTime" />
@@ -156,7 +156,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Bookings"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField
               label="Cancellation Reason"
               source="cancellationReason"
@@ -217,7 +217,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Credentials"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <ReferenceField label="App" source="app.id" reference="App">
               <TextField source={APP_TITLE_FIELD} />
             </ReferenceField>
@@ -230,26 +230,11 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           </Datagrid>
         </ReferenceManyField>
         <ReferenceManyField
-          reference="Feedback"
-          target="userId"
-          label="Feedbacks"
-        >
-          <Datagrid rowClick="show">
-            <TextField label="Comment" source="comment" />
-            <TextField label="Date" source="date" />
-            <TextField label="ID" source="id" />
-            <TextField label="Rating" source="rating" />
-            <ReferenceField label="User" source="user.id" reference="User">
-              <TextField source={USER_TITLE_FIELD} />
-            </ReferenceField>
-          </Datagrid>
-        </ReferenceManyField>
-        <ReferenceManyField
           reference="Impersonation"
           target="impersonatedById"
           label="Impersonations"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <DateField source="createdAt" label="Created At" />
             <TextField label="ID" source="id" />
             <ReferenceField
@@ -273,7 +258,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="impersonatedUserId"
           label="Impersonations"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <DateField source="createdAt" label="Created At" />
             <TextField label="ID" source="id" />
             <ReferenceField
@@ -297,7 +282,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Schedules"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField label="ID" source="id" />
             <TextField label="Name" source="name" />
             <TextField label="Time Zone" source="timeZone" />
@@ -311,7 +296,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="SelectedCalendars"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField label="External Id" source="externalId" />
             <TextField label="ID" source="id" />
             <TextField label="Integration" source="integration" />
@@ -325,7 +310,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Sessions"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField label="Expires" source="expires" />
             <TextField label="ID" source="id" />
             <TextField label="Session Token" source="sessionToken" />
@@ -339,7 +324,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Memberships"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <BooleanField label="Accepted" source="accepted" />
             <TextField label="ID" source="id" />
             <TextField label="Role" source="role" />
@@ -356,7 +341,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Webhooks"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <BooleanField label="Active" source="active" />
             <ReferenceField label="App" source="app.id" reference="App">
               <TextField source={APP_TITLE_FIELD} />
@@ -384,7 +369,7 @@ export const UserShow = (props: ShowProps): React.ReactElement => {
           target="userId"
           label="Workflows"
         >
-          <Datagrid rowClick="show">
+          <Datagrid rowClick="show" bulkActionButtons={false}>
             <TextField label="ID" source="id" />
             <TextField label="Name" source="name" />
             <TextField label="Time" source="time" />

@@ -28,7 +28,6 @@ import { IntNullableFilter } from "../../util/IntNullableFilter";
 import { DestinationCalendarWhereUniqueInput } from "../../destinationCalendar/base/DestinationCalendarWhereUniqueInput";
 import { DateTimeNullableFilter } from "../../util/DateTimeNullableFilter";
 import { EventTypeListRelationFilter } from "../../eventType/base/EventTypeListRelationFilter";
-import { FeedbackListRelationFilter } from "../../feedback/base/FeedbackListRelationFilter";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { ImpersonationListRelationFilter } from "../../impersonation/base/ImpersonationListRelationFilter";
 import { JsonFilter } from "../../util/JsonFilter";
@@ -281,18 +280,6 @@ class UserWhereInput {
     nullable: true,
   })
   eventTypes?: EventTypeListRelationFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => FeedbackListRelationFilter,
-  })
-  @ValidateNested()
-  @Type(() => FeedbackListRelationFilter)
-  @IsOptional()
-  @Field(() => FeedbackListRelationFilter, {
-    nullable: true,
-  })
-  feedback?: FeedbackListRelationFilter;
 
   @ApiProperty({
     required: false,

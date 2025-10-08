@@ -40,9 +40,6 @@ import { CredentialWhereUniqueInput } from "../../credential/base/CredentialWher
 import { EventTypeFindManyArgs } from "../../eventType/base/EventTypeFindManyArgs";
 import { EventType } from "../../eventType/base/EventType";
 import { EventTypeWhereUniqueInput } from "../../eventType/base/EventTypeWhereUniqueInput";
-import { FeedbackFindManyArgs } from "../../feedback/base/FeedbackFindManyArgs";
-import { Feedback } from "../../feedback/base/Feedback";
-import { FeedbackWhereUniqueInput } from "../../feedback/base/FeedbackWhereUniqueInput";
 import { ImpersonationFindManyArgs } from "../../impersonation/base/ImpersonationFindManyArgs";
 import { Impersonation } from "../../impersonation/base/Impersonation";
 import { ImpersonationWhereUniqueInput } from "../../impersonation/base/ImpersonationWhereUniqueInput";
@@ -1023,87 +1020,6 @@ export class UserControllerBase {
   ): Promise<void> {
     const data = {
       eventTypes: {
-        disconnect: body,
-      },
-    };
-    await this.service.updateUser({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Get("/:id/feedback")
-  @ApiNestedQuery(FeedbackFindManyArgs)
-  async findFeedback(
-    @common.Req() request: Request,
-    @common.Param() params: UserWhereUniqueInput
-  ): Promise<Feedback[]> {
-    const query = plainToClass(FeedbackFindManyArgs, request.query);
-    const results = await this.service.findFeedback(params.id, {
-      ...query,
-      select: {
-        comment: true,
-        date: true,
-        id: true,
-        rating: true,
-
-        user: {
-          select: {
-            id: true,
-          },
-        },
-      },
-    });
-    if (results === null) {
-      throw new errors.NotFoundException(
-        `No resource was found for ${JSON.stringify(params)}`
-      );
-    }
-    return results;
-  }
-
-  @common.Post("/:id/feedback")
-  async connectFeedback(
-    @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: FeedbackWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      feedback: {
-        connect: body,
-      },
-    };
-    await this.service.updateUser({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Patch("/:id/feedback")
-  async updateFeedback(
-    @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: FeedbackWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      feedback: {
-        set: body,
-      },
-    };
-    await this.service.updateUser({
-      where: params,
-      data,
-      select: { id: true },
-    });
-  }
-
-  @common.Delete("/:id/feedback")
-  async disconnectFeedback(
-    @common.Param() params: UserWhereUniqueInput,
-    @common.Body() body: FeedbackWhereUniqueInput[]
-  ): Promise<void> {
-    const data = {
-      feedback: {
         disconnect: body,
       },
     };

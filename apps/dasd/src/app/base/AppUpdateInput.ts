@@ -12,7 +12,13 @@ https://docs.amplication.com/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { ApiKeyUpdateManyWithoutAppsInput } from "./ApiKeyUpdateManyWithoutAppsInput";
-import { ValidateNested, IsOptional, IsEnum, IsString } from "class-validator";
+import {
+  ValidateNested,
+  IsOptional,
+  IsEnum,
+  IsString,
+  MaxLength,
+} from "class-validator";
 import { Type } from "class-transformer";
 import { EnumAppCategories } from "./EnumAppCategories";
 import { CredentialUpdateManyWithoutAppsInput } from "./CredentialUpdateManyWithoutAppsInput";
@@ -68,6 +74,7 @@ class AppUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,

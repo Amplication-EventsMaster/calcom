@@ -19,13 +19,12 @@ export const VerificationTokenEdit = (props: EditProps): React.ReactElement => {
         <DateTimeInput label="Expires" source="expires" />
         <TextInput label="Identifier" source="identifier" />
         <TextInput label="Token" source="token" />
-        <ReferenceArrayInput
-          source="users"
-          reference="User"
-          parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
-          format={(value: any) => value && value.map((v: any) => v.id)}
-        >
-          <SelectArrayInput optionText={UserTitle} />
+        <ReferenceArrayInput source="users" reference="User">
+          <SelectArrayInput
+            optionText={UserTitle}
+            parse={(value: any) => value && value.map((v: any) => ({ id: v }))}
+            format={(value: any) => value && value.map((v: any) => v.id)}
+          />
         </ReferenceArrayInput>
       </SimpleForm>
     </Edit>

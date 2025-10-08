@@ -12,15 +12,19 @@ https://docs.amplication.com/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { AccountUpdateManyWithoutUsersInput } from "./AccountUpdateManyWithoutUsersInput";
+
 import {
   ValidateNested,
   IsOptional,
   IsBoolean,
   IsString,
+  MaxLength,
   IsInt,
+  Max,
   IsDate,
   IsEnum,
 } from "class-validator";
+
 import { Type } from "class-transformer";
 import { ApiKeyUpdateManyWithoutUsersInput } from "./ApiKeyUpdateManyWithoutUsersInput";
 import { AvailabilityUpdateManyWithoutUsersInput } from "./AvailabilityUpdateManyWithoutUsersInput";
@@ -28,7 +32,6 @@ import { BookingUpdateManyWithoutUsersInput } from "./BookingUpdateManyWithoutUs
 import { CredentialUpdateManyWithoutUsersInput } from "./CredentialUpdateManyWithoutUsersInput";
 import { DestinationCalendarWhereUniqueInput } from "../../destinationCalendar/base/DestinationCalendarWhereUniqueInput";
 import { EventTypeUpdateManyWithoutUsersInput } from "./EventTypeUpdateManyWithoutUsersInput";
-import { FeedbackUpdateManyWithoutUsersInput } from "./FeedbackUpdateManyWithoutUsersInput";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { ImpersonationUpdateManyWithoutUsersInput } from "./ImpersonationUpdateManyWithoutUsersInput";
 import { IsJSONValue } from "../../validators";
@@ -98,6 +101,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -120,6 +124,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -143,6 +148,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -154,6 +160,7 @@ class UserUpdateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -188,6 +195,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -199,6 +207,7 @@ class UserUpdateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -233,6 +242,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -255,6 +265,7 @@ class UserUpdateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -272,18 +283,6 @@ class UserUpdateInput {
     nullable: true,
   })
   eventTypes?: EventTypeUpdateManyWithoutUsersInput;
-
-  @ApiProperty({
-    required: false,
-    type: () => FeedbackUpdateManyWithoutUsersInput,
-  })
-  @ValidateNested()
-  @Type(() => FeedbackUpdateManyWithoutUsersInput)
-  @IsOptional()
-  @Field(() => FeedbackUpdateManyWithoutUsersInput, {
-    nullable: true,
-  })
-  feedback?: FeedbackUpdateManyWithoutUsersInput;
 
   @ApiProperty({
     required: false,
@@ -312,6 +311,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -347,6 +347,7 @@ class UserUpdateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -358,6 +359,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -379,6 +381,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -390,6 +393,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -459,6 +463,7 @@ class UserUpdateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -482,6 +487,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -493,6 +499,7 @@ class UserUpdateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -504,6 +511,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -537,6 +545,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -548,6 +557,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -594,6 +604,7 @@ class UserUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,

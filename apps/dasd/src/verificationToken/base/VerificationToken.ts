@@ -15,6 +15,7 @@ import {
   IsDate,
   IsInt,
   IsString,
+  MaxLength,
   ValidateNested,
   IsOptional,
 } from "class-validator";
@@ -52,6 +53,7 @@ class VerificationToken {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   identifier!: string;
 
@@ -60,6 +62,7 @@ class VerificationToken {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   token!: string;
 

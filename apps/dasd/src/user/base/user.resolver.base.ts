@@ -32,8 +32,6 @@ import { CredentialFindManyArgs } from "../../credential/base/CredentialFindMany
 import { Credential } from "../../credential/base/Credential";
 import { EventTypeFindManyArgs } from "../../eventType/base/EventTypeFindManyArgs";
 import { EventType } from "../../eventType/base/EventType";
-import { FeedbackFindManyArgs } from "../../feedback/base/FeedbackFindManyArgs";
-import { Feedback } from "../../feedback/base/Feedback";
 import { ImpersonationFindManyArgs } from "../../impersonation/base/ImpersonationFindManyArgs";
 import { Impersonation } from "../../impersonation/base/Impersonation";
 import { ScheduleFindManyArgs } from "../../schedule/base/ScheduleFindManyArgs";
@@ -221,20 +219,6 @@ export class UserResolverBase {
     @graphql.Args() args: EventTypeFindManyArgs
   ): Promise<EventType[]> {
     const results = await this.service.findEventTypes(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results;
-  }
-
-  @graphql.ResolveField(() => [Feedback], { name: "feedback" })
-  async findFeedback(
-    @graphql.Parent() parent: User,
-    @graphql.Args() args: FeedbackFindManyArgs
-  ): Promise<Feedback[]> {
-    const results = await this.service.findFeedback(parent.id, args);
 
     if (!results) {
       return [];

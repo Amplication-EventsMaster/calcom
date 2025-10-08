@@ -13,7 +13,6 @@ import { IntNullableFilter } from "../../util/IntNullableFilter";
 import { DestinationCalendarWhereUniqueInput } from "../destinationCalendar/DestinationCalendarWhereUniqueInput";
 import { DateTimeNullableFilter } from "../../util/DateTimeNullableFilter";
 import { EventTypeListRelationFilter } from "../eventType/EventTypeListRelationFilter";
-import { FeedbackListRelationFilter } from "../feedback/FeedbackListRelationFilter";
 import { ImpersonationListRelationFilter } from "../impersonation/ImpersonationListRelationFilter";
 import { JsonFilter } from "../../util/JsonFilter";
 import { ScheduleListRelationFilter } from "../schedule/ScheduleListRelationFilter";
@@ -46,7 +45,6 @@ export type UserWhereInput = {
   emailVerified?: DateTimeNullableFilter;
   endTime?: IntFilter;
   eventTypes?: EventTypeListRelationFilter;
-  feedback?: FeedbackListRelationFilter;
   hideBranding?: BooleanFilter;
   id?: IntFilter;
   identityProvider?: "CAL" | "GOOGLE" | "SAML";
