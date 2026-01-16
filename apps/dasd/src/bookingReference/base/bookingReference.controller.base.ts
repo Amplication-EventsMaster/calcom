@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { BookingReferenceService } from "../bookingReference.service";
 import { BookingReferenceCreateInput } from "./BookingReferenceCreateInput";
-import { BookingReferenceWhereInput } from "./BookingReferenceWhereInput";
-import { BookingReferenceWhereUniqueInput } from "./BookingReferenceWhereUniqueInput";
-import { BookingReferenceFindManyArgs } from "./BookingReferenceFindManyArgs";
-import { BookingReferenceUpdateInput } from "./BookingReferenceUpdateInput";
 import { BookingReference } from "./BookingReference";
+import { BookingReferenceFindManyArgs } from "./BookingReferenceFindManyArgs";
+import { BookingReferenceWhereUniqueInput } from "./BookingReferenceWhereUniqueInput";
+import { BookingReferenceUpdateInput } from "./BookingReferenceUpdateInput";
 
 export class BookingReferenceControllerBase {
   constructor(protected readonly service: BookingReferenceService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: BookingReference })
-  async create(
+  async createBookingReference(
     @common.Body() data: BookingReferenceCreateInput
   ): Promise<BookingReference> {
-    return await this.service.create({
+    return await this.service.createBookingReference({
       data: {
         ...data,
 
@@ -63,9 +62,11 @@ export class BookingReferenceControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [BookingReference] })
   @ApiNestedQuery(BookingReferenceFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<BookingReference[]> {
+  async bookingReferences(
+    @common.Req() request: Request
+  ): Promise<BookingReference[]> {
     const args = plainToClass(BookingReferenceFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.bookingReferences({
       ...args,
       select: {
         booking: {
@@ -89,10 +90,10 @@ export class BookingReferenceControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: BookingReference })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async bookingReference(
     @common.Param() params: BookingReferenceWhereUniqueInput
   ): Promise<BookingReference | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.bookingReference({
       where: params,
       select: {
         booking: {
@@ -122,12 +123,12 @@ export class BookingReferenceControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: BookingReference })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateBookingReference(
     @common.Param() params: BookingReferenceWhereUniqueInput,
     @common.Body() data: BookingReferenceUpdateInput
   ): Promise<BookingReference | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateBookingReference({
         where: params,
         data: {
           ...data,
@@ -168,11 +169,11 @@ export class BookingReferenceControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: BookingReference })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteBookingReference(
     @common.Param() params: BookingReferenceWhereUniqueInput
   ): Promise<BookingReference | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteBookingReference({
         where: params,
         select: {
           booking: {

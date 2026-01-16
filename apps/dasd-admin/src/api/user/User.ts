@@ -5,13 +5,13 @@ import { Booking } from "../booking/Booking";
 import { Credential } from "../credential/Credential";
 import { DestinationCalendar } from "../destinationCalendar/DestinationCalendar";
 import { EventType } from "../eventType/EventType";
-import { Feedback } from "../feedback/Feedback";
 import { Impersonation } from "../impersonation/Impersonation";
 import { JsonValue } from "type-fest";
 import { Schedule } from "../schedule/Schedule";
 import { SelectedCalendar } from "../selectedCalendar/SelectedCalendar";
 import { Session } from "../session/Session";
 import { Membership } from "../membership/Membership";
+import { VerificationToken } from "../verificationToken/VerificationToken";
 import { Webhook } from "../webhook/Webhook";
 import { Workflow } from "../workflow/Workflow";
 
@@ -37,7 +37,6 @@ export type User = {
   emailVerified: Date | null;
   endTime: number;
   eventTypes?: Array<EventType>;
-  feedback?: Array<Feedback>;
   hideBranding: boolean;
   id: number;
   identityProvider?: "CAL" | "GOOGLE" | "SAML";
@@ -63,6 +62,7 @@ export type User = {
   twoFactorEnabled: boolean;
   twoFactorSecret: string | null;
   username: string | null;
+  verificationToken?: VerificationToken | null;
   verified: boolean | null;
   webhooks?: Array<Webhook>;
   weekStart: string;

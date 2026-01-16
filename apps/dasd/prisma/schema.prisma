@@ -102,7 +102,6 @@ model User {
   emailVerified        DateTime?
   endTime              Int                      @default(1440)
   eventTypes           EventType[]
-  feedback             Feedback[]
   hideBranding         Boolean                  @default(false)
   id                   Int                      @id @default(autoincrement())
   identityProvider     EnumUserIdentityProvider @default(CAL)
@@ -128,6 +127,8 @@ model User {
   twoFactorEnabled     Boolean                  @default(false)
   twoFactorSecret      String?
   username             String?                  @unique
+  verificationToken    VerificationToken?       @relation(fields: [verificationTokenId], references: [id])
+  verificationTokenId  Int?
   verified             Boolean?                 @default(false)
   webhooks             Webhook[]
   weekStart            String                   @default("Sunday")
@@ -166,6 +167,7 @@ model VerificationToken {
   identifier String
   token      String   @unique
   updatedAt  DateTime @updatedAt
+  users      User[]
 
   @@unique([identifier, token])
 }
@@ -399,8 +401,6 @@ model Feedback {
   date    DateTime
   id      Int      @id @default(autoincrement())
   rating  String
-  user    User     @relation(fields: [userId], references: [id])
-  userId  Int
 }
 
 model WorkflowStep {

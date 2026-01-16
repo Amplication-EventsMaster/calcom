@@ -11,8 +11,15 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString } from "class-validator";
+import {
+  IsDate,
+  IsString,
+  MaxLength,
+  ValidateNested,
+  IsOptional,
+} from "class-validator";
 import { Type } from "class-transformer";
+import { UserCreateNestedManyWithoutVerificationTokensInput } from "./UserCreateNestedManyWithoutVerificationTokensInput";
 
 @InputType()
 class VerificationTokenCreateInput {
@@ -29,6 +36,7 @@ class VerificationTokenCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   identifier!: string;
 
@@ -37,8 +45,21 @@ class VerificationTokenCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   token!: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserCreateNestedManyWithoutVerificationTokensInput,
+  })
+  @ValidateNested()
+  @Type(() => UserCreateNestedManyWithoutVerificationTokensInput)
+  @IsOptional()
+  @Field(() => UserCreateNestedManyWithoutVerificationTokensInput, {
+    nullable: true,
+  })
+  users?: UserCreateNestedManyWithoutVerificationTokensInput;
 }
 
 export { VerificationTokenCreateInput as VerificationTokenCreateInput };

@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateDestinationCalendarArgs } from "./CreateDestinationCalendarArgs";
-import { UpdateDestinationCalendarArgs } from "./UpdateDestinationCalendarArgs";
-import { DeleteDestinationCalendarArgs } from "./DeleteDestinationCalendarArgs";
+import { DestinationCalendar } from "./DestinationCalendar";
 import { DestinationCalendarCountArgs } from "./DestinationCalendarCountArgs";
 import { DestinationCalendarFindManyArgs } from "./DestinationCalendarFindManyArgs";
 import { DestinationCalendarFindUniqueArgs } from "./DestinationCalendarFindUniqueArgs";
-import { DestinationCalendar } from "./DestinationCalendar";
+import { CreateDestinationCalendarArgs } from "./CreateDestinationCalendarArgs";
+import { UpdateDestinationCalendarArgs } from "./UpdateDestinationCalendarArgs";
+import { DeleteDestinationCalendarArgs } from "./DeleteDestinationCalendarArgs";
 import { Booking } from "../../booking/base/Booking";
 import { Credential } from "../../credential/base/Credential";
 import { EventType } from "../../eventType/base/EventType";
@@ -42,14 +42,14 @@ export class DestinationCalendarResolverBase {
   async destinationCalendars(
     @graphql.Args() args: DestinationCalendarFindManyArgs
   ): Promise<DestinationCalendar[]> {
-    return this.service.findMany(args);
+    return this.service.destinationCalendars(args);
   }
 
   @graphql.Query(() => DestinationCalendar, { nullable: true })
   async destinationCalendar(
     @graphql.Args() args: DestinationCalendarFindUniqueArgs
   ): Promise<DestinationCalendar | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.destinationCalendar(args);
     if (result === null) {
       return null;
     }
@@ -60,7 +60,7 @@ export class DestinationCalendarResolverBase {
   async createDestinationCalendar(
     @graphql.Args() args: CreateDestinationCalendarArgs
   ): Promise<DestinationCalendar> {
-    return await this.service.create({
+    return await this.service.createDestinationCalendar({
       ...args,
       data: {
         ...args.data,
@@ -97,7 +97,7 @@ export class DestinationCalendarResolverBase {
     @graphql.Args() args: UpdateDestinationCalendarArgs
   ): Promise<DestinationCalendar | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateDestinationCalendar({
         ...args,
         data: {
           ...args.data,
@@ -142,7 +142,7 @@ export class DestinationCalendarResolverBase {
     @graphql.Args() args: DeleteDestinationCalendarArgs
   ): Promise<DestinationCalendar | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteDestinationCalendar(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -157,7 +157,7 @@ export class DestinationCalendarResolverBase {
     nullable: true,
     name: "booking",
   })
-  async resolveFieldBooking(
+  async getBooking(
     @graphql.Parent() parent: DestinationCalendar
   ): Promise<Booking | null> {
     const result = await this.service.getBooking(parent.id);
@@ -172,7 +172,7 @@ export class DestinationCalendarResolverBase {
     nullable: true,
     name: "credential",
   })
-  async resolveFieldCredential(
+  async getCredential(
     @graphql.Parent() parent: DestinationCalendar
   ): Promise<Credential | null> {
     const result = await this.service.getCredential(parent.id);
@@ -187,7 +187,7 @@ export class DestinationCalendarResolverBase {
     nullable: true,
     name: "eventType",
   })
-  async resolveFieldEventType(
+  async getEventType(
     @graphql.Parent() parent: DestinationCalendar
   ): Promise<EventType | null> {
     const result = await this.service.getEventType(parent.id);
@@ -202,7 +202,7 @@ export class DestinationCalendarResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
+  async getUser(
     @graphql.Parent() parent: DestinationCalendar
   ): Promise<User | null> {
     const result = await this.service.getUser(parent.id);

@@ -11,17 +11,21 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
+
 import {
   IsInt,
+  Max,
   ValidateNested,
   IsOptional,
   IsString,
+  MaxLength,
   IsBoolean,
   IsEnum,
 } from "class-validator";
+
 import { BookingWhereUniqueInput } from "../../booking/base/BookingWhereUniqueInput";
 import { Type } from "class-transformer";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { EnumPaymentType } from "./EnumPaymentType";
@@ -33,6 +37,7 @@ class PaymentCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   amount!: number;
 
@@ -53,6 +58,7 @@ class PaymentCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   currency!: string;
 
@@ -68,6 +74,7 @@ class PaymentCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   externalId!: string;
 
@@ -76,6 +83,7 @@ class PaymentCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   fee!: number;
 
@@ -108,6 +116,7 @@ class PaymentCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   uid!: string;
 }

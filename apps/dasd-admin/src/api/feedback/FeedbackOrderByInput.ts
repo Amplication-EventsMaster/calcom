@@ -5,5 +5,4 @@ export type FeedbackOrderByInput = {
   date?: SortOrder;
   id?: SortOrder;
   rating?: SortOrder;
-  userId?: SortOrder;
 };

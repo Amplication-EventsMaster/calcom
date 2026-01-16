@@ -10,49 +10,50 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  WorkflowsOnEventType,
-  EventType,
-  Workflow,
+  WorkflowsOnEventType as PrismaWorkflowsOnEventType,
+  EventType as PrismaEventType,
+  Workflow as PrismaWorkflow,
 } from "@prisma/client";
 
 export class WorkflowsOnEventTypeServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.WorkflowsOnEventTypeCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeCountArgs>
+  async count(
+    args: Omit<Prisma.WorkflowsOnEventTypeCountArgs, "select">
   ): Promise<number> {
     return this.prisma.workflowsOnEventType.count(args);
   }
 
-  async findMany<T extends Prisma.WorkflowsOnEventTypeFindManyArgs>(
-    args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeFindManyArgs>
-  ): Promise<WorkflowsOnEventType[]> {
+  async workflowsOnEventTypes(
+    args: Prisma.WorkflowsOnEventTypeFindManyArgs
+  ): Promise<PrismaWorkflowsOnEventType[]> {
     return this.prisma.workflowsOnEventType.findMany(args);
   }
-  async findOne<T extends Prisma.WorkflowsOnEventTypeFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeFindUniqueArgs>
-  ): Promise<WorkflowsOnEventType | null> {
+  async workflowsOnEventType(
+    args: Prisma.WorkflowsOnEventTypeFindUniqueArgs
+  ): Promise<PrismaWorkflowsOnEventType | null> {
     return this.prisma.workflowsOnEventType.findUnique(args);
   }
-  async create<T extends Prisma.WorkflowsOnEventTypeCreateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeCreateArgs>
-  ): Promise<WorkflowsOnEventType> {
-    return this.prisma.workflowsOnEventType.create<T>(args);
+  async createWorkflowsOnEventType(
+    args: Prisma.WorkflowsOnEventTypeCreateArgs
+  ): Promise<PrismaWorkflowsOnEventType> {
+    return this.prisma.workflowsOnEventType.create(args);
   }
-  async update<T extends Prisma.WorkflowsOnEventTypeUpdateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeUpdateArgs>
-  ): Promise<WorkflowsOnEventType> {
-    return this.prisma.workflowsOnEventType.update<T>(args);
+  async updateWorkflowsOnEventType(
+    args: Prisma.WorkflowsOnEventTypeUpdateArgs
+  ): Promise<PrismaWorkflowsOnEventType> {
+    return this.prisma.workflowsOnEventType.update(args);
   }
-  async delete<T extends Prisma.WorkflowsOnEventTypeDeleteArgs>(
-    args: Prisma.SelectSubset<T, Prisma.WorkflowsOnEventTypeDeleteArgs>
-  ): Promise<WorkflowsOnEventType> {
+  async deleteWorkflowsOnEventType(
+    args: Prisma.WorkflowsOnEventTypeDeleteArgs
+  ): Promise<PrismaWorkflowsOnEventType> {
     return this.prisma.workflowsOnEventType.delete(args);
   }
 
-  async getEventType(parentId: number): Promise<EventType | null> {
+  async getEventType(parentId: number): Promise<PrismaEventType | null> {
     return this.prisma.workflowsOnEventType
       .findUnique({
         where: { id: parentId },
@@ -60,7 +61,7 @@ export class WorkflowsOnEventTypeServiceBase {
       .eventType();
   }
 
-  async getWorkflow(parentId: number): Promise<Workflow | null> {
+  async getWorkflow(parentId: number): Promise<PrismaWorkflow | null> {
     return this.prisma.workflowsOnEventType
       .findUnique({
         where: { id: parentId },

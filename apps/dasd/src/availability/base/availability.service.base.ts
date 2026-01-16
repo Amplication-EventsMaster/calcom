@@ -10,50 +10,51 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
+
 import {
   Prisma,
-  Availability,
-  EventType,
-  Schedule,
-  User,
+  Availability as PrismaAvailability,
+  EventType as PrismaEventType,
+  Schedule as PrismaSchedule,
+  User as PrismaUser,
 } from "@prisma/client";
 
 export class AvailabilityServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.AvailabilityCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AvailabilityCountArgs>
+  async count(
+    args: Omit<Prisma.AvailabilityCountArgs, "select">
   ): Promise<number> {
     return this.prisma.availability.count(args);
   }
 
-  async findMany<T extends Prisma.AvailabilityFindManyArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AvailabilityFindManyArgs>
-  ): Promise<Availability[]> {
+  async availabilities(
+    args: Prisma.AvailabilityFindManyArgs
+  ): Promise<PrismaAvailability[]> {
     return this.prisma.availability.findMany(args);
   }
-  async findOne<T extends Prisma.AvailabilityFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AvailabilityFindUniqueArgs>
-  ): Promise<Availability | null> {
+  async availability(
+    args: Prisma.AvailabilityFindUniqueArgs
+  ): Promise<PrismaAvailability | null> {
     return this.prisma.availability.findUnique(args);
   }
-  async create<T extends Prisma.AvailabilityCreateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AvailabilityCreateArgs>
-  ): Promise<Availability> {
-    return this.prisma.availability.create<T>(args);
+  async createAvailability(
+    args: Prisma.AvailabilityCreateArgs
+  ): Promise<PrismaAvailability> {
+    return this.prisma.availability.create(args);
   }
-  async update<T extends Prisma.AvailabilityUpdateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AvailabilityUpdateArgs>
-  ): Promise<Availability> {
-    return this.prisma.availability.update<T>(args);
+  async updateAvailability(
+    args: Prisma.AvailabilityUpdateArgs
+  ): Promise<PrismaAvailability> {
+    return this.prisma.availability.update(args);
   }
-  async delete<T extends Prisma.AvailabilityDeleteArgs>(
-    args: Prisma.SelectSubset<T, Prisma.AvailabilityDeleteArgs>
-  ): Promise<Availability> {
+  async deleteAvailability(
+    args: Prisma.AvailabilityDeleteArgs
+  ): Promise<PrismaAvailability> {
     return this.prisma.availability.delete(args);
   }
 
-  async getEventType(parentId: number): Promise<EventType | null> {
+  async getEventType(parentId: number): Promise<PrismaEventType | null> {
     return this.prisma.availability
       .findUnique({
         where: { id: parentId },
@@ -61,7 +62,7 @@ export class AvailabilityServiceBase {
       .eventType();
   }
 
-  async getSchedule(parentId: number): Promise<Schedule | null> {
+  async getSchedule(parentId: number): Promise<PrismaSchedule | null> {
     return this.prisma.availability
       .findUnique({
         where: { id: parentId },
@@ -69,7 +70,7 @@ export class AvailabilityServiceBase {
       .schedule();
   }
 
-  async getUser(parentId: number): Promise<User | null> {
+  async getUser(parentId: number): Promise<PrismaUser | null> {
     return this.prisma.availability
       .findUnique({
         where: { id: parentId },

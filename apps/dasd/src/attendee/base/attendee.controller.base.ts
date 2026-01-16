@@ -18,18 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { AttendeeService } from "../attendee.service";
 import { AttendeeCreateInput } from "./AttendeeCreateInput";
-import { AttendeeWhereInput } from "./AttendeeWhereInput";
-import { AttendeeWhereUniqueInput } from "./AttendeeWhereUniqueInput";
-import { AttendeeFindManyArgs } from "./AttendeeFindManyArgs";
-import { AttendeeUpdateInput } from "./AttendeeUpdateInput";
 import { Attendee } from "./Attendee";
+import { AttendeeFindManyArgs } from "./AttendeeFindManyArgs";
+import { AttendeeWhereUniqueInput } from "./AttendeeWhereUniqueInput";
+import { AttendeeUpdateInput } from "./AttendeeUpdateInput";
 
 export class AttendeeControllerBase {
   constructor(protected readonly service: AttendeeService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Attendee })
-  async create(@common.Body() data: AttendeeCreateInput): Promise<Attendee> {
-    return await this.service.create({
+  async createAttendee(
+    @common.Body() data: AttendeeCreateInput
+  ): Promise<Attendee> {
+    return await this.service.createAttendee({
       data: {
         ...data,
 
@@ -58,9 +59,9 @@ export class AttendeeControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Attendee] })
   @ApiNestedQuery(AttendeeFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Attendee[]> {
+  async attendees(@common.Req() request: Request): Promise<Attendee[]> {
     const args = plainToClass(AttendeeFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.attendees({
       ...args,
       select: {
         booking: {
@@ -81,10 +82,10 @@ export class AttendeeControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Attendee })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async attendee(
     @common.Param() params: AttendeeWhereUniqueInput
   ): Promise<Attendee | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.attendee({
       where: params,
       select: {
         booking: {
@@ -111,12 +112,12 @@ export class AttendeeControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Attendee })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateAttendee(
     @common.Param() params: AttendeeWhereUniqueInput,
     @common.Body() data: AttendeeUpdateInput
   ): Promise<Attendee | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateAttendee({
         where: params,
         data: {
           ...data,
@@ -154,11 +155,11 @@ export class AttendeeControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Attendee })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteAttendee(
     @common.Param() params: AttendeeWhereUniqueInput
   ): Promise<Attendee | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteAttendee({
         where: params,
         select: {
           booking: {

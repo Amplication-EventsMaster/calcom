@@ -12,11 +12,17 @@ https://docs.amplication.com/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { ApiKeyCreateNestedManyWithoutAppsInput } from "./ApiKeyCreateNestedManyWithoutAppsInput";
-import { ValidateNested, IsOptional, IsEnum, IsString } from "class-validator";
+import {
+  ValidateNested,
+  IsOptional,
+  IsEnum,
+  IsString,
+  MaxLength,
+} from "class-validator";
 import { Type } from "class-transformer";
 import { EnumAppCategories } from "./EnumAppCategories";
 import { CredentialCreateNestedManyWithoutAppsInput } from "./CredentialCreateNestedManyWithoutAppsInput";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { WebhookCreateNestedManyWithoutAppsInput } from "./WebhookCreateNestedManyWithoutAppsInput";
@@ -68,6 +74,7 @@ class AppCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   dirName!: string;
 

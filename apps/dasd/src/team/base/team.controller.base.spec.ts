@@ -53,11 +53,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createTeam() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  teams: () => FIND_MANY_RESULT,
+  team: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

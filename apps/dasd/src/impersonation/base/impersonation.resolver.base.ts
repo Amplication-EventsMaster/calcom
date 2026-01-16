@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateImpersonationArgs } from "./CreateImpersonationArgs";
-import { UpdateImpersonationArgs } from "./UpdateImpersonationArgs";
-import { DeleteImpersonationArgs } from "./DeleteImpersonationArgs";
+import { Impersonation } from "./Impersonation";
 import { ImpersonationCountArgs } from "./ImpersonationCountArgs";
 import { ImpersonationFindManyArgs } from "./ImpersonationFindManyArgs";
 import { ImpersonationFindUniqueArgs } from "./ImpersonationFindUniqueArgs";
-import { Impersonation } from "./Impersonation";
+import { CreateImpersonationArgs } from "./CreateImpersonationArgs";
+import { UpdateImpersonationArgs } from "./UpdateImpersonationArgs";
+import { DeleteImpersonationArgs } from "./DeleteImpersonationArgs";
 import { User } from "../../user/base/User";
 import { ImpersonationService } from "../impersonation.service";
 @graphql.Resolver(() => Impersonation)
@@ -39,14 +39,14 @@ export class ImpersonationResolverBase {
   async impersonations(
     @graphql.Args() args: ImpersonationFindManyArgs
   ): Promise<Impersonation[]> {
-    return this.service.findMany(args);
+    return this.service.impersonations(args);
   }
 
   @graphql.Query(() => Impersonation, { nullable: true })
   async impersonation(
     @graphql.Args() args: ImpersonationFindUniqueArgs
   ): Promise<Impersonation | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.impersonation(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class ImpersonationResolverBase {
   async createImpersonation(
     @graphql.Args() args: CreateImpersonationArgs
   ): Promise<Impersonation> {
-    return await this.service.create({
+    return await this.service.createImpersonation({
       ...args,
       data: {
         ...args.data,
@@ -78,7 +78,7 @@ export class ImpersonationResolverBase {
     @graphql.Args() args: UpdateImpersonationArgs
   ): Promise<Impersonation | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateImpersonation({
         ...args,
         data: {
           ...args.data,
@@ -107,7 +107,7 @@ export class ImpersonationResolverBase {
     @graphql.Args() args: DeleteImpersonationArgs
   ): Promise<Impersonation | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteImpersonation(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -122,7 +122,7 @@ export class ImpersonationResolverBase {
     nullable: true,
     name: "impersonatedBy",
   })
-  async resolveFieldImpersonatedBy(
+  async getImpersonatedBy(
     @graphql.Parent() parent: Impersonation
   ): Promise<User | null> {
     const result = await this.service.getImpersonatedBy(parent.id);
@@ -137,7 +137,7 @@ export class ImpersonationResolverBase {
     nullable: true,
     name: "impersonatedUser",
   })
-  async resolveFieldImpersonatedUser(
+  async getImpersonatedUser(
     @graphql.Parent() parent: Impersonation
   ): Promise<User | null> {
     const result = await this.service.getImpersonatedUser(parent.id);

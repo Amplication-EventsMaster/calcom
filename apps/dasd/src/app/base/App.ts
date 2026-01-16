@@ -18,11 +18,12 @@ import {
   IsEnum,
   IsDate,
   IsString,
+  MaxLength,
 } from "class-validator";
 import { Type } from "class-transformer";
 import { EnumAppCategories } from "./EnumAppCategories";
 import { Credential } from "../../credential/base/Credential";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { Webhook } from "../../webhook/base/Webhook";
@@ -76,6 +77,7 @@ class App {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   dirName!: string;
 

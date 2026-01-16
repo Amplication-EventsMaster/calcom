@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateSessionArgs } from "./CreateSessionArgs";
-import { UpdateSessionArgs } from "./UpdateSessionArgs";
-import { DeleteSessionArgs } from "./DeleteSessionArgs";
+import { Session } from "./Session";
 import { SessionCountArgs } from "./SessionCountArgs";
 import { SessionFindManyArgs } from "./SessionFindManyArgs";
 import { SessionFindUniqueArgs } from "./SessionFindUniqueArgs";
-import { Session } from "./Session";
+import { CreateSessionArgs } from "./CreateSessionArgs";
+import { UpdateSessionArgs } from "./UpdateSessionArgs";
+import { DeleteSessionArgs } from "./DeleteSessionArgs";
 import { User } from "../../user/base/User";
 import { SessionService } from "../session.service";
 @graphql.Resolver(() => Session)
@@ -39,14 +39,14 @@ export class SessionResolverBase {
   async sessions(
     @graphql.Args() args: SessionFindManyArgs
   ): Promise<Session[]> {
-    return this.service.findMany(args);
+    return this.service.sessions(args);
   }
 
   @graphql.Query(() => Session, { nullable: true })
   async session(
     @graphql.Args() args: SessionFindUniqueArgs
   ): Promise<Session | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.session(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class SessionResolverBase {
   async createSession(
     @graphql.Args() args: CreateSessionArgs
   ): Promise<Session> {
-    return await this.service.create({
+    return await this.service.createSession({
       ...args,
       data: {
         ...args.data,
@@ -76,7 +76,7 @@ export class SessionResolverBase {
     @graphql.Args() args: UpdateSessionArgs
   ): Promise<Session | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateSession({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class SessionResolverBase {
     @graphql.Args() args: DeleteSessionArgs
   ): Promise<Session | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteSession(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -118,9 +118,7 @@ export class SessionResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Session
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Session): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

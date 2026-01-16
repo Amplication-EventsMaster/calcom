@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateApiKeyArgs } from "./CreateApiKeyArgs";
-import { UpdateApiKeyArgs } from "./UpdateApiKeyArgs";
-import { DeleteApiKeyArgs } from "./DeleteApiKeyArgs";
+import { ApiKey } from "./ApiKey";
 import { ApiKeyCountArgs } from "./ApiKeyCountArgs";
 import { ApiKeyFindManyArgs } from "./ApiKeyFindManyArgs";
 import { ApiKeyFindUniqueArgs } from "./ApiKeyFindUniqueArgs";
-import { ApiKey } from "./ApiKey";
+import { CreateApiKeyArgs } from "./CreateApiKeyArgs";
+import { UpdateApiKeyArgs } from "./UpdateApiKeyArgs";
+import { DeleteApiKeyArgs } from "./DeleteApiKeyArgs";
 import { App } from "../../app/base/App";
 import { User } from "../../user/base/User";
 import { ApiKeyService } from "../apiKey.service";
@@ -38,14 +38,14 @@ export class ApiKeyResolverBase {
 
   @graphql.Query(() => [ApiKey])
   async apiKeys(@graphql.Args() args: ApiKeyFindManyArgs): Promise<ApiKey[]> {
-    return this.service.findMany(args);
+    return this.service.apiKeys(args);
   }
 
   @graphql.Query(() => ApiKey, { nullable: true })
   async apiKey(
     @graphql.Args() args: ApiKeyFindUniqueArgs
   ): Promise<ApiKey | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.apiKey(args);
     if (result === null) {
       return null;
     }
@@ -54,7 +54,7 @@ export class ApiKeyResolverBase {
 
   @graphql.Mutation(() => ApiKey)
   async createApiKey(@graphql.Args() args: CreateApiKeyArgs): Promise<ApiKey> {
-    return await this.service.create({
+    return await this.service.createApiKey({
       ...args,
       data: {
         ...args.data,
@@ -79,7 +79,7 @@ export class ApiKeyResolverBase {
     @graphql.Args() args: UpdateApiKeyArgs
   ): Promise<ApiKey | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateApiKey({
         ...args,
         data: {
           ...args.data,
@@ -112,7 +112,7 @@ export class ApiKeyResolverBase {
     @graphql.Args() args: DeleteApiKeyArgs
   ): Promise<ApiKey | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteApiKey(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -127,7 +127,7 @@ export class ApiKeyResolverBase {
     nullable: true,
     name: "app",
   })
-  async resolveFieldApp(@graphql.Parent() parent: ApiKey): Promise<App | null> {
+  async getApp(@graphql.Parent() parent: ApiKey): Promise<App | null> {
     const result = await this.service.getApp(parent.id);
 
     if (!result) {
@@ -140,9 +140,7 @@ export class ApiKeyResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: ApiKey
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: ApiKey): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

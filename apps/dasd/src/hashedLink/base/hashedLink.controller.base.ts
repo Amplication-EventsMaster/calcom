@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { HashedLinkService } from "../hashedLink.service";
 import { HashedLinkCreateInput } from "./HashedLinkCreateInput";
-import { HashedLinkWhereInput } from "./HashedLinkWhereInput";
-import { HashedLinkWhereUniqueInput } from "./HashedLinkWhereUniqueInput";
-import { HashedLinkFindManyArgs } from "./HashedLinkFindManyArgs";
-import { HashedLinkUpdateInput } from "./HashedLinkUpdateInput";
 import { HashedLink } from "./HashedLink";
+import { HashedLinkFindManyArgs } from "./HashedLinkFindManyArgs";
+import { HashedLinkWhereUniqueInput } from "./HashedLinkWhereUniqueInput";
+import { HashedLinkUpdateInput } from "./HashedLinkUpdateInput";
 
 export class HashedLinkControllerBase {
   constructor(protected readonly service: HashedLinkService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: HashedLink })
-  async create(
+  async createHashedLink(
     @common.Body() data: HashedLinkCreateInput
   ): Promise<HashedLink> {
-    return await this.service.create({
+    return await this.service.createHashedLink({
       data: {
         ...data,
 
@@ -55,9 +54,9 @@ export class HashedLinkControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [HashedLink] })
   @ApiNestedQuery(HashedLinkFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<HashedLink[]> {
+  async hashedLinks(@common.Req() request: Request): Promise<HashedLink[]> {
     const args = plainToClass(HashedLinkFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.hashedLinks({
       ...args,
       select: {
         eventType: {
@@ -75,10 +74,10 @@ export class HashedLinkControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: HashedLink })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async hashedLink(
     @common.Param() params: HashedLinkWhereUniqueInput
   ): Promise<HashedLink | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.hashedLink({
       where: params,
       select: {
         eventType: {
@@ -102,12 +101,12 @@ export class HashedLinkControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: HashedLink })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateHashedLink(
     @common.Param() params: HashedLinkWhereUniqueInput,
     @common.Body() data: HashedLinkUpdateInput
   ): Promise<HashedLink | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateHashedLink({
         where: params,
         data: {
           ...data,
@@ -140,11 +139,11 @@ export class HashedLinkControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: HashedLink })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteHashedLink(
     @common.Param() params: HashedLinkWhereUniqueInput
   ): Promise<HashedLink | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteHashedLink({
         where: params,
         select: {
           eventType: {

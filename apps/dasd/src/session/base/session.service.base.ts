@@ -10,44 +10,38 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, Session, User } from "@prisma/client";
+import {
+  Prisma,
+  Session as PrismaSession,
+  User as PrismaUser,
+} from "@prisma/client";
 
 export class SessionServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.SessionCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.SessionCountArgs>
-  ): Promise<number> {
+  async count(args: Omit<Prisma.SessionCountArgs, "select">): Promise<number> {
     return this.prisma.session.count(args);
   }
 
-  async findMany<T extends Prisma.SessionFindManyArgs>(
-    args: Prisma.SelectSubset<T, Prisma.SessionFindManyArgs>
-  ): Promise<Session[]> {
+  async sessions(args: Prisma.SessionFindManyArgs): Promise<PrismaSession[]> {
     return this.prisma.session.findMany(args);
   }
-  async findOne<T extends Prisma.SessionFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, Prisma.SessionFindUniqueArgs>
-  ): Promise<Session | null> {
+  async session(
+    args: Prisma.SessionFindUniqueArgs
+  ): Promise<PrismaSession | null> {
     return this.prisma.session.findUnique(args);
   }
-  async create<T extends Prisma.SessionCreateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.SessionCreateArgs>
-  ): Promise<Session> {
-    return this.prisma.session.create<T>(args);
+  async createSession(args: Prisma.SessionCreateArgs): Promise<PrismaSession> {
+    return this.prisma.session.create(args);
   }
-  async update<T extends Prisma.SessionUpdateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.SessionUpdateArgs>
-  ): Promise<Session> {
-    return this.prisma.session.update<T>(args);
+  async updateSession(args: Prisma.SessionUpdateArgs): Promise<PrismaSession> {
+    return this.prisma.session.update(args);
   }
-  async delete<T extends Prisma.SessionDeleteArgs>(
-    args: Prisma.SelectSubset<T, Prisma.SessionDeleteArgs>
-  ): Promise<Session> {
+  async deleteSession(args: Prisma.SessionDeleteArgs): Promise<PrismaSession> {
     return this.prisma.session.delete(args);
   }
 
-  async getUser(parentId: string): Promise<User | null> {
+  async getUser(parentId: string): Promise<PrismaUser | null> {
     return this.prisma.session
       .findUnique({
         where: { id: parentId },

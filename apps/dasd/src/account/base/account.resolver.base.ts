@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateAccountArgs } from "./CreateAccountArgs";
-import { UpdateAccountArgs } from "./UpdateAccountArgs";
-import { DeleteAccountArgs } from "./DeleteAccountArgs";
+import { Account } from "./Account";
 import { AccountCountArgs } from "./AccountCountArgs";
 import { AccountFindManyArgs } from "./AccountFindManyArgs";
 import { AccountFindUniqueArgs } from "./AccountFindUniqueArgs";
-import { Account } from "./Account";
+import { CreateAccountArgs } from "./CreateAccountArgs";
+import { UpdateAccountArgs } from "./UpdateAccountArgs";
+import { DeleteAccountArgs } from "./DeleteAccountArgs";
 import { User } from "../../user/base/User";
 import { AccountService } from "../account.service";
 @graphql.Resolver(() => Account)
@@ -39,14 +39,14 @@ export class AccountResolverBase {
   async accounts(
     @graphql.Args() args: AccountFindManyArgs
   ): Promise<Account[]> {
-    return this.service.findMany(args);
+    return this.service.accounts(args);
   }
 
   @graphql.Query(() => Account, { nullable: true })
   async account(
     @graphql.Args() args: AccountFindUniqueArgs
   ): Promise<Account | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.account(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class AccountResolverBase {
   async createAccount(
     @graphql.Args() args: CreateAccountArgs
   ): Promise<Account> {
-    return await this.service.create({
+    return await this.service.createAccount({
       ...args,
       data: {
         ...args.data,
@@ -76,7 +76,7 @@ export class AccountResolverBase {
     @graphql.Args() args: UpdateAccountArgs
   ): Promise<Account | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateAccount({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class AccountResolverBase {
     @graphql.Args() args: DeleteAccountArgs
   ): Promise<Account | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteAccount(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -118,9 +118,7 @@ export class AccountResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Account
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Account): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

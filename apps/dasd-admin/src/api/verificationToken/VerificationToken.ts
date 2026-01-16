@@ -1,3 +1,5 @@
+import { User } from "../user/User";
+
 export type VerificationToken = {
   createdAt: Date;
   expires: Date;
@@ -5,4 +7,5 @@ export type VerificationToken = {
   identifier: string;
   token: string;
   updatedAt: Date;
+  users?: Array<User>;
 };

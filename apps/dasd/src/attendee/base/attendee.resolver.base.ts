@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateAttendeeArgs } from "./CreateAttendeeArgs";
-import { UpdateAttendeeArgs } from "./UpdateAttendeeArgs";
-import { DeleteAttendeeArgs } from "./DeleteAttendeeArgs";
+import { Attendee } from "./Attendee";
 import { AttendeeCountArgs } from "./AttendeeCountArgs";
 import { AttendeeFindManyArgs } from "./AttendeeFindManyArgs";
 import { AttendeeFindUniqueArgs } from "./AttendeeFindUniqueArgs";
-import { Attendee } from "./Attendee";
+import { CreateAttendeeArgs } from "./CreateAttendeeArgs";
+import { UpdateAttendeeArgs } from "./UpdateAttendeeArgs";
+import { DeleteAttendeeArgs } from "./DeleteAttendeeArgs";
 import { Booking } from "../../booking/base/Booking";
 import { AttendeeService } from "../attendee.service";
 @graphql.Resolver(() => Attendee)
@@ -39,14 +39,14 @@ export class AttendeeResolverBase {
   async attendees(
     @graphql.Args() args: AttendeeFindManyArgs
   ): Promise<Attendee[]> {
-    return this.service.findMany(args);
+    return this.service.attendees(args);
   }
 
   @graphql.Query(() => Attendee, { nullable: true })
   async attendee(
     @graphql.Args() args: AttendeeFindUniqueArgs
   ): Promise<Attendee | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.attendee(args);
     if (result === null) {
       return null;
     }
@@ -57,7 +57,7 @@ export class AttendeeResolverBase {
   async createAttendee(
     @graphql.Args() args: CreateAttendeeArgs
   ): Promise<Attendee> {
-    return await this.service.create({
+    return await this.service.createAttendee({
       ...args,
       data: {
         ...args.data,
@@ -76,7 +76,7 @@ export class AttendeeResolverBase {
     @graphql.Args() args: UpdateAttendeeArgs
   ): Promise<Attendee | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateAttendee({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class AttendeeResolverBase {
     @graphql.Args() args: DeleteAttendeeArgs
   ): Promise<Attendee | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteAttendee(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -118,7 +118,7 @@ export class AttendeeResolverBase {
     nullable: true,
     name: "booking",
   })
-  async resolveFieldBooking(
+  async getBooking(
     @graphql.Parent() parent: Attendee
   ): Promise<Booking | null> {
     const result = await this.service.getBooking(parent.id);

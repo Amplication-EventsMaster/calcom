@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateWorkflowsOnEventTypeArgs } from "./CreateWorkflowsOnEventTypeArgs";
-import { UpdateWorkflowsOnEventTypeArgs } from "./UpdateWorkflowsOnEventTypeArgs";
-import { DeleteWorkflowsOnEventTypeArgs } from "./DeleteWorkflowsOnEventTypeArgs";
+import { WorkflowsOnEventType } from "./WorkflowsOnEventType";
 import { WorkflowsOnEventTypeCountArgs } from "./WorkflowsOnEventTypeCountArgs";
 import { WorkflowsOnEventTypeFindManyArgs } from "./WorkflowsOnEventTypeFindManyArgs";
 import { WorkflowsOnEventTypeFindUniqueArgs } from "./WorkflowsOnEventTypeFindUniqueArgs";
-import { WorkflowsOnEventType } from "./WorkflowsOnEventType";
+import { CreateWorkflowsOnEventTypeArgs } from "./CreateWorkflowsOnEventTypeArgs";
+import { UpdateWorkflowsOnEventTypeArgs } from "./UpdateWorkflowsOnEventTypeArgs";
+import { DeleteWorkflowsOnEventTypeArgs } from "./DeleteWorkflowsOnEventTypeArgs";
 import { EventType } from "../../eventType/base/EventType";
 import { Workflow } from "../../workflow/base/Workflow";
 import { WorkflowsOnEventTypeService } from "../workflowsOnEventType.service";
@@ -40,14 +40,14 @@ export class WorkflowsOnEventTypeResolverBase {
   async workflowsOnEventTypes(
     @graphql.Args() args: WorkflowsOnEventTypeFindManyArgs
   ): Promise<WorkflowsOnEventType[]> {
-    return this.service.findMany(args);
+    return this.service.workflowsOnEventTypes(args);
   }
 
   @graphql.Query(() => WorkflowsOnEventType, { nullable: true })
   async workflowsOnEventType(
     @graphql.Args() args: WorkflowsOnEventTypeFindUniqueArgs
   ): Promise<WorkflowsOnEventType | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.workflowsOnEventType(args);
     if (result === null) {
       return null;
     }
@@ -58,7 +58,7 @@ export class WorkflowsOnEventTypeResolverBase {
   async createWorkflowsOnEventType(
     @graphql.Args() args: CreateWorkflowsOnEventTypeArgs
   ): Promise<WorkflowsOnEventType> {
-    return await this.service.create({
+    return await this.service.createWorkflowsOnEventType({
       ...args,
       data: {
         ...args.data,
@@ -79,7 +79,7 @@ export class WorkflowsOnEventTypeResolverBase {
     @graphql.Args() args: UpdateWorkflowsOnEventTypeArgs
   ): Promise<WorkflowsOnEventType | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWorkflowsOnEventType({
         ...args,
         data: {
           ...args.data,
@@ -108,7 +108,7 @@ export class WorkflowsOnEventTypeResolverBase {
     @graphql.Args() args: DeleteWorkflowsOnEventTypeArgs
   ): Promise<WorkflowsOnEventType | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteWorkflowsOnEventType(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -123,7 +123,7 @@ export class WorkflowsOnEventTypeResolverBase {
     nullable: true,
     name: "eventType",
   })
-  async resolveFieldEventType(
+  async getEventType(
     @graphql.Parent() parent: WorkflowsOnEventType
   ): Promise<EventType | null> {
     const result = await this.service.getEventType(parent.id);
@@ -138,7 +138,7 @@ export class WorkflowsOnEventTypeResolverBase {
     nullable: true,
     name: "workflow",
   })
-  async resolveFieldWorkflow(
+  async getWorkflow(
     @graphql.Parent() parent: WorkflowsOnEventType
   ): Promise<Workflow | null> {
     const result = await this.service.getWorkflow(parent.id);

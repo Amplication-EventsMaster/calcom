@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateReminderMailArgs } from "./CreateReminderMailArgs";
-import { UpdateReminderMailArgs } from "./UpdateReminderMailArgs";
-import { DeleteReminderMailArgs } from "./DeleteReminderMailArgs";
+import { ReminderMail } from "./ReminderMail";
 import { ReminderMailCountArgs } from "./ReminderMailCountArgs";
 import { ReminderMailFindManyArgs } from "./ReminderMailFindManyArgs";
 import { ReminderMailFindUniqueArgs } from "./ReminderMailFindUniqueArgs";
-import { ReminderMail } from "./ReminderMail";
+import { CreateReminderMailArgs } from "./CreateReminderMailArgs";
+import { UpdateReminderMailArgs } from "./UpdateReminderMailArgs";
+import { DeleteReminderMailArgs } from "./DeleteReminderMailArgs";
 import { ReminderMailService } from "../reminderMail.service";
 @graphql.Resolver(() => ReminderMail)
 export class ReminderMailResolverBase {
@@ -38,14 +38,14 @@ export class ReminderMailResolverBase {
   async reminderMails(
     @graphql.Args() args: ReminderMailFindManyArgs
   ): Promise<ReminderMail[]> {
-    return this.service.findMany(args);
+    return this.service.reminderMails(args);
   }
 
   @graphql.Query(() => ReminderMail, { nullable: true })
   async reminderMail(
     @graphql.Args() args: ReminderMailFindUniqueArgs
   ): Promise<ReminderMail | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.reminderMail(args);
     if (result === null) {
       return null;
     }
@@ -56,7 +56,7 @@ export class ReminderMailResolverBase {
   async createReminderMail(
     @graphql.Args() args: CreateReminderMailArgs
   ): Promise<ReminderMail> {
-    return await this.service.create({
+    return await this.service.createReminderMail({
       ...args,
       data: args.data,
     });
@@ -67,7 +67,7 @@ export class ReminderMailResolverBase {
     @graphql.Args() args: UpdateReminderMailArgs
   ): Promise<ReminderMail | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateReminderMail({
         ...args,
         data: args.data,
       });
@@ -86,7 +86,7 @@ export class ReminderMailResolverBase {
     @graphql.Args() args: DeleteReminderMailArgs
   ): Promise<ReminderMail | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteReminderMail(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(

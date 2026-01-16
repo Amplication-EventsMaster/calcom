@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { ScheduleService } from "../schedule.service";
 import { ScheduleCreateInput } from "./ScheduleCreateInput";
-import { ScheduleWhereInput } from "./ScheduleWhereInput";
-import { ScheduleWhereUniqueInput } from "./ScheduleWhereUniqueInput";
-import { ScheduleFindManyArgs } from "./ScheduleFindManyArgs";
-import { ScheduleUpdateInput } from "./ScheduleUpdateInput";
 import { Schedule } from "./Schedule";
+import { ScheduleFindManyArgs } from "./ScheduleFindManyArgs";
+import { ScheduleWhereUniqueInput } from "./ScheduleWhereUniqueInput";
+import { ScheduleUpdateInput } from "./ScheduleUpdateInput";
 import { AvailabilityFindManyArgs } from "../../availability/base/AvailabilityFindManyArgs";
 import { Availability } from "../../availability/base/Availability";
 import { AvailabilityWhereUniqueInput } from "../../availability/base/AvailabilityWhereUniqueInput";
@@ -34,8 +33,10 @@ export class ScheduleControllerBase {
   constructor(protected readonly service: ScheduleService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Schedule })
-  async create(@common.Body() data: ScheduleCreateInput): Promise<Schedule> {
-    return await this.service.create({
+  async createSchedule(
+    @common.Body() data: ScheduleCreateInput
+  ): Promise<Schedule> {
+    return await this.service.createSchedule({
       data: {
         ...data,
 
@@ -60,9 +61,9 @@ export class ScheduleControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Schedule] })
   @ApiNestedQuery(ScheduleFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Schedule[]> {
+  async schedules(@common.Req() request: Request): Promise<Schedule[]> {
     const args = plainToClass(ScheduleFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.schedules({
       ...args,
       select: {
         id: true,
@@ -81,10 +82,10 @@ export class ScheduleControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Schedule })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async schedule(
     @common.Param() params: ScheduleWhereUniqueInput
   ): Promise<Schedule | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.schedule({
       where: params,
       select: {
         id: true,
@@ -109,12 +110,12 @@ export class ScheduleControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Schedule })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateSchedule(
     @common.Param() params: ScheduleWhereUniqueInput,
     @common.Body() data: ScheduleUpdateInput
   ): Promise<Schedule | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateSchedule({
         where: params,
         data: {
           ...data,
@@ -148,11 +149,11 @@ export class ScheduleControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Schedule })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteSchedule(
     @common.Param() params: ScheduleWhereUniqueInput
   ): Promise<Schedule | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteSchedule({
         where: params,
         select: {
           id: true,
@@ -178,7 +179,7 @@ export class ScheduleControllerBase {
 
   @common.Get("/:id/availability")
   @ApiNestedQuery(AvailabilityFindManyArgs)
-  async findManyAvailability(
+  async findAvailability(
     @common.Req() request: Request,
     @common.Param() params: ScheduleWhereUniqueInput
   ): Promise<Availability[]> {
@@ -231,7 +232,7 @@ export class ScheduleControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateSchedule({
       where: params,
       data,
       select: { id: true },
@@ -248,7 +249,7 @@ export class ScheduleControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateSchedule({
       where: params,
       data,
       select: { id: true },
@@ -265,7 +266,7 @@ export class ScheduleControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateSchedule({
       where: params,
       data,
       select: { id: true },
@@ -274,7 +275,7 @@ export class ScheduleControllerBase {
 
   @common.Get("/:id/eventType")
   @ApiNestedQuery(EventTypeFindManyArgs)
-  async findManyEventType(
+  async findEventType(
     @common.Req() request: Request,
     @common.Param() params: ScheduleWhereUniqueInput
   ): Promise<EventType[]> {
@@ -360,7 +361,7 @@ export class ScheduleControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateSchedule({
       where: params,
       data,
       select: { id: true },
@@ -377,7 +378,7 @@ export class ScheduleControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateSchedule({
       where: params,
       data,
       select: { id: true },
@@ -394,7 +395,7 @@ export class ScheduleControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateSchedule({
       where: params,
       data,
       select: { id: true },

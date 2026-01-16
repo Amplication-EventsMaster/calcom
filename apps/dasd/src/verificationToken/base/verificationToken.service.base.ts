@@ -10,40 +10,55 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, VerificationToken } from "@prisma/client";
+import {
+  Prisma,
+  VerificationToken as PrismaVerificationToken,
+  User as PrismaUser,
+} from "@prisma/client";
 
 export class VerificationTokenServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.VerificationTokenCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.VerificationTokenCountArgs>
+  async count(
+    args: Omit<Prisma.VerificationTokenCountArgs, "select">
   ): Promise<number> {
     return this.prisma.verificationToken.count(args);
   }
 
-  async findMany<T extends Prisma.VerificationTokenFindManyArgs>(
-    args: Prisma.SelectSubset<T, Prisma.VerificationTokenFindManyArgs>
-  ): Promise<VerificationToken[]> {
+  async verificationTokens(
+    args: Prisma.VerificationTokenFindManyArgs
+  ): Promise<PrismaVerificationToken[]> {
     return this.prisma.verificationToken.findMany(args);
   }
-  async findOne<T extends Prisma.VerificationTokenFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, Prisma.VerificationTokenFindUniqueArgs>
-  ): Promise<VerificationToken | null> {
+  async verificationToken(
+    args: Prisma.VerificationTokenFindUniqueArgs
+  ): Promise<PrismaVerificationToken | null> {
     return this.prisma.verificationToken.findUnique(args);
   }
-  async create<T extends Prisma.VerificationTokenCreateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.VerificationTokenCreateArgs>
-  ): Promise<VerificationToken> {
-    return this.prisma.verificationToken.create<T>(args);
+  async createVerificationToken(
+    args: Prisma.VerificationTokenCreateArgs
+  ): Promise<PrismaVerificationToken> {
+    return this.prisma.verificationToken.create(args);
   }
-  async update<T extends Prisma.VerificationTokenUpdateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.VerificationTokenUpdateArgs>
-  ): Promise<VerificationToken> {
-    return this.prisma.verificationToken.update<T>(args);
+  async updateVerificationToken(
+    args: Prisma.VerificationTokenUpdateArgs
+  ): Promise<PrismaVerificationToken> {
+    return this.prisma.verificationToken.update(args);
   }
-  async delete<T extends Prisma.VerificationTokenDeleteArgs>(
-    args: Prisma.SelectSubset<T, Prisma.VerificationTokenDeleteArgs>
-  ): Promise<VerificationToken> {
+  async deleteVerificationToken(
+    args: Prisma.VerificationTokenDeleteArgs
+  ): Promise<PrismaVerificationToken> {
     return this.prisma.verificationToken.delete(args);
+  }
+
+  async findUsers(
+    parentId: number,
+    args: Prisma.UserFindManyArgs
+  ): Promise<PrismaUser[]> {
+    return this.prisma.verificationToken
+      .findUniqueOrThrow({
+        where: { id: parentId },
+      })
+      .users(args);
   }
 }

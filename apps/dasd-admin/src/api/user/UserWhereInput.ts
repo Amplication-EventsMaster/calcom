@@ -13,13 +13,13 @@ import { IntNullableFilter } from "../../util/IntNullableFilter";
 import { DestinationCalendarWhereUniqueInput } from "../destinationCalendar/DestinationCalendarWhereUniqueInput";
 import { DateTimeNullableFilter } from "../../util/DateTimeNullableFilter";
 import { EventTypeListRelationFilter } from "../eventType/EventTypeListRelationFilter";
-import { FeedbackListRelationFilter } from "../feedback/FeedbackListRelationFilter";
 import { ImpersonationListRelationFilter } from "../impersonation/ImpersonationListRelationFilter";
 import { JsonFilter } from "../../util/JsonFilter";
 import { ScheduleListRelationFilter } from "../schedule/ScheduleListRelationFilter";
 import { SelectedCalendarListRelationFilter } from "../selectedCalendar/SelectedCalendarListRelationFilter";
 import { SessionListRelationFilter } from "../session/SessionListRelationFilter";
 import { MembershipListRelationFilter } from "../membership/MembershipListRelationFilter";
+import { VerificationTokenWhereUniqueInput } from "../verificationToken/VerificationTokenWhereUniqueInput";
 import { WebhookListRelationFilter } from "../webhook/WebhookListRelationFilter";
 import { WorkflowListRelationFilter } from "../workflow/WorkflowListRelationFilter";
 
@@ -45,7 +45,6 @@ export type UserWhereInput = {
   emailVerified?: DateTimeNullableFilter;
   endTime?: IntFilter;
   eventTypes?: EventTypeListRelationFilter;
-  feedback?: FeedbackListRelationFilter;
   hideBranding?: BooleanFilter;
   id?: IntFilter;
   identityProvider?: "CAL" | "GOOGLE" | "SAML";
@@ -71,6 +70,7 @@ export type UserWhereInput = {
   twoFactorEnabled?: BooleanFilter;
   twoFactorSecret?: StringNullableFilter;
   username?: StringNullableFilter;
+  verificationToken?: VerificationTokenWhereUniqueInput;
   verified?: BooleanNullableFilter;
   webhooks?: WebhookListRelationFilter;
   weekStart?: StringFilter;

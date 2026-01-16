@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { CredentialService } from "../credential.service";
 import { CredentialCreateInput } from "./CredentialCreateInput";
-import { CredentialWhereInput } from "./CredentialWhereInput";
-import { CredentialWhereUniqueInput } from "./CredentialWhereUniqueInput";
-import { CredentialFindManyArgs } from "./CredentialFindManyArgs";
-import { CredentialUpdateInput } from "./CredentialUpdateInput";
 import { Credential } from "./Credential";
+import { CredentialFindManyArgs } from "./CredentialFindManyArgs";
+import { CredentialWhereUniqueInput } from "./CredentialWhereUniqueInput";
+import { CredentialUpdateInput } from "./CredentialUpdateInput";
 import { DestinationCalendarFindManyArgs } from "../../destinationCalendar/base/DestinationCalendarFindManyArgs";
 import { DestinationCalendar } from "../../destinationCalendar/base/DestinationCalendar";
 import { DestinationCalendarWhereUniqueInput } from "../../destinationCalendar/base/DestinationCalendarWhereUniqueInput";
@@ -31,10 +30,10 @@ export class CredentialControllerBase {
   constructor(protected readonly service: CredentialService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Credential })
-  async create(
+  async createCredential(
     @common.Body() data: CredentialCreateInput
   ): Promise<Credential> {
-    return await this.service.create({
+    return await this.service.createCredential({
       data: {
         ...data,
 
@@ -73,9 +72,9 @@ export class CredentialControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Credential] })
   @ApiNestedQuery(CredentialFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Credential[]> {
+  async credentials(@common.Req() request: Request): Promise<Credential[]> {
     const args = plainToClass(CredentialFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.credentials({
       ...args,
       select: {
         app: {
@@ -100,10 +99,10 @@ export class CredentialControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Credential })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async credential(
     @common.Param() params: CredentialWhereUniqueInput
   ): Promise<Credential | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.credential({
       where: params,
       select: {
         app: {
@@ -134,12 +133,12 @@ export class CredentialControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Credential })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateCredential(
     @common.Param() params: CredentialWhereUniqueInput,
     @common.Body() data: CredentialUpdateInput
   ): Promise<Credential | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateCredential({
         where: params,
         data: {
           ...data,
@@ -187,11 +186,11 @@ export class CredentialControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Credential })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteCredential(
     @common.Param() params: CredentialWhereUniqueInput
   ): Promise<Credential | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteCredential({
         where: params,
         select: {
           app: {
@@ -223,7 +222,7 @@ export class CredentialControllerBase {
 
   @common.Get("/:id/destinationCalendars")
   @ApiNestedQuery(DestinationCalendarFindManyArgs)
-  async findManyDestinationCalendars(
+  async findDestinationCalendars(
     @common.Req() request: Request,
     @common.Param() params: CredentialWhereUniqueInput
   ): Promise<DestinationCalendar[]> {
@@ -278,7 +277,7 @@ export class CredentialControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateCredential({
       where: params,
       data,
       select: { id: true },
@@ -295,7 +294,7 @@ export class CredentialControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateCredential({
       where: params,
       data,
       select: { id: true },
@@ -312,7 +311,7 @@ export class CredentialControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateCredential({
       where: params,
       data,
       select: { id: true },

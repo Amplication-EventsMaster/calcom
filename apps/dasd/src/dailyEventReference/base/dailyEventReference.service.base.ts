@@ -10,44 +10,49 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { PrismaService } from "../../prisma/prisma.service";
-import { Prisma, DailyEventReference, Booking } from "@prisma/client";
+
+import {
+  Prisma,
+  DailyEventReference as PrismaDailyEventReference,
+  Booking as PrismaBooking,
+} from "@prisma/client";
 
 export class DailyEventReferenceServiceBase {
   constructor(protected readonly prisma: PrismaService) {}
 
-  async count<T extends Prisma.DailyEventReferenceCountArgs>(
-    args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceCountArgs>
+  async count(
+    args: Omit<Prisma.DailyEventReferenceCountArgs, "select">
   ): Promise<number> {
     return this.prisma.dailyEventReference.count(args);
   }
 
-  async findMany<T extends Prisma.DailyEventReferenceFindManyArgs>(
-    args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceFindManyArgs>
-  ): Promise<DailyEventReference[]> {
+  async dailyEventReferences(
+    args: Prisma.DailyEventReferenceFindManyArgs
+  ): Promise<PrismaDailyEventReference[]> {
     return this.prisma.dailyEventReference.findMany(args);
   }
-  async findOne<T extends Prisma.DailyEventReferenceFindUniqueArgs>(
-    args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceFindUniqueArgs>
-  ): Promise<DailyEventReference | null> {
+  async dailyEventReference(
+    args: Prisma.DailyEventReferenceFindUniqueArgs
+  ): Promise<PrismaDailyEventReference | null> {
     return this.prisma.dailyEventReference.findUnique(args);
   }
-  async create<T extends Prisma.DailyEventReferenceCreateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceCreateArgs>
-  ): Promise<DailyEventReference> {
-    return this.prisma.dailyEventReference.create<T>(args);
+  async createDailyEventReference(
+    args: Prisma.DailyEventReferenceCreateArgs
+  ): Promise<PrismaDailyEventReference> {
+    return this.prisma.dailyEventReference.create(args);
   }
-  async update<T extends Prisma.DailyEventReferenceUpdateArgs>(
-    args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceUpdateArgs>
-  ): Promise<DailyEventReference> {
-    return this.prisma.dailyEventReference.update<T>(args);
+  async updateDailyEventReference(
+    args: Prisma.DailyEventReferenceUpdateArgs
+  ): Promise<PrismaDailyEventReference> {
+    return this.prisma.dailyEventReference.update(args);
   }
-  async delete<T extends Prisma.DailyEventReferenceDeleteArgs>(
-    args: Prisma.SelectSubset<T, Prisma.DailyEventReferenceDeleteArgs>
-  ): Promise<DailyEventReference> {
+  async deleteDailyEventReference(
+    args: Prisma.DailyEventReferenceDeleteArgs
+  ): Promise<PrismaDailyEventReference> {
     return this.prisma.dailyEventReference.delete(args);
   }
 
-  async getBooking(parentId: number): Promise<Booking | null> {
+  async getBooking(parentId: number): Promise<PrismaBooking | null> {
     return this.prisma.dailyEventReference
       .findUnique({
         where: { id: parentId },

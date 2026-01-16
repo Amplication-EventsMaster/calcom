@@ -41,11 +41,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createDailyEventReference() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  dailyEventReferences: () => FIND_MANY_RESULT,
+  dailyEventReference: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

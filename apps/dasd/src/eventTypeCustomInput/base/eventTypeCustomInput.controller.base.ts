@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { EventTypeCustomInputService } from "../eventTypeCustomInput.service";
 import { EventTypeCustomInputCreateInput } from "./EventTypeCustomInputCreateInput";
-import { EventTypeCustomInputWhereInput } from "./EventTypeCustomInputWhereInput";
-import { EventTypeCustomInputWhereUniqueInput } from "./EventTypeCustomInputWhereUniqueInput";
-import { EventTypeCustomInputFindManyArgs } from "./EventTypeCustomInputFindManyArgs";
-import { EventTypeCustomInputUpdateInput } from "./EventTypeCustomInputUpdateInput";
 import { EventTypeCustomInput } from "./EventTypeCustomInput";
+import { EventTypeCustomInputFindManyArgs } from "./EventTypeCustomInputFindManyArgs";
+import { EventTypeCustomInputWhereUniqueInput } from "./EventTypeCustomInputWhereUniqueInput";
+import { EventTypeCustomInputUpdateInput } from "./EventTypeCustomInputUpdateInput";
 
 export class EventTypeCustomInputControllerBase {
   constructor(protected readonly service: EventTypeCustomInputService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: EventTypeCustomInput })
-  async create(
+  async createEventTypeCustomInput(
     @common.Body() data: EventTypeCustomInputCreateInput
   ): Promise<EventTypeCustomInput> {
-    return await this.service.create({
+    return await this.service.createEventTypeCustomInput({
       data: {
         ...data,
 
@@ -58,11 +57,11 @@ export class EventTypeCustomInputControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [EventTypeCustomInput] })
   @ApiNestedQuery(EventTypeCustomInputFindManyArgs)
-  async findMany(
+  async eventTypeCustomInputs(
     @common.Req() request: Request
   ): Promise<EventTypeCustomInput[]> {
     const args = plainToClass(EventTypeCustomInputFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.eventTypeCustomInputs({
       ...args,
       select: {
         eventType: {
@@ -83,10 +82,10 @@ export class EventTypeCustomInputControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: EventTypeCustomInput })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async eventTypeCustomInput(
     @common.Param() params: EventTypeCustomInputWhereUniqueInput
   ): Promise<EventTypeCustomInput | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.eventTypeCustomInput({
       where: params,
       select: {
         eventType: {
@@ -113,12 +112,12 @@ export class EventTypeCustomInputControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: EventTypeCustomInput })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateEventTypeCustomInput(
     @common.Param() params: EventTypeCustomInputWhereUniqueInput,
     @common.Body() data: EventTypeCustomInputUpdateInput
   ): Promise<EventTypeCustomInput | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateEventTypeCustomInput({
         where: params,
         data: {
           ...data,
@@ -154,11 +153,11 @@ export class EventTypeCustomInputControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: EventTypeCustomInput })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteEventTypeCustomInput(
     @common.Param() params: EventTypeCustomInputWhereUniqueInput
   ): Promise<EventTypeCustomInput | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteEventTypeCustomInput({
         where: params,
         select: {
           eventType: {

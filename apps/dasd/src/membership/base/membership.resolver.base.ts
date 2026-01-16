@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateMembershipArgs } from "./CreateMembershipArgs";
-import { UpdateMembershipArgs } from "./UpdateMembershipArgs";
-import { DeleteMembershipArgs } from "./DeleteMembershipArgs";
+import { Membership } from "./Membership";
 import { MembershipCountArgs } from "./MembershipCountArgs";
 import { MembershipFindManyArgs } from "./MembershipFindManyArgs";
 import { MembershipFindUniqueArgs } from "./MembershipFindUniqueArgs";
-import { Membership } from "./Membership";
+import { CreateMembershipArgs } from "./CreateMembershipArgs";
+import { UpdateMembershipArgs } from "./UpdateMembershipArgs";
+import { DeleteMembershipArgs } from "./DeleteMembershipArgs";
 import { Team } from "../../team/base/Team";
 import { User } from "../../user/base/User";
 import { MembershipService } from "../membership.service";
@@ -40,14 +40,14 @@ export class MembershipResolverBase {
   async memberships(
     @graphql.Args() args: MembershipFindManyArgs
   ): Promise<Membership[]> {
-    return this.service.findMany(args);
+    return this.service.memberships(args);
   }
 
   @graphql.Query(() => Membership, { nullable: true })
   async membership(
     @graphql.Args() args: MembershipFindUniqueArgs
   ): Promise<Membership | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.membership(args);
     if (result === null) {
       return null;
     }
@@ -58,7 +58,7 @@ export class MembershipResolverBase {
   async createMembership(
     @graphql.Args() args: CreateMembershipArgs
   ): Promise<Membership> {
-    return await this.service.create({
+    return await this.service.createMembership({
       ...args,
       data: {
         ...args.data,
@@ -79,7 +79,7 @@ export class MembershipResolverBase {
     @graphql.Args() args: UpdateMembershipArgs
   ): Promise<Membership | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateMembership({
         ...args,
         data: {
           ...args.data,
@@ -108,7 +108,7 @@ export class MembershipResolverBase {
     @graphql.Args() args: DeleteMembershipArgs
   ): Promise<Membership | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteMembership(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -123,9 +123,7 @@ export class MembershipResolverBase {
     nullable: true,
     name: "team",
   })
-  async resolveFieldTeam(
-    @graphql.Parent() parent: Membership
-  ): Promise<Team | null> {
+  async getTeam(@graphql.Parent() parent: Membership): Promise<Team | null> {
     const result = await this.service.getTeam(parent.id);
 
     if (!result) {
@@ -138,9 +136,7 @@ export class MembershipResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Membership
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Membership): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

@@ -12,15 +12,19 @@ https://docs.amplication.com/how-to/custom-code
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { Account } from "../../account/base/Account";
+
 import {
   ValidateNested,
   IsOptional,
   IsBoolean,
   IsString,
+  MaxLength,
   IsInt,
+  Max,
   IsDate,
   IsEnum,
 } from "class-validator";
+
 import { Type } from "class-transformer";
 import { ApiKey } from "../../apiKey/base/ApiKey";
 import { Availability } from "../../availability/base/Availability";
@@ -28,10 +32,9 @@ import { Booking } from "../../booking/base/Booking";
 import { Credential } from "../../credential/base/Credential";
 import { DestinationCalendar } from "../../destinationCalendar/base/DestinationCalendar";
 import { EventType } from "../../eventType/base/EventType";
-import { Feedback } from "../../feedback/base/Feedback";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { Impersonation } from "../../impersonation/base/Impersonation";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { EnumUserPlan } from "./EnumUserPlan";
@@ -40,6 +43,7 @@ import { Schedule } from "../../schedule/base/Schedule";
 import { SelectedCalendar } from "../../selectedCalendar/base/SelectedCalendar";
 import { Session } from "../../session/base/Session";
 import { Membership } from "../../membership/base/Membership";
+import { VerificationToken } from "../../verificationToken/base/VerificationToken";
 import { Webhook } from "../../webhook/base/Webhook";
 import { Workflow } from "../../workflow/base/Workflow";
 
@@ -88,6 +92,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -107,6 +112,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -127,6 +133,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   brandColor!: string;
 
@@ -135,6 +142,7 @@ class User {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   bufferTime!: number;
 
@@ -168,6 +176,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   darkBrandColor!: string;
 
@@ -176,6 +185,7 @@ class User {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -204,6 +214,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   email!: string;
 
@@ -223,6 +234,7 @@ class User {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   endTime!: number;
 
@@ -234,15 +246,6 @@ class User {
   @Type(() => EventType)
   @IsOptional()
   eventTypes?: Array<EventType>;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Feedback],
-  })
-  @ValidateNested()
-  @Type(() => Feedback)
-  @IsOptional()
-  feedback?: Array<Feedback>;
 
   @ApiProperty({
     required: true,
@@ -275,6 +278,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -304,6 +308,7 @@ class User {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -315,6 +320,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -336,6 +342,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -347,6 +354,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -405,6 +413,7 @@ class User {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   startTime!: number;
 
@@ -422,6 +431,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -433,6 +443,7 @@ class User {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -444,6 +455,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   timeZone!: string;
 
@@ -471,6 +483,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -482,11 +495,21 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
   })
   username!: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationToken,
+  })
+  @ValidateNested()
+  @Type(() => VerificationToken)
+  @IsOptional()
+  verificationToken?: VerificationToken | null;
 
   @ApiProperty({
     required: false,
@@ -513,6 +536,7 @@ class User {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   weekStart!: string;
 

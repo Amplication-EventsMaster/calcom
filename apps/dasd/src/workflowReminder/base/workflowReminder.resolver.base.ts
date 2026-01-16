@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateWorkflowReminderArgs } from "./CreateWorkflowReminderArgs";
-import { UpdateWorkflowReminderArgs } from "./UpdateWorkflowReminderArgs";
-import { DeleteWorkflowReminderArgs } from "./DeleteWorkflowReminderArgs";
+import { WorkflowReminder } from "./WorkflowReminder";
 import { WorkflowReminderCountArgs } from "./WorkflowReminderCountArgs";
 import { WorkflowReminderFindManyArgs } from "./WorkflowReminderFindManyArgs";
 import { WorkflowReminderFindUniqueArgs } from "./WorkflowReminderFindUniqueArgs";
-import { WorkflowReminder } from "./WorkflowReminder";
+import { CreateWorkflowReminderArgs } from "./CreateWorkflowReminderArgs";
+import { UpdateWorkflowReminderArgs } from "./UpdateWorkflowReminderArgs";
+import { DeleteWorkflowReminderArgs } from "./DeleteWorkflowReminderArgs";
 import { Booking } from "../../booking/base/Booking";
 import { WorkflowStep } from "../../workflowStep/base/WorkflowStep";
 import { WorkflowReminderService } from "../workflowReminder.service";
@@ -40,14 +40,14 @@ export class WorkflowReminderResolverBase {
   async workflowReminders(
     @graphql.Args() args: WorkflowReminderFindManyArgs
   ): Promise<WorkflowReminder[]> {
-    return this.service.findMany(args);
+    return this.service.workflowReminders(args);
   }
 
   @graphql.Query(() => WorkflowReminder, { nullable: true })
   async workflowReminder(
     @graphql.Args() args: WorkflowReminderFindUniqueArgs
   ): Promise<WorkflowReminder | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.workflowReminder(args);
     if (result === null) {
       return null;
     }
@@ -58,7 +58,7 @@ export class WorkflowReminderResolverBase {
   async createWorkflowReminder(
     @graphql.Args() args: CreateWorkflowReminderArgs
   ): Promise<WorkflowReminder> {
-    return await this.service.create({
+    return await this.service.createWorkflowReminder({
       ...args,
       data: {
         ...args.data,
@@ -81,7 +81,7 @@ export class WorkflowReminderResolverBase {
     @graphql.Args() args: UpdateWorkflowReminderArgs
   ): Promise<WorkflowReminder | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWorkflowReminder({
         ...args,
         data: {
           ...args.data,
@@ -112,7 +112,7 @@ export class WorkflowReminderResolverBase {
     @graphql.Args() args: DeleteWorkflowReminderArgs
   ): Promise<WorkflowReminder | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteWorkflowReminder(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -127,7 +127,7 @@ export class WorkflowReminderResolverBase {
     nullable: true,
     name: "booking",
   })
-  async resolveFieldBooking(
+  async getBooking(
     @graphql.Parent() parent: WorkflowReminder
   ): Promise<Booking | null> {
     const result = await this.service.getBooking(parent.id);
@@ -142,7 +142,7 @@ export class WorkflowReminderResolverBase {
     nullable: true,
     name: "workflowStep",
   })
-  async resolveFieldWorkflowStep(
+  async getWorkflowStep(
     @graphql.Parent() parent: WorkflowReminder
   ): Promise<WorkflowStep | null> {
     const result = await this.service.getWorkflowStep(parent.id);

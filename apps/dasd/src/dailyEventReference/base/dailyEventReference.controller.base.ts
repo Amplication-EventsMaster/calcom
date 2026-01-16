@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { DailyEventReferenceService } from "../dailyEventReference.service";
 import { DailyEventReferenceCreateInput } from "./DailyEventReferenceCreateInput";
-import { DailyEventReferenceWhereInput } from "./DailyEventReferenceWhereInput";
-import { DailyEventReferenceWhereUniqueInput } from "./DailyEventReferenceWhereUniqueInput";
-import { DailyEventReferenceFindManyArgs } from "./DailyEventReferenceFindManyArgs";
-import { DailyEventReferenceUpdateInput } from "./DailyEventReferenceUpdateInput";
 import { DailyEventReference } from "./DailyEventReference";
+import { DailyEventReferenceFindManyArgs } from "./DailyEventReferenceFindManyArgs";
+import { DailyEventReferenceWhereUniqueInput } from "./DailyEventReferenceWhereUniqueInput";
+import { DailyEventReferenceUpdateInput } from "./DailyEventReferenceUpdateInput";
 
 export class DailyEventReferenceControllerBase {
   constructor(protected readonly service: DailyEventReferenceService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: DailyEventReference })
-  async create(
+  async createDailyEventReference(
     @common.Body() data: DailyEventReferenceCreateInput
   ): Promise<DailyEventReference> {
-    return await this.service.create({
+    return await this.service.createDailyEventReference({
       data: {
         ...data,
 
@@ -58,11 +57,11 @@ export class DailyEventReferenceControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [DailyEventReference] })
   @ApiNestedQuery(DailyEventReferenceFindManyArgs)
-  async findMany(
+  async dailyEventReferences(
     @common.Req() request: Request
   ): Promise<DailyEventReference[]> {
     const args = plainToClass(DailyEventReferenceFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.dailyEventReferences({
       ...args,
       select: {
         booking: {
@@ -81,10 +80,10 @@ export class DailyEventReferenceControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: DailyEventReference })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async dailyEventReference(
     @common.Param() params: DailyEventReferenceWhereUniqueInput
   ): Promise<DailyEventReference | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.dailyEventReference({
       where: params,
       select: {
         booking: {
@@ -109,12 +108,12 @@ export class DailyEventReferenceControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: DailyEventReference })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateDailyEventReference(
     @common.Param() params: DailyEventReferenceWhereUniqueInput,
     @common.Body() data: DailyEventReferenceUpdateInput
   ): Promise<DailyEventReference | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateDailyEventReference({
         where: params,
         data: {
           ...data,
@@ -150,11 +149,11 @@ export class DailyEventReferenceControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: DailyEventReference })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteDailyEventReference(
     @common.Param() params: DailyEventReferenceWhereUniqueInput
   ): Promise<DailyEventReference | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteDailyEventReference({
         where: params,
         select: {
           booking: {

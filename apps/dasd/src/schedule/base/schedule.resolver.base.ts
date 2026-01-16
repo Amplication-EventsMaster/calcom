@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateScheduleArgs } from "./CreateScheduleArgs";
-import { UpdateScheduleArgs } from "./UpdateScheduleArgs";
-import { DeleteScheduleArgs } from "./DeleteScheduleArgs";
+import { Schedule } from "./Schedule";
 import { ScheduleCountArgs } from "./ScheduleCountArgs";
 import { ScheduleFindManyArgs } from "./ScheduleFindManyArgs";
 import { ScheduleFindUniqueArgs } from "./ScheduleFindUniqueArgs";
-import { Schedule } from "./Schedule";
+import { CreateScheduleArgs } from "./CreateScheduleArgs";
+import { UpdateScheduleArgs } from "./UpdateScheduleArgs";
+import { DeleteScheduleArgs } from "./DeleteScheduleArgs";
 import { AvailabilityFindManyArgs } from "../../availability/base/AvailabilityFindManyArgs";
 import { Availability } from "../../availability/base/Availability";
 import { EventTypeFindManyArgs } from "../../eventType/base/EventTypeFindManyArgs";
@@ -43,14 +43,14 @@ export class ScheduleResolverBase {
   async schedules(
     @graphql.Args() args: ScheduleFindManyArgs
   ): Promise<Schedule[]> {
-    return this.service.findMany(args);
+    return this.service.schedules(args);
   }
 
   @graphql.Query(() => Schedule, { nullable: true })
   async schedule(
     @graphql.Args() args: ScheduleFindUniqueArgs
   ): Promise<Schedule | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.schedule(args);
     if (result === null) {
       return null;
     }
@@ -61,7 +61,7 @@ export class ScheduleResolverBase {
   async createSchedule(
     @graphql.Args() args: CreateScheduleArgs
   ): Promise<Schedule> {
-    return await this.service.create({
+    return await this.service.createSchedule({
       ...args,
       data: {
         ...args.data,
@@ -78,7 +78,7 @@ export class ScheduleResolverBase {
     @graphql.Args() args: UpdateScheduleArgs
   ): Promise<Schedule | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateSchedule({
         ...args,
         data: {
           ...args.data,
@@ -103,7 +103,7 @@ export class ScheduleResolverBase {
     @graphql.Args() args: DeleteScheduleArgs
   ): Promise<Schedule | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteSchedule(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -115,7 +115,7 @@ export class ScheduleResolverBase {
   }
 
   @graphql.ResolveField(() => [Availability], { name: "availability" })
-  async resolveFieldAvailability(
+  async findAvailability(
     @graphql.Parent() parent: Schedule,
     @graphql.Args() args: AvailabilityFindManyArgs
   ): Promise<Availability[]> {
@@ -129,7 +129,7 @@ export class ScheduleResolverBase {
   }
 
   @graphql.ResolveField(() => [EventType], { name: "eventType" })
-  async resolveFieldEventType(
+  async findEventType(
     @graphql.Parent() parent: Schedule,
     @graphql.Args() args: EventTypeFindManyArgs
   ): Promise<EventType[]> {
@@ -146,9 +146,7 @@ export class ScheduleResolverBase {
     nullable: true,
     name: "user",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Schedule
-  ): Promise<User | null> {
+  async getUser(@graphql.Parent() parent: Schedule): Promise<User | null> {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

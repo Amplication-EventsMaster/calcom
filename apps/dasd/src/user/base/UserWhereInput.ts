@@ -28,7 +28,6 @@ import { IntNullableFilter } from "../../util/IntNullableFilter";
 import { DestinationCalendarWhereUniqueInput } from "../../destinationCalendar/base/DestinationCalendarWhereUniqueInput";
 import { DateTimeNullableFilter } from "../../util/DateTimeNullableFilter";
 import { EventTypeListRelationFilter } from "../../eventType/base/EventTypeListRelationFilter";
-import { FeedbackListRelationFilter } from "../../feedback/base/FeedbackListRelationFilter";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { ImpersonationListRelationFilter } from "../../impersonation/base/ImpersonationListRelationFilter";
 import { JsonFilter } from "../../util/JsonFilter";
@@ -38,6 +37,7 @@ import { ScheduleListRelationFilter } from "../../schedule/base/ScheduleListRela
 import { SelectedCalendarListRelationFilter } from "../../selectedCalendar/base/SelectedCalendarListRelationFilter";
 import { SessionListRelationFilter } from "../../session/base/SessionListRelationFilter";
 import { MembershipListRelationFilter } from "../../membership/base/MembershipListRelationFilter";
+import { VerificationTokenWhereUniqueInput } from "../../verificationToken/base/VerificationTokenWhereUniqueInput";
 import { WebhookListRelationFilter } from "../../webhook/base/WebhookListRelationFilter";
 import { WorkflowListRelationFilter } from "../../workflow/base/WorkflowListRelationFilter";
 
@@ -280,18 +280,6 @@ class UserWhereInput {
     nullable: true,
   })
   eventTypes?: EventTypeListRelationFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => FeedbackListRelationFilter,
-  })
-  @ValidateNested()
-  @Type(() => FeedbackListRelationFilter)
-  @IsOptional()
-  @Field(() => FeedbackListRelationFilter, {
-    nullable: true,
-  })
-  feedback?: FeedbackListRelationFilter;
 
   @ApiProperty({
     required: false,
@@ -573,6 +561,18 @@ class UserWhereInput {
     nullable: true,
   })
   username?: StringNullableFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationTokenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => VerificationTokenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => VerificationTokenWhereUniqueInput, {
+    nullable: true,
+  })
+  verificationToken?: VerificationTokenWhereUniqueInput;
 
   @ApiProperty({
     required: false,

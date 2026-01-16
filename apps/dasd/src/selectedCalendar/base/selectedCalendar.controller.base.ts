@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { SelectedCalendarService } from "../selectedCalendar.service";
 import { SelectedCalendarCreateInput } from "./SelectedCalendarCreateInput";
-import { SelectedCalendarWhereInput } from "./SelectedCalendarWhereInput";
-import { SelectedCalendarWhereUniqueInput } from "./SelectedCalendarWhereUniqueInput";
-import { SelectedCalendarFindManyArgs } from "./SelectedCalendarFindManyArgs";
-import { SelectedCalendarUpdateInput } from "./SelectedCalendarUpdateInput";
 import { SelectedCalendar } from "./SelectedCalendar";
+import { SelectedCalendarFindManyArgs } from "./SelectedCalendarFindManyArgs";
+import { SelectedCalendarWhereUniqueInput } from "./SelectedCalendarWhereUniqueInput";
+import { SelectedCalendarUpdateInput } from "./SelectedCalendarUpdateInput";
 
 export class SelectedCalendarControllerBase {
   constructor(protected readonly service: SelectedCalendarService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: SelectedCalendar })
-  async create(
+  async createSelectedCalendar(
     @common.Body() data: SelectedCalendarCreateInput
   ): Promise<SelectedCalendar> {
-    return await this.service.create({
+    return await this.service.createSelectedCalendar({
       data: {
         ...data,
 
@@ -56,9 +55,11 @@ export class SelectedCalendarControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [SelectedCalendar] })
   @ApiNestedQuery(SelectedCalendarFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<SelectedCalendar[]> {
+  async selectedCalendars(
+    @common.Req() request: Request
+  ): Promise<SelectedCalendar[]> {
     const args = plainToClass(SelectedCalendarFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.selectedCalendars({
       ...args,
       select: {
         externalId: true,
@@ -77,10 +78,10 @@ export class SelectedCalendarControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: SelectedCalendar })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async selectedCalendar(
     @common.Param() params: SelectedCalendarWhereUniqueInput
   ): Promise<SelectedCalendar | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.selectedCalendar({
       where: params,
       select: {
         externalId: true,
@@ -105,12 +106,12 @@ export class SelectedCalendarControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: SelectedCalendar })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateSelectedCalendar(
     @common.Param() params: SelectedCalendarWhereUniqueInput,
     @common.Body() data: SelectedCalendarUpdateInput
   ): Promise<SelectedCalendar | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateSelectedCalendar({
         where: params,
         data: {
           ...data,
@@ -144,11 +145,11 @@ export class SelectedCalendarControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: SelectedCalendar })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteSelectedCalendar(
     @common.Param() params: SelectedCalendarWhereUniqueInput
   ): Promise<SelectedCalendar | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteSelectedCalendar({
         where: params,
         select: {
           externalId: true,

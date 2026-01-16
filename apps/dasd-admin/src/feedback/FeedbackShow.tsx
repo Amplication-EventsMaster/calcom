@@ -1,12 +1,5 @@
 import * as React from "react";
-import {
-  Show,
-  SimpleShowLayout,
-  ShowProps,
-  TextField,
-  ReferenceField,
-} from "react-admin";
-import { USER_TITLE_FIELD } from "../user/UserTitle";
+import { Show, SimpleShowLayout, ShowProps, TextField } from "react-admin";
 
 export const FeedbackShow = (props: ShowProps): React.ReactElement => {
   return (
@@ -16,9 +9,6 @@ export const FeedbackShow = (props: ShowProps): React.ReactElement => {
         <TextField label="Date" source="date" />
         <TextField label="ID" source="id" />
         <TextField label="Rating" source="rating" />
-        <ReferenceField label="User" source="user.id" reference="User">
-          <TextField source={USER_TITLE_FIELD} />
-        </ReferenceField>
       </SimpleShowLayout>
     </Show>
   );

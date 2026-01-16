@@ -13,13 +13,12 @@ import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
+  MaxLength,
   IsOptional,
   IsDate,
   IsInt,
-  ValidateNested,
 } from "class-validator";
 import { Type } from "class-transformer";
-import { User } from "../../user/base/User";
 
 @ObjectType()
 class Feedback {
@@ -28,6 +27,7 @@ class Feedback {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -55,16 +55,9 @@ class Feedback {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   rating!: string;
-
-  @ApiProperty({
-    required: true,
-    type: () => User,
-  })
-  @ValidateNested()
-  @Type(() => User)
-  user?: User;
 }
 
 export { Feedback as Feedback };

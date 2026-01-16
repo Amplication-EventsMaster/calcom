@@ -13,13 +13,13 @@ import * as graphql from "@nestjs/graphql";
 import { GraphQLError } from "graphql";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
-import { CreateAppArgs } from "./CreateAppArgs";
-import { UpdateAppArgs } from "./UpdateAppArgs";
-import { DeleteAppArgs } from "./DeleteAppArgs";
+import { App } from "./App";
 import { AppCountArgs } from "./AppCountArgs";
 import { AppFindManyArgs } from "./AppFindManyArgs";
 import { AppFindUniqueArgs } from "./AppFindUniqueArgs";
-import { App } from "./App";
+import { CreateAppArgs } from "./CreateAppArgs";
+import { UpdateAppArgs } from "./UpdateAppArgs";
+import { DeleteAppArgs } from "./DeleteAppArgs";
 import { ApiKeyFindManyArgs } from "../../apiKey/base/ApiKeyFindManyArgs";
 import { ApiKey } from "../../apiKey/base/ApiKey";
 import { CredentialFindManyArgs } from "../../credential/base/CredentialFindManyArgs";
@@ -42,12 +42,12 @@ export class AppResolverBase {
 
   @graphql.Query(() => [App])
   async apps(@graphql.Args() args: AppFindManyArgs): Promise<App[]> {
-    return this.service.findMany(args);
+    return this.service.apps(args);
   }
 
   @graphql.Query(() => App, { nullable: true })
   async app(@graphql.Args() args: AppFindUniqueArgs): Promise<App | null> {
-    const result = await this.service.findOne(args);
+    const result = await this.service.app(args);
     if (result === null) {
       return null;
     }
@@ -56,7 +56,7 @@ export class AppResolverBase {
 
   @graphql.Mutation(() => App)
   async createApp(@graphql.Args() args: CreateAppArgs): Promise<App> {
-    return await this.service.create({
+    return await this.service.createApp({
       ...args,
       data: args.data,
     });
@@ -65,7 +65,7 @@ export class AppResolverBase {
   @graphql.Mutation(() => App)
   async updateApp(@graphql.Args() args: UpdateAppArgs): Promise<App | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateApp({
         ...args,
         data: args.data,
       });
@@ -82,7 +82,7 @@ export class AppResolverBase {
   @graphql.Mutation(() => App)
   async deleteApp(@graphql.Args() args: DeleteAppArgs): Promise<App | null> {
     try {
-      return await this.service.delete(args);
+      return await this.service.deleteApp(args);
     } catch (error) {
       if (isRecordNotFoundError(error)) {
         throw new GraphQLError(
@@ -94,7 +94,7 @@ export class AppResolverBase {
   }
 
   @graphql.ResolveField(() => [ApiKey], { name: "apiKey" })
-  async resolveFieldApiKey(
+  async findApiKey(
     @graphql.Parent() parent: App,
     @graphql.Args() args: ApiKeyFindManyArgs
   ): Promise<ApiKey[]> {
@@ -108,7 +108,7 @@ export class AppResolverBase {
   }
 
   @graphql.ResolveField(() => [Credential], { name: "credentials" })
-  async resolveFieldCredentials(
+  async findCredentials(
     @graphql.Parent() parent: App,
     @graphql.Args() args: CredentialFindManyArgs
   ): Promise<Credential[]> {
@@ -122,7 +122,7 @@ export class AppResolverBase {
   }
 
   @graphql.ResolveField(() => [Webhook], { name: "webhook" })
-  async resolveFieldWebhook(
+  async findWebhook(
     @graphql.Parent() parent: App,
     @graphql.Args() args: WebhookFindManyArgs
   ): Promise<Webhook[]> {

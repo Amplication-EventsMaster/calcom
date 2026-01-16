@@ -5,13 +5,13 @@ import { BookingUpdateManyWithoutUsersInput } from "./BookingUpdateManyWithoutUs
 import { CredentialUpdateManyWithoutUsersInput } from "./CredentialUpdateManyWithoutUsersInput";
 import { DestinationCalendarWhereUniqueInput } from "../destinationCalendar/DestinationCalendarWhereUniqueInput";
 import { EventTypeUpdateManyWithoutUsersInput } from "./EventTypeUpdateManyWithoutUsersInput";
-import { FeedbackUpdateManyWithoutUsersInput } from "./FeedbackUpdateManyWithoutUsersInput";
 import { ImpersonationUpdateManyWithoutUsersInput } from "./ImpersonationUpdateManyWithoutUsersInput";
 import { InputJsonValue } from "../../types";
 import { ScheduleUpdateManyWithoutUsersInput } from "./ScheduleUpdateManyWithoutUsersInput";
 import { SelectedCalendarUpdateManyWithoutUsersInput } from "./SelectedCalendarUpdateManyWithoutUsersInput";
 import { SessionUpdateManyWithoutUsersInput } from "./SessionUpdateManyWithoutUsersInput";
 import { MembershipUpdateManyWithoutUsersInput } from "./MembershipUpdateManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../verificationToken/VerificationTokenWhereUniqueInput";
 import { WebhookUpdateManyWithoutUsersInput } from "./WebhookUpdateManyWithoutUsersInput";
 import { WorkflowUpdateManyWithoutUsersInput } from "./WorkflowUpdateManyWithoutUsersInput";
 
@@ -36,7 +36,6 @@ export type UserUpdateInput = {
   emailVerified?: Date | null;
   endTime?: number;
   eventTypes?: EventTypeUpdateManyWithoutUsersInput;
-  feedback?: FeedbackUpdateManyWithoutUsersInput;
   hideBranding?: boolean;
   identityProvider?: "CAL" | "GOOGLE" | "SAML";
   identityProviderId?: string | null;
@@ -61,6 +60,7 @@ export type UserUpdateInput = {
   twoFactorEnabled?: boolean;
   twoFactorSecret?: string | null;
   username?: string | null;
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
   verified?: boolean | null;
   webhooks?: WebhookUpdateManyWithoutUsersInput;
   weekStart?: string;

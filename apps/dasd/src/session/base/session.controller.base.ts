@@ -18,18 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { SessionService } from "../session.service";
 import { SessionCreateInput } from "./SessionCreateInput";
-import { SessionWhereInput } from "./SessionWhereInput";
-import { SessionWhereUniqueInput } from "./SessionWhereUniqueInput";
-import { SessionFindManyArgs } from "./SessionFindManyArgs";
-import { SessionUpdateInput } from "./SessionUpdateInput";
 import { Session } from "./Session";
+import { SessionFindManyArgs } from "./SessionFindManyArgs";
+import { SessionWhereUniqueInput } from "./SessionWhereUniqueInput";
+import { SessionUpdateInput } from "./SessionUpdateInput";
 
 export class SessionControllerBase {
   constructor(protected readonly service: SessionService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: Session })
-  async create(@common.Body() data: SessionCreateInput): Promise<Session> {
-    return await this.service.create({
+  async createSession(
+    @common.Body() data: SessionCreateInput
+  ): Promise<Session> {
+    return await this.service.createSession({
       data: {
         ...data,
 
@@ -56,9 +57,9 @@ export class SessionControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [Session] })
   @ApiNestedQuery(SessionFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<Session[]> {
+  async sessions(@common.Req() request: Request): Promise<Session[]> {
     const args = plainToClass(SessionFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.sessions({
       ...args,
       select: {
         expires: true,
@@ -77,10 +78,10 @@ export class SessionControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: Session })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async session(
     @common.Param() params: SessionWhereUniqueInput
   ): Promise<Session | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.session({
       where: params,
       select: {
         expires: true,
@@ -105,12 +106,12 @@ export class SessionControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: Session })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateSession(
     @common.Param() params: SessionWhereUniqueInput,
     @common.Body() data: SessionUpdateInput
   ): Promise<Session | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateSession({
         where: params,
         data: {
           ...data,
@@ -146,11 +147,11 @@ export class SessionControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: Session })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteSession(
     @common.Param() params: SessionWhereUniqueInput
   ): Promise<Session | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteSession({
         where: params,
         select: {
           expires: true,

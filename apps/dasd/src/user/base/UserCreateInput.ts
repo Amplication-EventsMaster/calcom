@@ -12,15 +12,19 @@ https://docs.amplication.com/how-to/custom-code
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { AccountCreateNestedManyWithoutUsersInput } from "./AccountCreateNestedManyWithoutUsersInput";
+
 import {
   ValidateNested,
   IsOptional,
   IsBoolean,
   IsString,
+  MaxLength,
   IsInt,
+  Max,
   IsDate,
   IsEnum,
 } from "class-validator";
+
 import { Type } from "class-transformer";
 import { ApiKeyCreateNestedManyWithoutUsersInput } from "./ApiKeyCreateNestedManyWithoutUsersInput";
 import { AvailabilityCreateNestedManyWithoutUsersInput } from "./AvailabilityCreateNestedManyWithoutUsersInput";
@@ -28,10 +32,9 @@ import { BookingCreateNestedManyWithoutUsersInput } from "./BookingCreateNestedM
 import { CredentialCreateNestedManyWithoutUsersInput } from "./CredentialCreateNestedManyWithoutUsersInput";
 import { DestinationCalendarWhereUniqueInput } from "../../destinationCalendar/base/DestinationCalendarWhereUniqueInput";
 import { EventTypeCreateNestedManyWithoutUsersInput } from "./EventTypeCreateNestedManyWithoutUsersInput";
-import { FeedbackCreateNestedManyWithoutUsersInput } from "./FeedbackCreateNestedManyWithoutUsersInput";
 import { EnumUserIdentityProvider } from "./EnumUserIdentityProvider";
 import { ImpersonationCreateNestedManyWithoutUsersInput } from "./ImpersonationCreateNestedManyWithoutUsersInput";
-import { IsJSONValue } from "@app/custom-validators";
+import { IsJSONValue } from "../../validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { EnumUserPlan } from "./EnumUserPlan";
@@ -40,6 +43,7 @@ import { ScheduleCreateNestedManyWithoutUsersInput } from "./ScheduleCreateNeste
 import { SelectedCalendarCreateNestedManyWithoutUsersInput } from "./SelectedCalendarCreateNestedManyWithoutUsersInput";
 import { SessionCreateNestedManyWithoutUsersInput } from "./SessionCreateNestedManyWithoutUsersInput";
 import { MembershipCreateNestedManyWithoutUsersInput } from "./MembershipCreateNestedManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../../verificationToken/base/VerificationTokenWhereUniqueInput";
 import { WebhookCreateNestedManyWithoutUsersInput } from "./WebhookCreateNestedManyWithoutUsersInput";
 import { WorkflowCreateNestedManyWithoutUsersInput } from "./WorkflowCreateNestedManyWithoutUsersInput";
 
@@ -97,6 +101,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -116,6 +121,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -139,6 +145,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   brandColor!: string;
 
@@ -147,6 +154,7 @@ class UserCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   bufferTime!: number;
 
@@ -175,6 +183,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   darkBrandColor!: string;
 
@@ -183,6 +192,7 @@ class UserCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -214,6 +224,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   email!: string;
 
@@ -233,6 +244,7 @@ class UserCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   endTime!: number;
 
@@ -247,18 +259,6 @@ class UserCreateInput {
     nullable: true,
   })
   eventTypes?: EventTypeCreateNestedManyWithoutUsersInput;
-
-  @ApiProperty({
-    required: false,
-    type: () => FeedbackCreateNestedManyWithoutUsersInput,
-  })
-  @ValidateNested()
-  @Type(() => FeedbackCreateNestedManyWithoutUsersInput)
-  @IsOptional()
-  @Field(() => FeedbackCreateNestedManyWithoutUsersInput, {
-    nullable: true,
-  })
-  feedback?: FeedbackCreateNestedManyWithoutUsersInput;
 
   @ApiProperty({
     required: true,
@@ -281,6 +281,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -316,6 +317,7 @@ class UserCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -327,6 +329,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -348,6 +351,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -359,6 +363,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -422,6 +427,7 @@ class UserCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @Field(() => Number)
   startTime!: number;
 
@@ -442,6 +448,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -453,6 +460,7 @@ class UserCreateInput {
     type: Number,
   })
   @IsInt()
+  @Max(99999999999)
   @IsOptional()
   @Field(() => Number, {
     nullable: true,
@@ -464,6 +472,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   timeZone!: string;
 
@@ -491,6 +500,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -502,11 +512,24 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
   })
   username?: string | null;
+
+  @ApiProperty({
+    required: false,
+    type: () => VerificationTokenWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => VerificationTokenWhereUniqueInput)
+  @IsOptional()
+  @Field(() => VerificationTokenWhereUniqueInput, {
+    nullable: true,
+  })
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
 
   @ApiProperty({
     required: false,
@@ -536,6 +559,7 @@ class UserCreateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @Field(() => String)
   weekStart!: string;
 

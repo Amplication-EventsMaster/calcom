@@ -129,11 +129,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createEventType() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  eventTypes: () => FIND_MANY_RESULT,
+  eventType: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

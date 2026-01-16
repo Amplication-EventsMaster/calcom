@@ -45,11 +45,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createEventTypeCustomInput() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  eventTypeCustomInputs: () => FIND_MANY_RESULT,
+  eventTypeCustomInput: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

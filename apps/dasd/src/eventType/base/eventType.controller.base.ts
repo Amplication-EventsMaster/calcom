@@ -18,11 +18,10 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { EventTypeService } from "../eventType.service";
 import { EventTypeCreateInput } from "./EventTypeCreateInput";
-import { EventTypeWhereInput } from "./EventTypeWhereInput";
-import { EventTypeWhereUniqueInput } from "./EventTypeWhereUniqueInput";
-import { EventTypeFindManyArgs } from "./EventTypeFindManyArgs";
-import { EventTypeUpdateInput } from "./EventTypeUpdateInput";
 import { EventType } from "./EventType";
+import { EventTypeFindManyArgs } from "./EventTypeFindManyArgs";
+import { EventTypeWhereUniqueInput } from "./EventTypeWhereUniqueInput";
+import { EventTypeUpdateInput } from "./EventTypeUpdateInput";
 import { AvailabilityFindManyArgs } from "../../availability/base/AvailabilityFindManyArgs";
 import { Availability } from "../../availability/base/Availability";
 import { AvailabilityWhereUniqueInput } from "../../availability/base/AvailabilityWhereUniqueInput";
@@ -46,8 +45,10 @@ export class EventTypeControllerBase {
   constructor(protected readonly service: EventTypeService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: EventType })
-  async create(@common.Body() data: EventTypeCreateInput): Promise<EventType> {
-    return await this.service.create({
+  async createEventType(
+    @common.Body() data: EventTypeCreateInput
+  ): Promise<EventType> {
+    return await this.service.createEventType({
       data: {
         ...data,
 
@@ -141,9 +142,9 @@ export class EventTypeControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [EventType] })
   @ApiNestedQuery(EventTypeFindManyArgs)
-  async findMany(@common.Req() request: Request): Promise<EventType[]> {
+  async eventTypes(@common.Req() request: Request): Promise<EventType[]> {
     const args = plainToClass(EventTypeFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.eventTypes({
       ...args,
       select: {
         afterEventBuffer: true,
@@ -211,10 +212,10 @@ export class EventTypeControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: EventType })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async eventType(
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<EventType | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.eventType({
       where: params,
       select: {
         afterEventBuffer: true,
@@ -288,12 +289,12 @@ export class EventTypeControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: EventType })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateEventType(
     @common.Param() params: EventTypeWhereUniqueInput,
     @common.Body() data: EventTypeUpdateInput
   ): Promise<EventType | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateEventType({
         where: params,
         data: {
           ...data,
@@ -396,11 +397,11 @@ export class EventTypeControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: EventType })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteEventType(
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<EventType | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteEventType({
         where: params,
         select: {
           afterEventBuffer: true,
@@ -475,7 +476,7 @@ export class EventTypeControllerBase {
 
   @common.Get("/:id/availability")
   @ApiNestedQuery(AvailabilityFindManyArgs)
-  async findManyAvailability(
+  async findAvailability(
     @common.Req() request: Request,
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<Availability[]> {
@@ -528,7 +529,7 @@ export class EventTypeControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -545,7 +546,7 @@ export class EventTypeControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -562,7 +563,7 @@ export class EventTypeControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -571,7 +572,7 @@ export class EventTypeControllerBase {
 
   @common.Get("/:id/bookings")
   @ApiNestedQuery(BookingFindManyArgs)
-  async findManyBookings(
+  async findBookings(
     @common.Req() request: Request,
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<Booking[]> {
@@ -646,7 +647,7 @@ export class EventTypeControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -663,7 +664,7 @@ export class EventTypeControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -680,7 +681,7 @@ export class EventTypeControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -689,7 +690,7 @@ export class EventTypeControllerBase {
 
   @common.Get("/:id/customInputs")
   @ApiNestedQuery(EventTypeCustomInputFindManyArgs)
-  async findManyCustomInputs(
+  async findCustomInputs(
     @common.Req() request: Request,
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<EventTypeCustomInput[]> {
@@ -728,7 +729,7 @@ export class EventTypeControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -745,7 +746,7 @@ export class EventTypeControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -762,7 +763,7 @@ export class EventTypeControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -771,7 +772,7 @@ export class EventTypeControllerBase {
 
   @common.Get("/:id/users")
   @ApiNestedQuery(UserFindManyArgs)
-  async findManyUsers(
+  async findUsers(
     @common.Req() request: Request,
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<User[]> {
@@ -819,6 +820,13 @@ export class EventTypeControllerBase {
         twoFactorEnabled: true,
         twoFactorSecret: true,
         username: true,
+
+        verificationToken: {
+          select: {
+            id: true,
+          },
+        },
+
         verified: true,
         weekStart: true,
       },
@@ -841,7 +849,7 @@ export class EventTypeControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -858,7 +866,7 @@ export class EventTypeControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -875,7 +883,7 @@ export class EventTypeControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -884,7 +892,7 @@ export class EventTypeControllerBase {
 
   @common.Get("/:id/webhooks")
   @ApiNestedQuery(WebhookFindManyArgs)
-  async findManyWebhooks(
+  async findWebhooks(
     @common.Req() request: Request,
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<Webhook[]> {
@@ -939,7 +947,7 @@ export class EventTypeControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -956,7 +964,7 @@ export class EventTypeControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -973,7 +981,7 @@ export class EventTypeControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -982,7 +990,7 @@ export class EventTypeControllerBase {
 
   @common.Get("/:id/workflows")
   @ApiNestedQuery(WorkflowsOnEventTypeFindManyArgs)
-  async findManyWorkflows(
+  async findWorkflows(
     @common.Req() request: Request,
     @common.Param() params: EventTypeWhereUniqueInput
   ): Promise<WorkflowsOnEventType[]> {
@@ -1023,7 +1031,7 @@ export class EventTypeControllerBase {
         connect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -1040,7 +1048,7 @@ export class EventTypeControllerBase {
         set: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },
@@ -1057,7 +1065,7 @@ export class EventTypeControllerBase {
         disconnect: body,
       },
     };
-    await this.service.update({
+    await this.service.updateEventType({
       where: params,
       data,
       select: { id: true },

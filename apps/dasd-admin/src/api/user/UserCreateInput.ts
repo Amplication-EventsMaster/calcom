@@ -5,13 +5,13 @@ import { BookingCreateNestedManyWithoutUsersInput } from "./BookingCreateNestedM
 import { CredentialCreateNestedManyWithoutUsersInput } from "./CredentialCreateNestedManyWithoutUsersInput";
 import { DestinationCalendarWhereUniqueInput } from "../destinationCalendar/DestinationCalendarWhereUniqueInput";
 import { EventTypeCreateNestedManyWithoutUsersInput } from "./EventTypeCreateNestedManyWithoutUsersInput";
-import { FeedbackCreateNestedManyWithoutUsersInput } from "./FeedbackCreateNestedManyWithoutUsersInput";
 import { ImpersonationCreateNestedManyWithoutUsersInput } from "./ImpersonationCreateNestedManyWithoutUsersInput";
 import { InputJsonValue } from "../../types";
 import { ScheduleCreateNestedManyWithoutUsersInput } from "./ScheduleCreateNestedManyWithoutUsersInput";
 import { SelectedCalendarCreateNestedManyWithoutUsersInput } from "./SelectedCalendarCreateNestedManyWithoutUsersInput";
 import { SessionCreateNestedManyWithoutUsersInput } from "./SessionCreateNestedManyWithoutUsersInput";
 import { MembershipCreateNestedManyWithoutUsersInput } from "./MembershipCreateNestedManyWithoutUsersInput";
+import { VerificationTokenWhereUniqueInput } from "../verificationToken/VerificationTokenWhereUniqueInput";
 import { WebhookCreateNestedManyWithoutUsersInput } from "./WebhookCreateNestedManyWithoutUsersInput";
 import { WorkflowCreateNestedManyWithoutUsersInput } from "./WorkflowCreateNestedManyWithoutUsersInput";
 
@@ -36,7 +36,6 @@ export type UserCreateInput = {
   emailVerified?: Date | null;
   endTime: number;
   eventTypes?: EventTypeCreateNestedManyWithoutUsersInput;
-  feedback?: FeedbackCreateNestedManyWithoutUsersInput;
   hideBranding: boolean;
   identityProvider: "CAL" | "GOOGLE" | "SAML";
   identityProviderId?: string | null;
@@ -61,6 +60,7 @@ export type UserCreateInput = {
   twoFactorEnabled: boolean;
   twoFactorSecret?: string | null;
   username?: string | null;
+  verificationToken?: VerificationTokenWhereUniqueInput | null;
   verified?: boolean | null;
   webhooks?: WebhookCreateNestedManyWithoutUsersInput;
   weekStart: string;

@@ -11,8 +11,15 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsOptional, IsString } from "class-validator";
+import {
+  IsDate,
+  IsOptional,
+  IsString,
+  MaxLength,
+  ValidateNested,
+} from "class-validator";
 import { Type } from "class-transformer";
+import { UserUpdateManyWithoutVerificationTokensInput } from "./UserUpdateManyWithoutVerificationTokensInput";
 
 @InputType()
 class VerificationTokenUpdateInput {
@@ -32,6 +39,7 @@ class VerificationTokenUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
@@ -43,11 +51,24 @@ class VerificationTokenUpdateInput {
     type: String,
   })
   @IsString()
+  @MaxLength(256)
   @IsOptional()
   @Field(() => String, {
     nullable: true,
   })
   token?: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserUpdateManyWithoutVerificationTokensInput,
+  })
+  @ValidateNested()
+  @Type(() => UserUpdateManyWithoutVerificationTokensInput)
+  @IsOptional()
+  @Field(() => UserUpdateManyWithoutVerificationTokensInput, {
+    nullable: true,
+  })
+  users?: UserUpdateManyWithoutVerificationTokensInput;
 }
 
 export { VerificationTokenUpdateInput as VerificationTokenUpdateInput };

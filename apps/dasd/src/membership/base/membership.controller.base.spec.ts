@@ -37,11 +37,11 @@ const FIND_ONE_RESULT = {
 };
 
 const service = {
-  create() {
+  createMembership() {
     return CREATE_RESULT;
   },
-  findMany: () => FIND_MANY_RESULT,
-  findOne: ({ where }: { where: { id: string } }) => {
+  memberships: () => FIND_MANY_RESULT,
+  membership: ({ where }: { where: { id: string } }) => {
     switch (where.id) {
       case existingId:
         return FIND_ONE_RESULT;

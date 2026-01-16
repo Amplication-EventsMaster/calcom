@@ -14,12 +14,11 @@ export const CredentialList = (props: ListProps): React.ReactElement => {
   return (
     <List
       {...props}
-      bulkActionButtons={false}
       title={"Credentials"}
       perPage={50}
       pagination={<Pagination />}
     >
-      <Datagrid rowClick="show">
+      <Datagrid rowClick="show" bulkActionButtons={false}>
         <ReferenceField label="App" source="app.id" reference="App">
           <TextField source={APP_TITLE_FIELD} />
         </ReferenceField>
@@ -28,7 +27,7 @@ export const CredentialList = (props: ListProps): React.ReactElement => {
         <TextField label="Type Field" source="typeField" />
         <ReferenceField label="User" source="user.id" reference="User">
           <TextField source={USER_TITLE_FIELD} />
-        </ReferenceField>
+        </ReferenceField>{" "}
       </Datagrid>
     </List>
   );

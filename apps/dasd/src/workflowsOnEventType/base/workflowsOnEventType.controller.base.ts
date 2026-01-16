@@ -18,20 +18,19 @@ import { plainToClass } from "class-transformer";
 import { ApiNestedQuery } from "../../decorators/api-nested-query.decorator";
 import { WorkflowsOnEventTypeService } from "../workflowsOnEventType.service";
 import { WorkflowsOnEventTypeCreateInput } from "./WorkflowsOnEventTypeCreateInput";
-import { WorkflowsOnEventTypeWhereInput } from "./WorkflowsOnEventTypeWhereInput";
-import { WorkflowsOnEventTypeWhereUniqueInput } from "./WorkflowsOnEventTypeWhereUniqueInput";
-import { WorkflowsOnEventTypeFindManyArgs } from "./WorkflowsOnEventTypeFindManyArgs";
-import { WorkflowsOnEventTypeUpdateInput } from "./WorkflowsOnEventTypeUpdateInput";
 import { WorkflowsOnEventType } from "./WorkflowsOnEventType";
+import { WorkflowsOnEventTypeFindManyArgs } from "./WorkflowsOnEventTypeFindManyArgs";
+import { WorkflowsOnEventTypeWhereUniqueInput } from "./WorkflowsOnEventTypeWhereUniqueInput";
+import { WorkflowsOnEventTypeUpdateInput } from "./WorkflowsOnEventTypeUpdateInput";
 
 export class WorkflowsOnEventTypeControllerBase {
   constructor(protected readonly service: WorkflowsOnEventTypeService) {}
   @common.Post()
   @swagger.ApiCreatedResponse({ type: WorkflowsOnEventType })
-  async create(
+  async createWorkflowsOnEventType(
     @common.Body() data: WorkflowsOnEventTypeCreateInput
   ): Promise<WorkflowsOnEventType> {
-    return await this.service.create({
+    return await this.service.createWorkflowsOnEventType({
       data: {
         ...data,
 
@@ -64,11 +63,11 @@ export class WorkflowsOnEventTypeControllerBase {
   @common.Get()
   @swagger.ApiOkResponse({ type: [WorkflowsOnEventType] })
   @ApiNestedQuery(WorkflowsOnEventTypeFindManyArgs)
-  async findMany(
+  async workflowsOnEventTypes(
     @common.Req() request: Request
   ): Promise<WorkflowsOnEventType[]> {
     const args = plainToClass(WorkflowsOnEventTypeFindManyArgs, request.query);
-    return this.service.findMany({
+    return this.service.workflowsOnEventTypes({
       ...args,
       select: {
         eventType: {
@@ -91,10 +90,10 @@ export class WorkflowsOnEventTypeControllerBase {
   @common.Get("/:id")
   @swagger.ApiOkResponse({ type: WorkflowsOnEventType })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async findOne(
+  async workflowsOnEventType(
     @common.Param() params: WorkflowsOnEventTypeWhereUniqueInput
   ): Promise<WorkflowsOnEventType | null> {
-    const result = await this.service.findOne({
+    const result = await this.service.workflowsOnEventType({
       where: params,
       select: {
         eventType: {
@@ -123,12 +122,12 @@ export class WorkflowsOnEventTypeControllerBase {
   @common.Patch("/:id")
   @swagger.ApiOkResponse({ type: WorkflowsOnEventType })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async update(
+  async updateWorkflowsOnEventType(
     @common.Param() params: WorkflowsOnEventTypeWhereUniqueInput,
     @common.Body() data: WorkflowsOnEventTypeUpdateInput
   ): Promise<WorkflowsOnEventType | null> {
     try {
-      return await this.service.update({
+      return await this.service.updateWorkflowsOnEventType({
         where: params,
         data: {
           ...data,
@@ -170,11 +169,11 @@ export class WorkflowsOnEventTypeControllerBase {
   @common.Delete("/:id")
   @swagger.ApiOkResponse({ type: WorkflowsOnEventType })
   @swagger.ApiNotFoundResponse({ type: errors.NotFoundException })
-  async delete(
+  async deleteWorkflowsOnEventType(
     @common.Param() params: WorkflowsOnEventTypeWhereUniqueInput
   ): Promise<WorkflowsOnEventType | null> {
     try {
-      return await this.service.delete({
+      return await this.service.deleteWorkflowsOnEventType({
         where: params,
         select: {
           eventType: {
